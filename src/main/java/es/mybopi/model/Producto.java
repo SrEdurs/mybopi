@@ -1,6 +1,12 @@
 package es.mybopi.model;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +19,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 
+@Entity
+@Table(name = "productos")
 public class Producto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nombre;
     private double precio;
@@ -23,4 +33,7 @@ public class Producto {
     private String video;
     private String categoria;
     private boolean activo;
+
+    @ManyToOne
+    private Usuario usuario;
 }
