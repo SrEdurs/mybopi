@@ -20,5 +20,7 @@ public class Producto {
     private String imagen;
     private String imagen2;
     private String imagen3;
+    private String video;
+    private String categoria;
     private boolean activo;
 }
