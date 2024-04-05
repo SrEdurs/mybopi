@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{admin/template_admin :: header}"></div>
+
+<body>
+
+<div th:insert="~{admin/template_admin :: nav}"></div>
+
+<!-- Page Content -->
+<div class="container">
+
+
+  <!-- Page Heading/Breadcrumbs -->
+  <h1 class="mt-4 mb-3">
+    Mybopi <small>Productos</small>
+  </h1>
+
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+    <li class="breadcrumb-item active">Ver Productos</li>
+  </ol>
+
+  <a class="btn btn-primary" href="#" > Crear Producto</a>
+  <h2>Productos</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Descripción</th>
+        <th scope="col">Inventario</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Acción</th>
+        <th scope="col">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td ></td>
+        <td ></td>
+        <td ></td>
+        <td ></td>
+        <td><a  class="btn btn-warning" href="">Editar</a> </td>
+        <td><a  class="btn btn-danger" href="">Eliminar</a> </td>
+      </tr>       
+    </tbody>
+  </table>
+
+</div>
+<!-- /.container -->
+
+<div th:insert="~{admin/template_admin :: footer}"></div>
+
+<!-- Bootstrap core JavaScript -->
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
