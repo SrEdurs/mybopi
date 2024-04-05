@@ -32,7 +32,8 @@ public class Producto {
     private String imagen2;
     private String imagen3;
     private String video;
-    private String categoria;
+    private String descripcion;
+    private int categoria;
     private boolean activo;
 
     @ManyToOne
