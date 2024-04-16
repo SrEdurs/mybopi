@@ -19,11 +19,11 @@
 
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a th:href="@{/productos}">Productos</a></li>
-    <li class="breadcrumb-item active">Crear Productos</li>
+    <li class="breadcrumb-item active">Crear producto</li>
   </ol>
 
   <h2>Crear Producto</h2>
-  <form class="form-horizontal" action="#" method="post" enctype="multipart/form-data">
+  <form class="form-horizontal" th:action="@{/productos/guardar}" method="post" enctype="multipart/form-data">
 
     <div class="form-group">
       <label class="control-label col-sm-2" for="nombre">Nombre:</label>
@@ -37,7 +37,7 @@
       <label class="control-label col-sm-2" for="descripcion">Descripción:</label>
       <div class="col-sm-10">
         <textarea class="form-control" id="descripcion" name="descripcion"
-        placeholder="Descripción del producto" required
+        placeholder="Descripcion del producto" required
         autocomplete="off"> </textarea>
       </div>
     </div>
@@ -93,13 +93,13 @@
       </div>
     </div>
 
-    <!-- form-group for video -->
+    <!-- form-group for video 
     <div class="form-group">
       <label class="control-label col-sm-2" for="video">Video:</label>
       <div class="col-sm-10">
         <input type="file" class="form-control-file" id="video" name="video">
       </div>
-    </div>
+    </div> -->
 
     <div class="row">
       <div class="col-sm-2">
