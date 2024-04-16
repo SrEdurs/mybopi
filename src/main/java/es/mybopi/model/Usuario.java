@@ -32,8 +32,8 @@ public class Usuario {
     private String email;
     private String direccion;
     private String telefono;
-    private boolean admin;
-    private boolean activo;
+    private String admin;
+    private int activo;
     private String password;
 
     @OneToMany(mappedBy = "usuario")
