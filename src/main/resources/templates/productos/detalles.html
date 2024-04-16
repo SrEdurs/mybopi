@@ -26,7 +26,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">Imagen</th>
+        <th scope="col">Portada</th>
         <th scope="col">Nombre</th>
         <th scope="col">Precio</th>
         <th scope="col">Categoría</th>
@@ -34,10 +34,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td ></td>
-        <td ></td>
-        <td ></td>
+      <tr th:each="producto : ${inventario}">
+        <td th:text="${producto.portada}"></td>
+        <td th:text="${producto.nombre}"></td>
+        <td th:text="${producto.precio}"></td>
+        <td th:text="${producto.categoria}"></td>
+        <td th:text="${producto.activo}"></td>
         <td><a  class="btn btn-warning" href="">Editar</a> </td>
         <td><a  class="btn btn-danger" href="">Eliminar</a> </td>
       </tr>       

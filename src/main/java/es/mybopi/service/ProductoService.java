@@ -1,4 +1,5 @@
 package es.mybopi.service;
+import java.util.List;
 import java.util.Optional;
 import es.mybopi.model.Producto;
 
@@ -11,5 +12,7 @@ public interface ProductoService {
     public void update(Producto producto);
 
     public void deleteById(Integer id);
+
+    public List<Producto> findAll();
 
 }

@@ -28,13 +28,13 @@ public class Producto {
 
     private String nombre;
     private double precio;
-    private String imagen;
+    private String portada;
+    private String imagen1;
     private String imagen2;
-    private String imagen3;
     private String video;
     private String descripcion;
     private int categoria;
-    private boolean activo;
+    private boolean activo = true;
 
     @ManyToOne
     private Usuario usuario;

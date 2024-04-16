@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 
 import es.mybopi.model.Producto;
 import es.mybopi.model.Usuario;
@@ -22,7 +24,8 @@ public class ProductoController {
     private ProductoService productoService;
 
     @GetMapping("")
-    public String detalles(){
+    public String detalles(Model model){
+        model.addAttribute("inventario", productoService.findAll());
         return "productos/detalles";
     }
 

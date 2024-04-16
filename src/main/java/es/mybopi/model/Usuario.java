@@ -33,7 +33,7 @@ public class Usuario {
     private String direccion;
     private String telefono;
     private String admin;
-    private int activo;
+    private int activo = 1;
     private String password;
 
     @OneToMany(mappedBy = "usuario")
