@@ -1,5 +1,6 @@
 package es.mybopi.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -52,8 +53,6 @@ public class ProductoController {
         producto.setUsuario(u);
 
         if(producto.getId() == null){ //Creando un producto
-            System.out.println("---------------------------------------------");
-            System.out.println("------------------" + file.toString());
             String nombreImagen = upload.saveImage(file);
             producto.setPortada(nombreImagen);
         } 
@@ -69,15 +68,13 @@ public class ProductoController {
 
         producto = optionalProducto.get();
 
-        LOGGER.info("Editado {}", producto);
-
         model.addAttribute("producto", producto);
 
         return "productos/editar";
     }
 
     @PostMapping("/actualizar")
-    public String actualizar(Producto producto, @RequestParam("portada") MultipartFile portada) throws IOException{
+    public String actualizar(Producto producto, @RequestParam("img1") MultipartFile portada) throws IOException{
 
         if(portada.isEmpty()){
             Producto p = new Producto();
@@ -109,7 +106,10 @@ public class ProductoController {
 
         if(p.getPortada().equals("default.jpg")){ //Si hay una portada por defecto borrarla
         upload.deleteImage(p.getPortada());
+
         }
+        
+        upload.deleteImage(p.getPortada());
         
         productoService.deleteById(id);
         return "redirect:/productos";
