@@ -71,4 +71,17 @@ public class ProductoController {
 
     }
 
+
+    //Acción de borrar un producto
+    @GetMapping("/eliminar/{id}")
+    public String eliminarProducto(@PathVariable Integer id){
+
+        productoService.deleteById(id);
+        return "redirect:/productos";
+
+    }
+
+
+
+
 }
