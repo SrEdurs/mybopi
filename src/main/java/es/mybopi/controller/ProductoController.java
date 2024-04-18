@@ -1,11 +1,14 @@
 package es.mybopi.controller;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -44,6 +47,21 @@ public class ProductoController {
         producto.setUsuario(u);
         productoService.save(producto);
         return "redirect:/productos";
+    }
+
+    //Pantalla editar producto
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Integer id, Model model){
+        Producto producto = new Producto();
+        Optional<Producto> optionalProducto = productoService.findById(id);
+
+        producto = optionalProducto.get();
+
+        LOGGER.info("Editado {}", producto);
+
+        model.addAttribute("producto", producto);
+
+        return "productos/editar";
     }
 
 }

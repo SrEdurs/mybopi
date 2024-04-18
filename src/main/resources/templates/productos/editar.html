@@ -14,51 +14,88 @@
 
       <!-- Page Heading/Breadcrumbs -->
       <h1 class="mt-4 mb-3">
-        Spring eCommerce <small>Productos</small>
+        Mybopi <small>Productos</small>
       </h1>
 
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/productos}">Productos</a></li>
         <li class="breadcrumb-item active">Actualizar Producto</li>
       </ol>
 
       <h2>Actualizar Producto</h2>
-      <form class="form-horizontal" th:action="#" method="post"  enctype="multipart/form-data">
-        <input type="hidden" name="id" value="">    
+      <form class="form-horizontal" action="" method="post"  enctype="multipart/form-data">
+        <input type="hidden" name="id" th:value="${producto.id}">
+
         <div class="form-group">
-          <label class="control-label col-sm-2" for="nombre">Nombre:</label>
+          <label class="control-label col-sm-2" for="nombre">Título:</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del producto" required autocomplete="off" value="">
+            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del producto" required autocomplete="off" th:value="${producto.nombre}">
             <div id="prueba"></div>  
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="descripcion">Descripción:</label>
-          <div class="col-sm-10">          
-            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese la descripcion del producto" required autocomplete="off"> </textarea>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="control-label col-sm-2" for="cantidad">Cantidad:</label>
+          <label class="control-label col-sm-2" for="descripcion">Descripción:</label>
           <div class="col-sm-10">          
-            <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Ingrese la cantidad del producto" value="" required autocomplete="off">
+            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese la descripcion del producto" required autocomplete="off" th:text="${producto.descripcion}"> </textarea>
           </div>
         </div>
 
         <div class="form-group">
           <label class="control-label col-sm-2" for="precio">Precio:</label>
           <div class="col-sm-10">          
-            <input type="number" class="form-control" step="any"  id="precio" name="precio" placeholder="Ingrese el precio del producto" value="" required autocomplete="off">
+            <input type="number" class="form-control" step="any"  id="precio" name="precio" placeholder="Ingrese el precio del producto" th:value="${producto.precio}" required autocomplete="off">
           </div>
         </div>
 
         <div class="form-group">
-          <label  class="control-label col-sm-2" for="img">Imagen:</label>
-          <div class="col-sm-10">  
-            <input type="file" class="form-control-file" id="img" name="img">
+          <label class="control-label col-sm-2" for="categoria">Categoría:</label>
+          <div class="col-sm-10">
+            <select class="form-control" id="categoria" name="categoria">
+              <option value="1" th:selected="${producto.categoria == 1}">Totebag</option>
+              <option value="2" th:selected="${producto.categoria == 2}">Bolsa</option>
+            </select>
           </div>
         </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="activo">Activo:</label>
+          <div class="col-sm-10">
+            <select class="form-control" id="activo" name="activo">
+              <option value="true" th:selected="${producto.activo == true}">Si</option>
+              <option value="false" th:selected="${producto.activo == false}">No</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label  class="control-label col-sm-2" for="img">Portada:</label>
+          <div class="col-sm-10">  
+            <input type="file" class="form-control-file" id="img" name="img" th:value="${producto.portada}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label  class="control-label col-sm-2" for="img">Imagen 1:</label>
+          <div class="col-sm-10">  
+            <input type="file" class="form-control-file" id="img" name="img" th:value="${producto.imagen1}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label  class="control-label col-sm-2" for="img">Imagen 2:</label>
+          <div class="col-sm-10">  
+            <input type="file" class="form-control-file" id="img" name="img" th:value="${producto.imagen2}">
+          </div>
+        </div>
+
+        <!-- form-group for video 
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="video">Video:</label>
+      <div class="col-sm-10">
+        <input type="file" class="form-control-file" id="video" name="video" th:value="${producto.video}">
+      </div>
+    </div> -->
 
         <div class="row">
           <div class="col-sm-2">
