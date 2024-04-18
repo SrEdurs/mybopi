@@ -35,7 +35,9 @@
     </thead>
     <tbody>
       <tr th:each="producto : ${inventario}">
-        <td th:text="${producto.portada}"></td>
+        <td>
+          <img th:src="@{/images/{img} (img = ${producto.portada})}" width="100px" height="100px"/>
+        </td>        
         <td th:text="${producto.nombre}"></td>
         <td th:text="${producto.precio}"></td>
         <td th:text="${producto.categoria}"></td>

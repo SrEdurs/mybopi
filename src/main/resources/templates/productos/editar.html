@@ -70,6 +70,7 @@
 
         <div class="form-group">
           <label  class="control-label col-sm-2" for="img">Portada:</label>
+          <img th:src="@{/images/{img} (img = ${producto.portada})}" width="100px" height="100px">
           <div class="col-sm-10">  
             <input type="file" class="form-control-file" id="img1" name="img1" th:value="${producto.portada}">
           </div>
