@@ -85,7 +85,7 @@ public class ProductoController {
             Producto p = new Producto();
             p = productoService.findById(producto.getId()).get();
 
-            if(p.getPortada().equals("default.jpg")){ //Si hay una portada por defecto borrarla
+            if(!p.getPortada().equals("default.jpg")){ //Si hay una portada por defecto borrarla
             upload.deleteImage(p.getPortada());
             }
             String nombreImagen = upload.saveImage(portada);
@@ -104,12 +104,10 @@ public class ProductoController {
         Producto p = new Producto();
         p = productoService.findById(id).get();
 
-        if(p.getPortada().equals("default.jpg")){ //Si hay una portada por defecto borrarla
-        upload.deleteImage(p.getPortada());
-
-        }
+        if(!p.getPortada().equals("default.jpg")){ 
         
-        upload.deleteImage(p.getPortada());
+            upload.deleteImage(p.getPortada());
+        }
         
         productoService.deleteById(id);
         return "redirect:/productos";
