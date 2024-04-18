@@ -64,4 +64,11 @@ public class ProductoController {
         return "productos/editar";
     }
 
+    @PostMapping("/actualizar")
+    public String actualizar(Producto producto){
+        productoService.update(producto);
+        return "redirect:/productos";
+
+    }
+
 }
