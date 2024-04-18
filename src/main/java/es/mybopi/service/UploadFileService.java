@@ -14,12 +14,16 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class UploadFileService {
 
-    private String ruta = "images//";
+    private String ruta = "images\\";
 
     public String saveImage(MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
             byte [] bytes = file.getBytes();
-            Path path = Paths.get(ruta+file.getOriginalFilename());
+            Path path = Paths.get(ruta).resolve(file.getOriginalFilename()).toAbsolutePath();
+            System.out.println(path.toString());
+            System.out.println(bytes.toString());
+            System.out.println(file.getOriginalFilename());
+            System.out.println("-------------------------");
             Files.write(path, bytes);
             return file.getOriginalFilename();
         }

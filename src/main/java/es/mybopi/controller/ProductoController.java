@@ -46,26 +46,17 @@ public class ProductoController {
 
     //Guardar un nuevo producto
     @PostMapping("/guardar")
-    public String guardar(Producto producto, @RequestParam("portada") MultipartFile portada) throws IOException{
+    public String guardar(Producto producto, @RequestParam("img1") MultipartFile file) throws IOException{
         LOGGER.info("Guardado {}", producto);
         Usuario u = new Usuario(1, "admin", "admin", "admin", "admin", "admin", null, 1, "admin", null, null);
         producto.setUsuario(u);
 
-        //Imagenes
         if(producto.getId() == null){ //Creando un producto
-            String nombreImagen = upload.saveImage(portada);
+            System.out.println("---------------------------------------------");
+            System.out.println("------------------" + file.toString());
+            String nombreImagen = upload.saveImage(file);
             producto.setPortada(nombreImagen);
-        } else { //Editando un producto sin cambiar la imagen
-            if(portada.isEmpty()){
-                Producto p = new Producto();
-                p = productoService.findById(producto.getId()).get();
-                producto.setPortada(p.getPortada());
-            } else { //Editando cambiando la imagen
-                String nombreImagen = upload.saveImage(portada);
-                producto.setPortada(nombreImagen);
-            }
-        }
-
+        } 
         productoService.save(producto);
         return "redirect:/productos";
     }
@@ -86,7 +77,24 @@ public class ProductoController {
     }
 
     @PostMapping("/actualizar")
-    public String actualizar(Producto producto){
+    public String actualizar(Producto producto, @RequestParam("portada") MultipartFile portada) throws IOException{
+
+        if(portada.isEmpty()){
+            Producto p = new Producto();
+            p = productoService.findById(producto.getId()).get();
+            producto.setPortada(p.getPortada());
+        } else { //Editando cambiando la imagen
+
+            Producto p = new Producto();
+            p = productoService.findById(producto.getId()).get();
+
+            if(p.getPortada().equals("default.jpg")){ //Si hay una portada por defecto borrarla
+            upload.deleteImage(p.getPortada());
+            }
+            String nombreImagen = upload.saveImage(portada);
+            producto.setPortada(nombreImagen);
+        }
+
         productoService.update(producto);
         return "redirect:/productos";
 
@@ -95,8 +103,14 @@ public class ProductoController {
 
     //Acción de borrar un producto
     @GetMapping("/eliminar/{id}")
-    public String eliminarProducto(@PathVariable Integer id){
+    public String eliminarProducto(@PathVariable Integer id) throws IOException{
+        Producto p = new Producto();
+        p = productoService.findById(id).get();
 
+        if(p.getPortada().equals("default.jpg")){ //Si hay una portada por defecto borrarla
+        upload.deleteImage(p.getPortada());
+        }
+        
         productoService.deleteById(id);
         return "redirect:/productos";
 
