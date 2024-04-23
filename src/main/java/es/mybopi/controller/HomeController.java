@@ -12,17 +12,17 @@ import es.mybopi.model.Producto;
 import es.mybopi.service.ProductoService;
 
 @Controller
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/")
+public class HomeController {
 
     @Autowired
     private ProductoService productoService;
 
-    @GetMapping("")
+    @GetMapping("/")
     public String home(Model model) {
         List<Producto> productos = this.productoService.findAll();
-        model.addAttribute("productos", productos);
-        return "admin/home";
+        model.addAttribute("productosHome", productos);
+        return "usuarios/index";
     }
-    
+
 }

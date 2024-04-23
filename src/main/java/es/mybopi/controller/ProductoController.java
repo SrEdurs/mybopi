@@ -32,7 +32,7 @@ public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
-    @GetMapping("")
+    @GetMapping("/lista")
     public String detalles(Model model){
         model.addAttribute("inventario", productoService.findAll());
         return "productos/detalles";
@@ -75,22 +75,22 @@ public class ProductoController {
     @PostMapping("/actualizar")
     public String actualizar(Producto producto, @RequestParam("img1") MultipartFile portada) throws IOException{
 
+        Producto p = new Producto();
+        p = productoService.findById(producto.getId()).get();
+
         if(portada.isEmpty()){
-            Producto p = new Producto();
-            p = productoService.findById(producto.getId()).get();
+            
             producto.setPortada(p.getPortada());
         } else { //Editando cambiando la imagen
 
-            Producto p = new Producto();
-            p = productoService.findById(producto.getId()).get();
-
-            if(!p.getPortada().equals("default.jpg")){ //Si hay una portada por defecto borrarla
+            if(!p.getPortada().equals("default.jpg")){ //Si hay una portada por defecto
             upload.deleteImage(p.getPortada());
             }
             String nombreImagen = upload.saveImage(portada);
             producto.setPortada(nombreImagen);
         }
 
+        producto.setUsuario(p.getUsuario());
         productoService.update(producto);
         return "redirect:/productos";
 
