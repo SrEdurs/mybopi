@@ -31,7 +31,6 @@ public class Producto {
     private String portada;
     private String imagen1;
     private String imagen2;
-    private String video;
     private String descripcion;
     private int categoria;
     private boolean activo = true;

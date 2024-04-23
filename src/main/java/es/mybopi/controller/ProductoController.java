@@ -46,7 +46,7 @@ public class ProductoController {
 
     //Guardar un nuevo producto
     @PostMapping("/guardar")
-    public String guardar(Producto producto, @RequestParam("img1") MultipartFile file) throws IOException{
+    public String guardar(Producto producto, @RequestParam("img1") MultipartFile file, @RequestParam("img2") MultipartFile file2, @RequestParam("img3") MultipartFile file3) throws IOException{
         LOGGER.info("Guardado {}", producto);
         Usuario u = new Usuario(1, "admin", "admin", "admin", "admin", "admin", null, 1, "admin", null, null);
         producto.setUsuario(u);
@@ -54,9 +54,15 @@ public class ProductoController {
         if(producto.getId() == null){ //Creando un producto
             String nombreImagen = upload.saveImage(file);
             producto.setPortada(nombreImagen);
+
+            String nombreImagen2 = upload.saveImage(file2);
+            producto.setImagen1(nombreImagen2);
+
+            String nombreImagen3 = upload.saveImage(file3);
+            producto.setImagen2(nombreImagen3);
         } 
         productoService.save(producto);
-        return "redirect:/productos";
+        return "redirect:/productos/lista";
     }
 
     //Pantalla editar producto
@@ -73,7 +79,7 @@ public class ProductoController {
     }
 
     @PostMapping("/actualizar")
-    public String actualizar(Producto producto, @RequestParam("img1") MultipartFile portada) throws IOException{
+    public String actualizar(Producto producto, @RequestParam("img1") MultipartFile portada, @RequestParam("img2") MultipartFile imagen2, @RequestParam("img3") MultipartFile imagen3) throws IOException{
 
         Producto p = new Producto();
         p = productoService.findById(producto.getId()).get();
@@ -90,9 +96,35 @@ public class ProductoController {
             producto.setPortada(nombreImagen);
         }
 
+        //Imagen 1
+        if(imagen2.isEmpty()){
+            
+            producto.setImagen1(p.getImagen1());
+        } else { //Editando cambiando la imagen
+
+            if(!p.getImagen1().equals("default.jpg")){ //Si hay una imagen por defecto
+            upload.deleteImage(p.getImagen1());
+            }
+            String nombreImagen = upload.saveImage(imagen2);
+            producto.setImagen1(nombreImagen);
+        }
+
+        //Imagen 2
+        if(imagen3.isEmpty()){
+            
+            producto.setImagen2(p.getImagen2());
+        } else { //Editando cambiando la imagen
+
+            if(!p.getImagen2().equals("default.jpg")){ //Si hay una imagen por defecto
+            upload.deleteImage(p.getImagen2());
+            }
+            String nombreImagen = upload.saveImage(imagen3);
+            producto.setImagen2(nombreImagen);
+        }
+
         producto.setUsuario(p.getUsuario());
         productoService.update(producto);
-        return "redirect:/productos";
+        return "redirect:/productos/lista";
 
     }
 
@@ -103,13 +135,28 @@ public class ProductoController {
         Producto p = new Producto();
         p = productoService.findById(id).get();
 
+        //Si la portada es por defecto no la borramos
         if(!p.getPortada().equals("default.jpg")){ 
         
             upload.deleteImage(p.getPortada());
         }
+
+        //Si la imagen 1 es por defecto no la borramos
+        if(!p.getImagen1().equals("default.jpg")){ 
+        
+            upload.deleteImage(p.getImagen1());
+        }
+
+        //Si la imagen 2 es por defecto no la borramos
+        if(!p.getImagen2().equals("default.jpg")){ 
+        
+            upload.deleteImage(p.getImagen2());
+        }
+
+        
         
         productoService.deleteById(id);
-        return "redirect:/productos";
+        return "redirect:/productos/lista";
 
     }
 
