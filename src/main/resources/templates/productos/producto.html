@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+    <!-- Page Content -->
+    <div class="container">
+
+
+      <!-- Page Heading/Breadcrumbs -->
+      <h1 class="mt-4 mb-3">
+        Spring eCommerce <small>Producto</small>
+      </h1>
+
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+        <li class="breadcrumb-item active">Producto</li>
+      </ol>
+
+      <!-- Blog Post -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <a href="#"> <img class="img-fluid rounded"
+                th:src="@{/images/{img} (img = ${producto.portada})}"  alt="">
+              </a>
+            </div>
+            <div class="col-lg-6">
+              <form action="carrito.html" method="POST">
+                <h2 class="card-title" th:text="${producto.nombre}"></h2>
+
+                <ul class="list-group">
+                  <li class="list-group-item"><h5 th:text="${producto.precio} + €">Precio: </h5></li>
+                  <li class="list-group-item">
+                    <p th:text="${producto.descripcion}">Descripción:</p>
+                  </li>
+                </ul>
+
+
+                <button type="submit"  class="btn btn-dark">Añadir al carrito </button>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+    <!-- Scripts -->
+    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+
+  </body>
+
+  </html>
