@@ -34,6 +34,7 @@ public class Producto {
     private String descripcion;
     private int categoria;
     private boolean activo = true;
+    private boolean vendido = false;
 
     @ManyToOne
     private Usuario usuario;
