@@ -46,7 +46,7 @@ public class HomeController {
     }
 
     @PostMapping("/carrito")
-    public String addCarrito(@RequestParam("id") Integer id) {
+    public String addCarrito(@RequestParam("id") Integer id, Model model) {
 
         DetallePedido detallePedido = new DetallePedido();
         Producto producto = new Producto();
@@ -55,7 +55,29 @@ public class HomeController {
         Optional<Producto> optionalProducto = productoService.findById(id);
         System.out.println("Producto añadido: " + optionalProducto.get().getNombre());
         System.out.println("-------------------------");
-        System.out.println("Suma Total: " + sumaTotal);
+
+        if (optionalProducto.isPresent()) {
+            producto = optionalProducto.get();
+            detallePedido.setNombre(producto.getNombre());
+            detallePedido.setPrecio(producto.getPrecio());
+            detallePedido.setProducto(producto);
+
+            detalles.add(detallePedido);
+
+            //calcular sumaTotal
+            for (DetallePedido dp : detalles) {
+                sumaTotal += dp.getPrecio();
+            }
+
+
+            System.out.println("--------------"+sumaTotal);
+            pedido.setTotal(sumaTotal);
+
+            System.out.println("--------------"+pedido.getTotal());
+            model.addAttribute("detalles", detalles);
+            model.addAttribute("pedido", pedido);
+            
+        }
         
         return "usuarios/carrito";
     }
