@@ -31,16 +31,15 @@
               <thead>
                 <tr>
                   <th scope="col">Producto</th>
+                  <th scope="col"></th>
                   <th scope="col">Precio</th>
-                  <th scope="col">Total</th>
-                  <th scope="col">Acción</th>
                 </tr>
               </thead>
               <tbody>
                 <tr th:each="carrito : ${detalles}">
+                  <td><img th:src="@{images/{img} (img = ${carrito.producto.portada})}" width="100px" height="100px"/></td>
                   <td th:text="${carrito.nombre}"></td>
                   <td th:text="${carrito.precio}"></td>
-                  <td th:text="${carrito.total}"></td>
                   <td><a href="#" class="btn btn-danger">Quitar</a></td>
                 </tr>
               </tbody>
@@ -52,7 +51,7 @@
 
             <ul class="list-group">
               <li class="list-group-item"><h5 th:text="${pedido.total}"></h5></li>
-              <a href="resumenorden.html" class="btn btn-dark">Ver Orden</a>
+              <a href="resumenorden.html" class="btn btn-dark">Proceder al pago</a>
             </ul>
           </div>
 
