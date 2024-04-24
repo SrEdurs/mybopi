@@ -28,7 +28,6 @@ public class DetallePedido {
     private Integer id;
 
     private String nombre;
-    private double cantidad;
     private double precio;
     private double total;
 
