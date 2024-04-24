@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import es.mybopi.model.Producto;
 import es.mybopi.service.ProductoService;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 @Controller
 @RequestMapping("/")
@@ -35,4 +37,11 @@ public class HomeController {
         }
         return "productos/producto";
     }
+
+    @PostMapping("/carrito")
+    public String addCarrito() {
+        
+        return "usuarios/carrito";
+    }
+    
 }
