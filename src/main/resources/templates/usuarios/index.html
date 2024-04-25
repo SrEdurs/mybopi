@@ -11,16 +11,39 @@
     <!-- Page Content -->
     <div class="container">
 
-      <!-- Jumbotron Header -->
+      <!-- Jumbotron Header 
       <header class="jumbotron my-4">
         <h1 class="display-3">Mybopi</h1>
         <p class="lead">Tu tienda guay</p>
-      </header>
+      </header> -->
 
       <!-- Page Features -->
-      <div class="row text-center">
+      <div class="row text-center mb-4" style="margin-top: 50px; align-content: center;">
 
-        <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${productosHome}">
+        <!-- dos columnas con una card cada una-->
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card h-100">
+            <img class="card-img-top" th:src="@{/images/home/totebag.png}" alt="">
+            <div class="card-body">
+              <p class="card-text" th:text="TOTEBAGS"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card h-100">
+            <img class="card-img-top" th:src="@{/images/home/mochila.jpg}" alt="">
+            <div class="card-body">
+              <p class="card-text" th:text="MOCHILAS"></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row"> <h4>Últimas novedades</h4></div>
+        <div class="row">
+          <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${productosHome}">
           <div class="card h-100">
             <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt="">
             <div class="card-body">
@@ -30,10 +53,8 @@
               <a th:href="@{/producto/{id}(id=${producto.id})}" class="btn btn-success">Ver producto</a>
             </div>
           </div>
+          </div>
         </div>
-
-
-      </div>
       <!-- /.row -->
 
     </div>
