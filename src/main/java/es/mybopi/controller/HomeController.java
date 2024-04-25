@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import es.mybopi.model.DetallePedido;
 import es.mybopi.model.Pedido;
 import es.mybopi.model.Producto;
+import es.mybopi.repository.ProductoRepository;
 import es.mybopi.service.ProductoService;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -26,6 +27,9 @@ public class HomeController {
     @Autowired
     private ProductoService productoService;
 
+    @Autowired
+    private ProductoRepository productoRepository;
+
     private List<DetallePedido> detalles = new ArrayList<DetallePedido>();
     private Pedido pedido = new Pedido();
 
@@ -34,6 +38,20 @@ public class HomeController {
         List<Producto> productos = this.productoService.findAll();
         model.addAttribute("productosHome", productos);
         return "usuarios/index";
+    }
+
+    @GetMapping("/totebags")
+    public String totebags(Model model) {
+        List<Producto> totebags = this.productoRepository.findByCategoriaAndActivo(1, true);
+        model.addAttribute("inventario", totebags);
+        return "usuarios/totebags";
+    }
+
+    @GetMapping("/mochilas")
+    public String mochilas(Model model) {
+        List<Producto> mochilas = this.productoRepository.findByCategoriaAndActivo(2, true);
+        model.addAttribute("inventario", mochilas);
+        return "usuarios/mochilas";
     }
 
     @GetMapping("producto/{id}")

@@ -20,44 +20,16 @@
       <!-- Page Features -->
       <div class="row text-center allign-content-center justify-content-center mb-4" style="margin-top: 50px;">
 
-        <!-- dos columnas con una card cada una-->
-        <div class="col-lg-4 col-md-6 mb-4">
-          <div class="card h-100">
-            <a th:href="@{/totebags}">
-              <img class="card-img-top" th:src="@{/images/home/totebags.jpg}" alt="">
-            </a>
-            
-            <div class="card-body">
-              <p class="card-text" th:text="TOTEBAGS"></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 mb-4">
-          <div class="card h-100">
-            <a th:href="@{/mochilas}">
-              <img class="card-img-top" th:src="@{/images/home/mochilas.jpg}" alt="">
-            </a>
-            
-            <div class="card-body">
-              <p class="card-text" th:text="MOCHILAS"></p>
-            </div>
-          </div>
-        </div>
-
       </div>
 
       <div class="row">
-        <h4>Últimas novedades</h4>
+        <h4>Mochilas</h4>
       </div>
 
       <div class="row">
-        <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${productosHome}">
+        <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${inventario}">
         <div class="card h-100">
-          <a th:href="@{/producto/{id}(id=${producto.id})}">
-            <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt="" >
-          </a>
-          
+          <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt="" >
           <div class="card-body">
             <p class="card-text text-center" th:text="${producto.nombre}"></p>
           </div>
