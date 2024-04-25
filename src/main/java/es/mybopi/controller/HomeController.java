@@ -81,5 +81,40 @@ public class HomeController {
         
         return "usuarios/carrito";
     }
+
+    //Quitar un producto del carrito
+    @GetMapping("/quitar/{id}")
+    public String quitarProducto(@PathVariable Integer id, Model model) {
+
+        //Lista nueva de productos
+        List<DetallePedido> nuevaLista = new ArrayList<DetallePedido>();
+        for (DetallePedido dp : detalles) {
+            if (dp.getProducto().getId() != id) {
+                nuevaLista.add(dp);
+            }
+        }
+        detalles = nuevaLista;
+
+        //calcular sumaTotal
+        double sumaTotal = 0;
+        for (DetallePedido dp : detalles) {
+            sumaTotal += dp.getPrecio();
+        }
+        pedido.setTotal(sumaTotal);
+        model.addAttribute("detalles", detalles);
+        model.addAttribute("pedido", pedido);
+
+        return "redirect:/carrito";
+    }
+
+
+    //Carrito
+    @GetMapping("/carrito")
+    public String carrito(Model model) {
+        model.addAttribute("detalles", detalles);
+        model.addAttribute("pedido", pedido);
+        
+        return "usuarios/carrito";
+    }
     
 }
