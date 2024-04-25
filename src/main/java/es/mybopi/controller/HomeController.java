@@ -62,6 +62,19 @@ public class HomeController {
             detallePedido.setPrecio(producto.getPrecio());
             detallePedido.setProducto(producto);
 
+            //Validar que el producto no se añado 2 veces
+            boolean encontrado = false;
+            for (DetallePedido dp : detalles) {
+                if (dp.getProducto().getId() == producto.getId()) {
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (encontrado) {
+                System.out.println("El producto ya se encuentra en el carrito");
+                return "redirect:/carrito";
+            }
+
             detalles.add(detallePedido);
 
             //calcular sumaTotal
@@ -113,7 +126,7 @@ public class HomeController {
     public String carrito(Model model) {
         model.addAttribute("detalles", detalles);
         model.addAttribute("pedido", pedido);
-        
+
         return "usuarios/carrito";
     }
     
