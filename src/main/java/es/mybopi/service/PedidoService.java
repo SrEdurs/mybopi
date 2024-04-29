@@ -9,5 +9,6 @@ public interface PedidoService {
     List<Pedido> findAll();
     Pedido save(Pedido pedido);
     String generarNumPedido();
+    
 
 }

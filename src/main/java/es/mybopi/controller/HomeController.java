@@ -171,16 +171,43 @@ public class HomeController {
 
     @GetMapping("/guardarPedido")
     public String guardarPedido() {
+
+        System.out.println("--------------" + detalles.size());
+        List<Producto> productos = new ArrayList<Producto>();
+        for (int i = 0; i < detalles.size(); i++) {
+            System.out.println("----------------------------------111111111111----------------");
+            productos.add(detalles.get(i).getProducto());
+            detalles.get(i).getProducto().setElPedido(pedido);
+            System.out.println("-------------------------" + detalles.get(i).getProducto().getNombre());
+        }
+
+        
+
+        
+
+
+        pedido.setProductos(productos);
+        pedido.setTotal(pedido.getTotal());
         Date fechaPedido = new Date();
         pedido.setFecha(fechaPedido);
         pedido.setNumero(pedidoService.generarNumPedido());
         pedido.setUsuario(usuarioService.findById(1));
         pedidoService.save(pedido);
 
-        for (DetallePedido dp : detalles) {
-            dp.setPedido(pedido);
-            detalleService.save(dp);
+        //Guardar los productos del list
+        for (Producto p : productos) {
+            p.setVendido(true);
+            productoService.save(p);
         }
+
+        //Leer el list de productos
+        for (Producto p : productos) {
+            System.out.println("-------------------------" + p.getNombre());
+        }
+
+        System.out.println("--------------" + pedido.getProductos().size());
+        System.out.println("--------------" + pedido.getProductos().get(0).getNombre());
+        
 
         pedido = new Pedido();
         detalles.clear();
