@@ -2,8 +2,6 @@ package es.mybopi.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import es.mybopi.model.Pedido;
