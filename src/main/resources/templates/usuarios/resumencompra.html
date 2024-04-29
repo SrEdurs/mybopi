@@ -31,9 +31,10 @@
               <h5 class="card-title">
                 DATOS PEDIDO
               </h5>
-              <h6>Nombre: </h6>
-              <h6 >Correo: </h6>
-              <h6 >Dirección</h6>
+              <h6 th:text="'Nombre: ' + ${usuario.nombre}">Nombre: </h6>
+              <h6 th:text="'Correo: ' + ${usuario.email}">Correo: </h6>
+              <h6 th:text="'Tlf: ' + ${usuario.telefono}">Tlf: </h6>
+              <h6 th:text="'Dirección: ' + ${usuario.direccion}">Dirección</h6>
 
               <h5 class="card-title">
                 PRODUCTOS
@@ -43,13 +44,15 @@
                   <thead>
                     <tr>
                       <th scope="col">Producto</th>
+                      <th scope="col"></th>
                       <th scope="col">Precio</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                     <td >Nombre</td>
-                     <td >Precio</td>
+                    <tr th:each="carrito : ${detalles}">
+                      <td><img th:src="@{images/{img} (img = ${carrito.producto.portada})}" width="100px" height="100px"/></td>
+                     <td th:text="${carrito.producto.nombre}">Nombre</td>
+                     <td th:text="${carrito.producto.precio}">Precio</td>
                    </tr>
                  </tbody>
                </table>
@@ -63,7 +66,7 @@
           <h2 class="card-title">Resumen</h2>
 
           <ul class="list-group">
-            <li class="list-group-item"><h5> Total:</h5></li>
+            <li class="list-group-item"><h5 th:text="'Total: ' + ${pedido.total}"></h5></li>
             <a href="#" class="btn btn-dark">Generar</a>
           </ul>
         </div>

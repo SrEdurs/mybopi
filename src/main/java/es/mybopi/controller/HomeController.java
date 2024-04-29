@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import es.mybopi.model.DetallePedido;
 import es.mybopi.model.Pedido;
 import es.mybopi.model.Producto;
+import es.mybopi.model.Usuario;
 import es.mybopi.repository.ProductoRepository;
 import es.mybopi.service.ProductoService;
+import es.mybopi.service.UsuarioService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -29,6 +32,9 @@ public class HomeController {
 
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     private List<DetallePedido> detalles = new ArrayList<DetallePedido>();
     private Pedido pedido = new Pedido();
@@ -149,8 +155,10 @@ public class HomeController {
 
     @GetMapping("/pedido")
     public String order(Model model) {
+        Usuario usuario = usuarioService.findById(1);
         model.addAttribute("detalles", detalles);
         model.addAttribute("pedido", pedido);
+        model.addAttribute("usuario", usuario);
         return "usuarios/resumencompra";
     }
     
