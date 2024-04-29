@@ -147,5 +147,10 @@ public class HomeController {
 
         return "usuarios/carrito";
     }
+
+    @GetMapping("/pedido")
+    public String order(Model model) {
+        return "usuarios/resumencompra";
+    }
     
 }

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+    <!-- Page Content -->
+    <div class="container">
+
+
+      <!-- Page Heading/Breadcrumbs -->
+      <h1 class="mt-4 mb-3">
+        Mybopi <small>Resumen del pedido</small>
+      </h1>
+
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+        <li class="breadcrumb-item active">Pedido</li>
+      </ol>
+
+      <!-- Blog Post -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row">
+           <div class="col-lg-9">
+             <div class="card-body">
+              <h5 class="card-title">
+                DATOS PEDIDO
+              </h5>
+              <h6>Nombre: </h6>
+              <h6 >Correo: </h6>
+              <h6 >Dirección</h6>
+
+              <h5 class="card-title">
+                PRODUCTOS
+              </h5>
+              <div class="alert alert-light" role="alert">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Producto</th>
+                      <th scope="col">Precio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                     <td >Nombre</td>
+                     <td >Precio</td>
+                   </tr>
+                 </tbody>
+               </table>
+             </div>
+
+           </div>
+         </div>
+
+
+         <div class="col-lg-3">
+          <h2 class="card-title">Resumen</h2>
+
+          <ul class="list-group">
+            <li class="list-group-item"><h5> Total:</h5></li>
+            <a href="#" class="btn btn-dark">Generar</a>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.container -->
+
+<!-- Footer -->
+<div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+<!-- Scripts -->
+<div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+</body>
+
+</html>
