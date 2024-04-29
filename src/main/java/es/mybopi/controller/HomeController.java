@@ -94,7 +94,6 @@ public class HomeController {
             pedido.setFecha(new Date());
             pedido.setNumero(pedidoService.generarNumPedido());
             pedido.setTotal(sumaTotal);
-            pedidoService.save(pedido);
             model.addAttribute("pedido", pedido);
             
         }
