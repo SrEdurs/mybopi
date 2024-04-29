@@ -67,7 +67,7 @@
 
           <ul class="list-group">
             <li class="list-group-item"><h5 th:text="'Total: ' + ${pedido.total}"></h5></li>
-            <a href="#" class="btn btn-dark">Generar</a>
+            <a th:href="@{/guardarPedido}" class="btn btn-dark">Generar</a>
           </ul>
         </div>
       </div>
