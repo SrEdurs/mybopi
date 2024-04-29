@@ -7,5 +7,6 @@ import es.mybopi.model.Usuario;
 @Service
 public interface UsuarioService {
     Usuario findById(Integer id);
+    Usuario save(Usuario usuario);
 
 }
