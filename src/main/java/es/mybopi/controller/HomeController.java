@@ -21,6 +21,8 @@ import es.mybopi.service.PedidoService;
 import es.mybopi.service.ProductoService;
 import es.mybopi.service.UsuarioService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Controller
@@ -186,5 +188,17 @@ public class HomeController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/buscar")
+    public String buscarProducto(@RequestParam("nombre") String nombre, Model model) {
+        final List<Producto> productos = this.productoRepository.findByNombreContainingIgnoreCaseAndActivo(nombre, true);
+        //Recorremos el list por consola
+        for (Producto p : productos) {
+            System.out.println(p.getNombre());
+        }
+        model.addAttribute("producto", productos);
+        return "usuarios/busqueda";
+    }
+    
     
 }

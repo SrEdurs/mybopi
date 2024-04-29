@@ -20,7 +20,7 @@
       <div class="container">
         <a class="navbar-brand" th:href="@{/}" style="color: black; font-weight: bold;">Mybopi</a>
 
-        <form class="form-inline my-2 my-lg-0" method="post" action="#">
+        <form class="form-inline my-2 my-lg-0" method="get" th:action="@{/buscar}">
           <input class="form-control mr-sm-2" type="search"
           placeholder="Buscar" aria-label="Search" name="nombre"
           autocomplete="off">

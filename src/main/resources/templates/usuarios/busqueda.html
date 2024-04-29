@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- Jumbotron Header 
+      <header class="jumbotron my-4">
+        <h1 class="display-3">Mybopi</h1>
+        <p class="lead">Tu tienda guay</p>
+      </header> -->
+
+      <!-- Page Features -->
+      <div class="row text-center allign-content-center justify-content-center mb-4" style="margin-top: 50px;">
+
+      </div>
+
+      <div class="row">
+        <h4>Resultado de la búsqueda</h4>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${producto}">
+        <div class="card h-100">
+          <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt="" >
+          <div class="card-body">
+            <p class="card-text text-center" th:text="${producto.nombre}"></p>
+          </div>
+          <div class="card-footer text-center justify-content-center" style="background-color: rgba(255, 203, 58, 0.329);">
+            <a th:href="@{/producto/{id}(id=${producto.id})}" class="btn" style="background-color: rgba(0, 0, 0, 0.295); color: rgb(255, 255, 255);">Ver producto</a>
+          </div>
+        </div>
+        </div>
+      </div>
+      
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+    <!-- Scripts -->
+    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+  </body>
+
+  </html>
