@@ -144,12 +144,13 @@ public class HomeController {
     public String carrito(Model model) {
         model.addAttribute("detalles", detalles);
         model.addAttribute("pedido", pedido);
-
         return "usuarios/carrito";
     }
 
     @GetMapping("/pedido")
     public String order(Model model) {
+        model.addAttribute("detalles", detalles);
+        model.addAttribute("pedido", pedido);
         return "usuarios/resumencompra";
     }
     
