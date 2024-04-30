@@ -1,6 +1,7 @@
 package es.mybopi.controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -51,6 +52,10 @@ public class ProductoController {
         Usuario u = new Usuario(1, "admin", "admin", "admin", "admin", "admin", null, 1, "admin", null, null);
         producto.setUsuario(u);
 
+        //Fecha
+        Date date = new Date();
+        producto.setFecha(date);
+
         if(producto.getId() == null){ //Creando un producto
             String nombreImagen = upload.saveImage(file);
             producto.setPortada(nombreImagen);
@@ -83,6 +88,10 @@ public class ProductoController {
 
         Producto p = new Producto();
         p = productoService.findById(producto.getId()).get();
+
+        //Fecha
+        Date date = new Date();
+        producto.setFecha(date);
 
         if(portada.isEmpty()){
             
