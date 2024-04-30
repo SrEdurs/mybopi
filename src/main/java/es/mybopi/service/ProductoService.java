@@ -15,4 +15,6 @@ public interface ProductoService {
 
     public List<Producto> findAll();
 
+    public List<Producto> findTop4ByActivoOrderByFechaDesc(boolean activo);
+
 }

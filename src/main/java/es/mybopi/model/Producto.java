@@ -1,5 +1,7 @@
 package es.mybopi.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,6 +37,7 @@ public class Producto {
     private int categoria;
     private boolean activo = true;
     private boolean vendido = false;
+    private Date fecha;
 
     @ManyToOne
     private Usuario usuario;

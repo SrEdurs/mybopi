@@ -42,7 +42,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        List<Producto> productos = this.productoService.findAll();
+        List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
         model.addAttribute("productosHome", productos);
         return "usuarios/index";
     }
