@@ -78,23 +78,31 @@ public class HomeController {
 
         Optional<Producto> optionalProducto = productoService.findById(id);
         if (optionalProducto.isPresent()) {
-            producto = optionalProducto.get();
 
-            //Añadir el producto al pedido
-            productosCarro.add(producto);
-            pedido.setProductos(productosCarro);
-            
-            //Calcular el total del pedido
+            //Comprobar si el producto ya se encuentra en el carrito
             for (Producto p : productosCarro) {
-                sumaTotal += p.getPrecio();
+                if (p.getId() == id) {
+                    return "redirect:/carrito";
+                }
             }
-        
-            Usuario usuario = usuarioService.findById(1);
-            pedido.setUsuario(usuario);
-            pedido.setFecha(new Date());
-            pedido.setNumero(pedidoService.generarNumPedido());
-            pedido.setTotal(sumaTotal);
-            model.addAttribute("pedido", pedido);
+            
+                producto = optionalProducto.get();
+
+                //Añadir el producto al pedido
+                productosCarro.add(producto);
+                pedido.setProductos(productosCarro);
+                
+                //Calcular el total del pedido
+                for (Producto p : productosCarro) {
+                    sumaTotal += p.getPrecio();
+                }
+            
+                Usuario usuario = usuarioService.findById(1);
+                pedido.setUsuario(usuario);
+                pedido.setFecha(new Date());
+                pedido.setNumero(pedidoService.generarNumPedido());
+                pedido.setTotal(sumaTotal);
+                model.addAttribute("pedido", pedido);
             
         }
         
