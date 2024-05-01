@@ -18,39 +18,34 @@
 
     <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgb(241, 193, 120);">
       <div class="container">
-        <a class="navbar-brand" th:href="@{/}" style="color: black; font-weight: bold;">Mybopi</a>
-
-        <form class="form-inline my-2 my-lg-0" method="get" th:action="@{/buscar}">
-          <input class="form-control mr-sm-2" type="search"
-          placeholder="Buscar" aria-label="Search" name="nombre"
-          autocomplete="off">
-          <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Buscar</button>
-        </form>
+          <a class="navbar-brand" th:href="@{/}" style="color: black; font-weight: bold;">Mybopi</a>
   
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#"
-              id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false" style="color: black;"> USUARIO </a>
-
-              <div class="dropdown-menu"
-                aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" th:href="@{/carrito}">Carrito</a> 
-                <a class="dropdown-item" th:href="@{/pedidos}">Pedidos</a>
-                <a class="dropdown-item" th:href="@{/logout}">Logout</a>
-              </div>
-            </li>
-
-          </ul>
-        </div>
-      </div>  
-    </nav>
+          <form class="form-inline my-2 my-lg-0" method="get" th:action="@{/buscar}">
+              <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search" name="nombre" autocomplete="off">
+              <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Buscar</button>
+          </form>
+  
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" style="background-color: aquamarine;">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+              <ul class="navbar-nav ml-auto">
+  
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;"> USUARIO </a>
+  
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <a class="dropdown-item" th:href="@{/carrito}">Carrito</a> 
+                          <a class="dropdown-item" th:href="@{/pedidos}">Pedidos</a>
+                          <a class="dropdown-item" th:href="@{/logout}">Logout</a>
+                      </div>
+                  </li>
+  
+              </ul>
+          </div>
+      </div>   
+  </nav>
 
   </div>
 

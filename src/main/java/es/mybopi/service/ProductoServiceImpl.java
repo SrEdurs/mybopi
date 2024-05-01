@@ -40,6 +40,11 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.findAll();
     }
 
+    @Override
+    public List<Producto> findTop4ByActivoOrderByFechaDesc(boolean activo) {
+        return productoRepository.findTop4ByActivoOrderByFechaDesc(activo);
+    }
+
 
 
 }
