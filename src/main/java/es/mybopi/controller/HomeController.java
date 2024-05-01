@@ -2,6 +2,7 @@ package es.mybopi.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +89,11 @@ public class HomeController {
             
                 producto = optionalProducto.get();
 
+                //Comprobar si el producto se ha vendido
+                if (producto.isVendido()) {
+                    producto.setPrecio(0);                   
+                }
+
                 //Añadir el producto al pedido
                 productosCarro.add(producto);
                 pedido.setProductos(productosCarro);
@@ -103,6 +109,9 @@ public class HomeController {
                 pedido.setNumero(pedidoService.generarNumPedido());
                 pedido.setTotal(sumaTotal);
                 model.addAttribute("pedido", pedido);
+
+                
+               
             
         }
         
@@ -138,12 +147,40 @@ public class HomeController {
     //Carrito
     @GetMapping("/carrito")
     public String carrito(Model model) {
+        //Comprobar si algún producto se ha vendido
+        for (Producto p : productosCarro) {
+            if (p.isVendido()) {
+                p.setPrecio(0);
+            }
+        }
         model.addAttribute("pedido", pedido);
         return "usuarios/carrito";
     }
 
+    @GetMapping("/prepedido")
+    public String preorder(Model model) {
+       
+        Iterator<Producto> iterator = productosCarro.iterator();
+
+        while(iterator.hasNext()) {
+            Producto p = iterator.next();
+            if (p.isVendido()) {
+                iterator.remove(); // Eliminar el producto usando el iterador
+            }
+        }
+
+        return "redirect:/pedido";
+    }
+
     @GetMapping("/pedido")
     public String order(Model model) {
+
+        /*for (Producto p : productosCarro) {
+            if (p.isVendido()) {
+                productosCarro.remove(p);
+            }
+        }*/
+
         Usuario usuario = usuarioService.findById(1);
         model.addAttribute("pedido", pedido);
         model.addAttribute("usuario", usuario);
@@ -153,31 +190,19 @@ public class HomeController {
     @GetMapping("/guardarPedido")
     public String guardarPedido() {
 
-        
-        System.out.println("-------------------00000000000--------------");
         List<Producto> productos = new ArrayList<Producto>();
 
-        System.out.println("-------------------11111111--------------");
          for (int i = 0; i < productosCarro.size(); i++) {
-            System.out.println("-------------------111111555555555--------------");
             productos.add(productosCarro.get(i));
             productosCarro.get(i).setElPedido(pedido);
         }
 
-        System.out.println("-------------------2222222222--------------");
-
         pedido.setProductos(productos);
-        System.out.println("-------------------33333333333--------------");
         pedido.setTotal(pedido.getTotal());
-        System.out.println("-------------------44444444444444--------------");
         Date fechaPedido = new Date();
-        System.out.println("-------------------5555555555555--------------");
         pedido.setFecha(fechaPedido);
-        System.out.println("-------------------666666666666666--------------");
         pedido.setNumero(pedidoService.generarNumPedido());
-        System.out.println("-------------------777777777777--------------");
         pedido.setUsuario(usuarioService.findById(1));
-        System.out.println("-------------------888888888888888--------------");
         pedidoService.save(pedido);
 
         //Guardar los productos del list

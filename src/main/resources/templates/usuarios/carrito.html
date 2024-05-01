@@ -42,9 +42,11 @@
                 </tr>
                 
                 <tr th:each="carrito : ${pedido.productos}">
-                  <td><img th:src="@{images/{img} (img = ${carrito.portada})}" width="100px" height="100px"/></td>
-                  <td th:text="${carrito.nombre}"></td>
-                  <td th:text="${carrito.precio}"></td>
+                  <td><img th:src="@{images/{img} (img = ${carrito.portada})}" width="100px" height="100px" th:classappend="${carrito.vendido} ? 'grayscale' : ''"/></td>
+                  <td th:if="${carrito.vendido}" th:text="${carrito.nombre}"></td>
+                  <td th:if="!${carrito.vendido}" th:text="${carrito.nombre}"></td>
+                  <td th:if="!${carrito.vendido}" th:text="${carrito.precio}"></td>
+                  <td th:if="${carrito.vendido}" th:text="'[VENDIDO]'" style="font-size: large; color: red"></td>
                   <td><a th:href="@{/quitar/{id} (id = ${carrito.id})}" class="btn btn-danger">Quitar</a></td>
                 </tr>
 
@@ -57,7 +59,7 @@
 
             <ul class="list-group">
               <li class="list-group-item"><h5 th:text="${pedido.total}"></h5></li>
-              <a th:href="@{/pedido}" class="btn btn-dark">Continuar</a>
+              <a th:href="@{/prepedido}" class="btn btn-dark">Continuar</a>
             </ul>
           </div>
 
