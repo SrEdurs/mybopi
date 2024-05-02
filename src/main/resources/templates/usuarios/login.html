@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <div class="card mb-3">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h2>Iniciar sesión</h2>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <form  action="#" method="post">
+      <div class="form-group">
+        <label for="email"> Email:  </label>      
+        <input type="email" class="form-control" id="email" name="email" placeholder="Ingrese su email" required autocomplete="off"> 
+
+      </div>
+
+      <div class="form-group">
+        <label for="pwd"> Contraseña:</label>
+        <input type="password"  class="form-control" id="password" name="password" placeholder="Ingrese su contraseña" required>       
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-2">
+          <button type="submit" class="btn btn-dark"> <span class="glyphicon glyphicon-ok"></span> Iniciar sesión</button>
+        </div>      
+      </div>    
+    </form>
+    <a th:href="@{/usuario/registro}" class="card-link">Registrarse</a>
+  </div>
+  <!-- /.container -->
+
+    <!-- Footer -->
+    <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+    <!-- Scripts -->
+    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+</body>
+
+</html>
