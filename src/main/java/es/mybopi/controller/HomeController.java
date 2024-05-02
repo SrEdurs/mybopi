@@ -19,6 +19,8 @@ import es.mybopi.repository.ProductoRepository;
 import es.mybopi.service.PedidoService;
 import es.mybopi.service.ProductoService;
 import es.mybopi.service.UsuarioService;
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -42,7 +44,9 @@ public class HomeController {
     private List<Producto> productosCarro = new ArrayList<Producto>();
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, HttpSession session) {
+        System.out.println("Sesión del usuario: " + session.getAttribute("idusuario"));
+        System.out.println("-------------------------" + session.getAttribute("nombreusuario"));
         List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
         model.addAttribute("productosHome", productos);
         return "usuarios/index";
@@ -72,7 +76,7 @@ public class HomeController {
     }
 
     @PostMapping("/carrito")
-    public String addCarrito(@RequestParam("id") Integer id, Model model) {
+    public String addCarrito(@RequestParam("id") Integer id, Model model, HttpSession session) {
 
         Producto producto = new Producto();
         double sumaTotal = 0;
@@ -103,7 +107,7 @@ public class HomeController {
                     sumaTotal += p.getPrecio();
                 }
             
-                Usuario usuario = usuarioService.findById(1);
+                Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
                 pedido.setUsuario(usuario);
                 pedido.setFecha(new Date());
                 pedido.setNumero(pedidoService.generarNumPedido());
@@ -173,7 +177,7 @@ public class HomeController {
     }
 
     @GetMapping("/pedido")
-    public String order(Model model) {
+    public String order(Model model, HttpSession session) {
 
         /*for (Producto p : productosCarro) {
             if (p.isVendido()) {
@@ -181,14 +185,14 @@ public class HomeController {
             }
         }*/
 
-        Usuario usuario = usuarioService.findById(1);
+        Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
         model.addAttribute("pedido", pedido);
         model.addAttribute("usuario", usuario);
         return "usuarios/resumencompra";
     }
 
     @GetMapping("/guardarPedido")
-    public String guardarPedido() {
+    public String guardarPedido(HttpSession session) {
 
         List<Producto> productos = new ArrayList<Producto>();
 
@@ -202,7 +206,7 @@ public class HomeController {
         Date fechaPedido = new Date();
         pedido.setFecha(fechaPedido);
         pedido.setNumero(pedidoService.generarNumPedido());
-        pedido.setUsuario(usuarioService.findById(1));
+        pedido.setUsuario(usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())));
         pedidoService.save(pedido);
 
         //Guardar los productos del list
