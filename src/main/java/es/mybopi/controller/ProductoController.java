@@ -20,6 +20,8 @@ import es.mybopi.model.Producto;
 import es.mybopi.model.Usuario;
 import es.mybopi.service.ProductoService;
 import es.mybopi.service.UploadFileService;
+import es.mybopi.service.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/productos")
@@ -32,6 +34,9 @@ public class ProductoController {
     
     @Autowired
     private ProductoService productoService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping("/lista")
     public String detalles(Model model){
@@ -47,9 +52,9 @@ public class ProductoController {
 
     //Guardar un nuevo producto
     @PostMapping("/guardar")
-    public String guardar(Producto producto, @RequestParam("img1") MultipartFile file, @RequestParam("img2") MultipartFile file2, @RequestParam("img3") MultipartFile file3) throws IOException{
+    public String guardar(Producto producto, @RequestParam("img1") MultipartFile file, @RequestParam("img2") MultipartFile file2, @RequestParam("img3") MultipartFile file3, HttpSession session) throws IOException{
         LOGGER.info("Guardado {}", producto);
-        Usuario u = new Usuario(1, "admin", "admin", "admin", "admin", "admin", null, 1, "admin", null, null);
+        Usuario u = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
         producto.setUsuario(u);
 
         //Fecha
