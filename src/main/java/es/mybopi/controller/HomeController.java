@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,9 +48,23 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model, HttpSession session) {
         List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
+        System.out.println("--------------------------------- " + name + " ---------------------------");
+
+
+        if (user.isPresent()) {
+            System.out.println("Usuario encontrado: " + user.get().getNombre());
+            session.setAttribute("idusuario", user.get().getId());
+        }
+
+
+
         model.addAttribute("productosHome", productos);
         model.addAttribute("session", session.getAttribute("idusuario"));
-        System.out.println("----------------------Session: " + session.getAttribute("idusuario"));
         return "usuarios/index";
     }
 
