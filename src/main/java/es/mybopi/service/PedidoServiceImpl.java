@@ -2,6 +2,8 @@ package es.mybopi.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import es.mybopi.model.Pedido;
@@ -53,5 +55,9 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public List<Pedido> findByUsuario_Id(int id) {
         return pedidoRepository.findByUsuario_Id(id);
+    }
+    @Override
+    public Optional<Pedido> findById(int id) {
+        return pedidoRepository.findById(id);
     }
 }

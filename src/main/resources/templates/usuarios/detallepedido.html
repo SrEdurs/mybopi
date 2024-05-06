@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+    <!-- Page Content -->
+    <div class="container">
+
+
+      <!-- Page Heading/Breadcrumbs -->
+      <h1 class="mt-4 mb-3">
+        Mybopi <small>Detalles</small>
+      </h1>
+
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/pedidos}">Pedidos</a></li>
+        <li class="breadcrumb-item active">Detalle de pedido</li>
+      </ol>
+
+      <!-- Blog Post -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row">
+           <div class="col-lg-12">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Pedido</th>                  
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Total</th>                 
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td th:text="${pedido.numero}"></td>
+                  <td th:text="${pedido.fecha}"></td>
+                  <td th:text="${pedido.total}">Total</td>
+                  <td ></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Producto</th>
+                  <th scope="col"></th>
+                  <th scope="col">Precio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="producto : ${pedido.productos}">
+                  <td><img th:src="@{'/images/' + ${producto.portada}}" width="100px" height="100px"/></td>
+                  <td th:text="${producto.nombre}"></td>
+                  <td th:text="${producto.precio}"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.container -->
+
+    <!-- Footer -->
+    
+
+    <!-- Scripts -->
+    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+</body>
+
+</html>
+

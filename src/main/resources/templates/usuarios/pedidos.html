@@ -27,7 +27,7 @@
         <div class="card-body">
           <div class="row">
            <div class="col-lg-12">
-            <table class="table">
+            <table th:if="${pedidos} != null" class="table">
               <thead>
                 <tr>
                   <th scope="col">Pedido</th>
@@ -41,7 +41,7 @@
                   <td th:text="${pedido.numero}">4555454</td>
                   <td th:text="${pedido.fecha}">Fecha de Compra</td>
                   <td th:text="${pedido.total}">Total</td>
-                  <td><a href="detallecompra.html" class="btn btn-success">Ver Detalle</a></td>
+                  <td><a th:href="@{/pedidos/{id}(id=${pedido.id})}" class="btn btn-success">Ver Detalle</a></td>
                 </tr>
               </tbody>
             </table>

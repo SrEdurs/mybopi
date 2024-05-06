@@ -45,7 +45,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, HttpSession session) {
-        System.out.println("session: " + session.getAttribute("idusuario"));
         List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
         model.addAttribute("productosHome", productos);
         model.addAttribute("session", session.getAttribute("idusuario"));
@@ -236,6 +235,16 @@ public class HomeController {
         List<Pedido> pedidos = pedidoService.findByUsuario_Id(Integer.parseInt(session.getAttribute("idusuario").toString()));
         model.addAttribute("pedidos", pedidos);
         return "usuarios/pedidos";
+    }
+
+    @GetMapping("/pedidos/{id}")
+    public String pedidos(@PathVariable Integer id, Model model, HttpSession session) {
+        Optional<Pedido> pedido = pedidoService.findById(id);
+        if(pedido.isPresent()){
+            model.addAttribute("pedido", pedido.get());
+            return "usuarios/detallepedido";
+        }
+        return "usuarios/detallepedido";
     }
     
     
