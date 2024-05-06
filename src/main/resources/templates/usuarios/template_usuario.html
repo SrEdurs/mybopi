@@ -33,13 +33,13 @@
               <ul class="navbar-nav ml-auto">
   
                   <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;"> USUARIO </a>
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;"> MENU </a>
   
                       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                          <a class="dropdown-item" th:href="@{/usuario/login}">Login</a>
+                          <a th:if="${session == null}" class="dropdown-item" th:href="@{/usuario/login}">Login</a>
                           <a class="dropdown-item" th:href="@{/carrito}">Carrito</a> 
                           <a class="dropdown-item" th:href="@{/pedidos}">Pedidos</a>
-                          <a class="dropdown-item" th:href="@{/logout}">Logout</a>
+                          <a th:if="${session != null}" class="dropdown-item" th:href="@{/logout}">Logout</a>
                       </div>
                   </li>
   

@@ -50,4 +50,8 @@ public class PedidoServiceImpl implements PedidoService {
 
         return numconcact;
     }
+    @Override
+    public List<Pedido> findByUsuario_Id(int id) {
+        return pedidoRepository.findByUsuario_Id(id);
+    }
 }

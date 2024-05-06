@@ -45,10 +45,10 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, HttpSession session) {
-        System.out.println("Sesión del usuario: " + session.getAttribute("idusuario"));
-        System.out.println("-------------------------" + session.getAttribute("nombreusuario"));
+        System.out.println("session: " + session.getAttribute("idusuario"));
         List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
         model.addAttribute("productosHome", productos);
+        model.addAttribute("session", session.getAttribute("idusuario"));
         return "usuarios/index";
     }
 
@@ -229,6 +229,13 @@ public class HomeController {
         }
         model.addAttribute("producto", productos);
         return "usuarios/busqueda";
+    }
+
+    @GetMapping("/pedidos")
+    public String pedidos(Model model, HttpSession session) {
+        List<Pedido> pedidos = pedidoService.findByUsuario_Id(Integer.parseInt(session.getAttribute("idusuario").toString()));
+        model.addAttribute("pedidos", pedidos);
+        return "usuarios/pedidos";
     }
     
     
