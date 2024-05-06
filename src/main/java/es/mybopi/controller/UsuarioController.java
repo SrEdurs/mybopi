@@ -11,7 +11,6 @@ import es.mybopi.model.Usuario;
 import es.mybopi.service.UsuarioService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,12 +31,6 @@ public class UsuarioController {
         return "usuarios/registro";
     }
     
-    /*@PostMapping("/save")
-    public Usuario save(@ModelAttribute Usuario user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        return usuarioService.save(user);
-    }*/
-
     @PostMapping("/save")
     public String save(@ModelAttribute Usuario user) {
         user.setPassword(encoder.encode(user.getPassword()));
