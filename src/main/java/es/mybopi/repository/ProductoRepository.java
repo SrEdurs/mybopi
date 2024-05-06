@@ -11,12 +11,11 @@ import es.mybopi.model.Producto;
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     
 
-    //Findby categoria y activo
     List<Producto> findByCategoriaAndActivo(int categoria, boolean activo);
-
     List<Producto> findByNombreContainingIgnoreCaseAndActivo(String nombre, boolean b);
-
-    //4 últimos productos activos
     List<Producto> findTop4ByActivoOrderByFechaDesc(boolean activo);
+    
+
+
     
 }

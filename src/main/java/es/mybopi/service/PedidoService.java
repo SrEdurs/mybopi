@@ -13,6 +13,7 @@ public interface PedidoService {
     String generarNumPedido();
     List<Pedido> findByUsuario_Id(int id);
     Optional<Pedido> findById(int id);
+    List<Pedido> findAllWithOrderByFechaDesc();
     
 
 }
