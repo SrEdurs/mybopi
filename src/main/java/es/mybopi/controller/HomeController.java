@@ -48,6 +48,7 @@ public class HomeController {
         List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
         model.addAttribute("productosHome", productos);
         model.addAttribute("session", session.getAttribute("idusuario"));
+        System.out.println("----------------------Session: " + session.getAttribute("idusuario"));
         return "usuarios/index";
     }
 
