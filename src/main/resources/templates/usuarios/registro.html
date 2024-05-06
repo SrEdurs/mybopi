@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <form th:action="@{/usuario/save}" method="post">
+    <form th:action="@{/usuario/save}" method="post"  enctype="application/x-www-form-urlencoded">
       <div class="form-group">
         <label for="InputUser">Usuario:</label>
         <input required type="text" id="InputUser" class="form-control" maxlength="30" name="nombre" pattern="^(?!\s*$).{6,}$"/>

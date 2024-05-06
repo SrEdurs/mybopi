@@ -34,7 +34,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         return User.builder()
                 .username(usuario.getNombre())
                 .password(encoder.encode(usuario.getPassword()))
-                .roles(usuario.getAdmin())
+                .roles(usuario.getRoles())
                 .build();
     }).orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 }

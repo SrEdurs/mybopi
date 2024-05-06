@@ -32,7 +32,7 @@ public class Usuario {
     private String email;
     private String direccion;
     private String telefono;
-    private String admin;
+    private String roles; // ADMIN o USER
     private int activo = 1;
     private String password;
 
