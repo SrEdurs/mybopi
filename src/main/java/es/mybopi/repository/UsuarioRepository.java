@@ -1,5 +1,6 @@
 package es.mybopi.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,8 @@ import es.mybopi.model.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Optional<Usuario> findByEmail(String email);
+
+    //Lista de todos los usuarios
+    @SuppressWarnings("null")
+    List<Usuario> findAll();
 }

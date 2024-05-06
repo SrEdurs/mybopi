@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import es.mybopi.model.Producto;
+import es.mybopi.model.Usuario;
 import es.mybopi.service.ProductoService;
+import es.mybopi.service.UsuarioService;
 
 @Controller
 @RequestMapping("/admin")
@@ -18,11 +20,21 @@ public class AdminController {
     @Autowired
     private ProductoService productoService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @GetMapping("")
     public String home(Model model) {
         List<Producto> productos = this.productoService.findAll();
         model.addAttribute("productos", productos);
         return "admin/home";
+    }
+
+    @GetMapping("/usuarios")
+    public String usuarios(Model model) {
+        List<Usuario> usuarios = this.usuarioService.findAll();
+        model.addAttribute("usuarios", usuarios);
+        return "admin/usuarios";
     }
     
 }
