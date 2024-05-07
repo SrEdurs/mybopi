@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+    <!-- Page Content -->
+    <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title" th:text="'Hola! ' + ${usuario.username}" ></h5>
+        <h6 class="card-subtitle mb-2 text-muted">Desde aquí puedes ver y editar tu información personal, tu dirección de envío y ver tus pedidos.</h6>
+        <div class="list-group">
+          <a th:href="@{/usuario/direccion/editar}" class="list-group-item list-group-item-action">Editar Dirección</a>
+          <a th:href="@{/usuario/cuenta/editar}" class="list-group-item list-group-item-action">Editar Detalles</a>
+          <a th:href="@{/pedidos}" class="list-group-item list-group-item-action">Ver Pedidos</a>
+        </div>
+      </div>
+    </div>
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+    <!-- Scripts -->
+    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+  </body>
+
+  </html>

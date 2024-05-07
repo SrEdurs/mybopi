@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+    <!-- Page Content -->
+    <div class="container">
+
+
+      <h1 class="mb-4">Editar Información de Usuario</h1>
+    <form th:action="@{/usuario/cuenta/editar}" method="post">
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Usuario @</span>
+        <input th:field="${usuario.username}" name="username" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Nombre</span>
+        <input th:field="${usuario.nombre}" name="nombre" type="text" class="form-control" placeholder="Nombre" aria-label="Username" aria-describedby="basic-addon1">
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Apellidos</span>
+        <input th:field="${usuario.apellidos}" name="apellidos" type="text" class="form-control" placeholder="Apellidos" aria-label="Username" aria-describedby="basic-addon1">
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Email</span>
+        <input th:field="${usuario.email}" name="email" type="text" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Teléfono</span>
+        <input th:field="${usuario.telefono}" name="telefono" type="text" class="form-control" placeholder="teléfono" aria-label="Username" aria-describedby="basic-addon1">
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </form>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+    <!-- Scripts -->
+    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+  </body>
+
+  </html>

@@ -31,7 +31,8 @@ public class Usuario {
     private String nombre;
     private String apellidos;
     private String direccion;
-    private int CP;
+    private String localidad;
+    private String CP;
     private String telefono;
     private String roles;
     private int activo = 1;
