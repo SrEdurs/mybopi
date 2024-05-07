@@ -50,11 +50,8 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
-
-        System.out.println("--------------------------------- " + name + " ---------------------------");
-
-        if(user.isPresent()) {
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Usuario encontrado: " + user.get().getId());
+        if (user.isPresent()) {
+            model.addAttribute("usuarioNav", user.get());
         }
 
         model.addAttribute("productosHome", productos);
@@ -284,5 +281,6 @@ public class HomeController {
         return "usuarios/detallepedido";
     }
     
+
     
 }

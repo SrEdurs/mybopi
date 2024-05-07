@@ -19,7 +19,7 @@
 
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-        <li class="breadcrumb-item active">Compras</li>
+        <li class="breadcrumb-item active">Pedidos</li>
       </ol>
 
       <!-- Blog Post -->
@@ -27,7 +27,7 @@
         <div class="card-body">
           <div class="row">
            <div class="col-lg-12">
-            <table th:if="${pedidos} != null" class="table">
+            <table class="table">
               <thead>
                 <tr>
                   <th scope="col">Pedido</th>
@@ -36,12 +36,17 @@
                   <th scope="col">Acción</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody th:unless="${pedidos.empty}">
                 <tr th:each="pedido : ${pedidos}">
                   <td th:text="${pedido.numero}">4555454</td>
                   <td th:text="${pedido.fecha}">Fecha de Compra</td>
                   <td th:text="${pedido.total}">Total</td>
                   <td><a th:href="@{/pedidos/{id}(id=${pedido.id})}" class="btn btn-success">Ver Detalle</a></td>
+                </tr>
+              </tbody>
+              <tbody th:if="${pedidos.empty}">
+                <tr>
+                  <td><h3>No hay pedidos</h3></td>
                 </tr>
               </tbody>
             </table>

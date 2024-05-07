@@ -27,12 +27,13 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)    
     private Integer id;
     private String username;
+    private String email;
     private String nombre;
     private String apellidos;
-    private String email;
     private String direccion;
+    private int CP;
     private String telefono;
-    private String roles; // ADMIN o USER
+    private String roles;
     private int activo = 1;
     private String password;
 
