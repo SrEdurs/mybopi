@@ -36,7 +36,9 @@ public class WebSecurityConfig {
         http
         .authorizeHttpRequests(
             request -> request
-                .requestMatchers("/", "/usuario/login", "/usuario/registro", "/usuario/save", "/usuario/cerrar").permitAll()
+                .requestMatchers("/", "/usuario/login", "/usuario/registro", "/usuario/save", "/usuario/cerrar","/images/**", "/producto/**", "/totebags/**", "/mochilas/**").permitAll()
+                .requestMatchers("/productos/**", "/admin/**").hasRole("ADMIN")
+                .requestMatchers("/pedidos/**").hasRole("USER")
                 .anyRequest().authenticated()
         )
         .formLogin(

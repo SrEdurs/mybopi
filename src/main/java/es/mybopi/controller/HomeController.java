@@ -22,9 +22,7 @@ import es.mybopi.service.PedidoService;
 import es.mybopi.service.ProductoService;
 import es.mybopi.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
-
 import org.springframework.web.bind.annotation.PostMapping;
-
 
 
 @Controller
@@ -46,25 +44,20 @@ public class HomeController {
     private List<Producto> productosCarro = new ArrayList<Producto>();
 
     @GetMapping("/")
-    public String home(Model model, HttpSession session) {
+    public String home(Model model) {
         List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
-
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
+
         System.out.println("--------------------------------- " + name + " ---------------------------");
 
-
-        if (user.isPresent()) {
-            System.out.println("Usuario encontrado: " + user.get().getNombre());
-            session.setAttribute("idusuario", user.get().getId());
+        if(user.isPresent()) {
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Usuario encontrado: " + user.get().getId());
         }
 
-
-
         model.addAttribute("productosHome", productos);
-        model.addAttribute("session", session.getAttribute("idusuario"));
         return "usuarios/index";
     }
 
@@ -92,13 +85,19 @@ public class HomeController {
     }
 
     @PostMapping("/carrito")
-    public String addCarrito(@RequestParam("id") Integer id, Model model, HttpSession session) {
+    public String addCarrito(@RequestParam("id") Integer id, Model model) {
 
         Producto producto = new Producto();
         double sumaTotal = 0;
-
         Optional<Producto> optionalProducto = productoService.findById(id);
-        if (optionalProducto.isPresent()) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
+
+
+        if (optionalProducto.isPresent() && user.isPresent()) {
+            Integer usuid = user.get().getId();
 
             //Comprobar si el producto ya se encuentra en el carrito
             for (Producto p : productosCarro) {
@@ -123,19 +122,20 @@ public class HomeController {
                     sumaTotal += p.getPrecio();
                 }
             
-                Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
+                Usuario usuario = usuarioService.findById(usuid);
                 pedido.setUsuario(usuario);
                 pedido.setFecha(new Date());
                 pedido.setNumero(pedidoService.generarNumPedido());
                 pedido.setTotal(sumaTotal);
                 model.addAttribute("pedido", pedido);
 
-                
-               
+                return "usuarios/carrito";
             
+        } else{
+            return "redirect:/carrito";
         }
         
-        return "usuarios/carrito";
+        
     }
 
     //Quitar un producto del carrito
@@ -200,15 +200,27 @@ public class HomeController {
                 productosCarro.remove(p);
             }
         }*/
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
 
-        Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
-        model.addAttribute("pedido", pedido);
-        model.addAttribute("usuario", usuario);
-        return "usuarios/resumencompra";
+        if (user.isPresent()) {
+            Usuario usuario = user.get();
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("pedido", pedido);
+            return "usuarios/resumencompra";
+        } else{
+            return "redirect:/";
+        }
+        
     }
 
     @GetMapping("/guardarPedido")
-    public String guardarPedido(HttpSession session) {
+    public String guardarPedido() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
 
         List<Producto> productos = new ArrayList<Producto>();
 
@@ -217,13 +229,17 @@ public class HomeController {
             productosCarro.get(i).setElPedido(pedido);
         }
 
-        pedido.setProductos(productos);
-        pedido.setTotal(pedido.getTotal());
-        Date fechaPedido = new Date();
-        pedido.setFecha(fechaPedido);
-        pedido.setNumero(pedidoService.generarNumPedido());
-        pedido.setUsuario(usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())));
-        pedidoService.save(pedido);
+        if (user.isPresent()) {
+            pedido.setUsuario(user.get());
+            pedido.setProductos(productos);
+            pedido.setTotal(pedido.getTotal());
+            Date fechaPedido = new Date();
+            pedido.setFecha(fechaPedido);
+            pedido.setNumero(pedidoService.generarNumPedido());
+            pedidoService.save(pedido);
+        } else{
+            return "redirect:/";
+        }
 
         //Guardar los productos del list
         for (Producto p : productos) {
@@ -248,14 +264,18 @@ public class HomeController {
     }
 
     @GetMapping("/pedidos")
-    public String pedidos(Model model, HttpSession session) {
-        List<Pedido> pedidos = pedidoService.findByUsuario_Id(Integer.parseInt(session.getAttribute("idusuario").toString()));
+    public String pedidos(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
+
+        List<Pedido> pedidos = pedidoService.findByUsuario_Id(user.get().getId());
         model.addAttribute("pedidos", pedidos);
         return "usuarios/pedidos";
     }
 
     @GetMapping("/pedidos/{id}")
-    public String pedidos(@PathVariable Integer id, Model model, HttpSession session) {
+    public String pedidos(@PathVariable Integer id, Model model) {
         Optional<Pedido> pedido = pedidoService.findById(id);
         if(pedido.isPresent()){
             model.addAttribute("pedido", pedido.get());

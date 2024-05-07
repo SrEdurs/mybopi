@@ -23,28 +23,28 @@ public class MyUserDetailsService implements UserDetailsService {
     private UsuarioRepository userRepository;
 
     @Override
-public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Optional<Usuario> user = userRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Usuario> user = userRepository.findByEmail(username);
 
-    if (user.isPresent()) {
-        var userObj = user.get();
-        
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (String role : getRoles(userObj)) {
-            authorities.add(new SimpleGrantedAuthority(role));
+        if (user.isPresent()) {
+            var userObj = user.get();
+            
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            for (String role : getRoles(userObj)) {
+                authorities.add(new SimpleGrantedAuthority(role));
+            }
+
+            return new User(userObj.getEmail(), userObj.getPassword(), authorities);
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
+    }
+
+    private String[] getRoles(Usuario user) {
+        if (user.getRoles() == null) {
+            return new String[]{"USER"};
         }
 
-        return new User(userObj.getNombre(), userObj.getPassword(), authorities);
-    } else {
-        throw new UsernameNotFoundException(username);
+        return user.getRoles().split(",");
     }
-}
-
-private String[] getRoles(Usuario user) {
-    if (user.getRoles() == null) {
-        return new String[]{"USER"};
-    }
-
-    return user.getRoles().split(",");
-}
 }

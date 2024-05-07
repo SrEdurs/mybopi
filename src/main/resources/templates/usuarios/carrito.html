@@ -36,10 +36,10 @@
                 </tr>
               </thead>
               <tbody>
-                <!-- si el carrito está vací omostrar un mensaje -->
+                <!-- si el carrito está vací omostrar un mensaje 
                 <tr th:if="${#lists.isEmpty(pedido.productos)}">
                 <td><h3>Carrito vacío</h3></td>
-                </tr>
+                </tr> -->
                 
                 <tr th:each="carrito : ${pedido.productos}">
                   <td><img th:src="@{images/{img} (img = ${carrito.portada})}" width="100px" height="100px" th:classappend="${carrito.vendido} ? 'grayscale' : ''"/></td>

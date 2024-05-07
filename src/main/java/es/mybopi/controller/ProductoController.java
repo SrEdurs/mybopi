@@ -3,10 +3,9 @@ package es.mybopi.controller;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,19 +14,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import es.mybopi.model.Producto;
 import es.mybopi.model.Usuario;
 import es.mybopi.service.ProductoService;
 import es.mybopi.service.UploadFileService;
 import es.mybopi.service.UsuarioService;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/productos")
 public class ProductoController {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
 
     @Autowired
     private UploadFileService upload;
@@ -52,27 +47,39 @@ public class ProductoController {
 
     //Guardar un nuevo producto
     @PostMapping("/guardar")
-    public String guardar(Producto producto, @RequestParam("img1") MultipartFile file, @RequestParam("img2") MultipartFile file2, @RequestParam("img3") MultipartFile file3, HttpSession session) throws IOException{
-        LOGGER.info("Guardado {}", producto);
-        Usuario u = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString()));
-        producto.setUsuario(u);
+    public String guardar(Producto producto, @RequestParam("img1") MultipartFile file, @RequestParam("img2") MultipartFile file2, @RequestParam("img3") MultipartFile file3) throws IOException{
 
-        //Fecha
-        Date date = new Date();
-        producto.setFecha(date);
+        //Usuario
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
 
-        if(producto.getId() == null){ //Creando un producto
-            String nombreImagen = upload.saveImage(file);
-            producto.setPortada(nombreImagen);
+        if(user.isPresent()){
+            Usuario u = user.get();
+            producto.setUsuario(u);
 
-            String nombreImagen2 = upload.saveImage(file2);
-            producto.setImagen1(nombreImagen2);
+            //Fecha
+            Date date = new Date();
+            producto.setFecha(date);
 
-            String nombreImagen3 = upload.saveImage(file3);
-            producto.setImagen2(nombreImagen3);
-        } 
-        productoService.save(producto);
-        return "redirect:/productos/lista";
+            if(producto.getId() == null){ //Creando un producto
+                String nombreImagen = upload.saveImage(file);
+                producto.setPortada(nombreImagen);
+
+                String nombreImagen2 = upload.saveImage(file2);
+                producto.setImagen1(nombreImagen2);
+
+                String nombreImagen3 = upload.saveImage(file3);
+                producto.setImagen2(nombreImagen3);
+            }
+
+            productoService.save(producto);
+            return "redirect:/productos/lista";
+        } else{
+            return "redirect:/";
+        }
+
+        
     }
 
     //Pantalla editar producto

@@ -35,7 +35,7 @@ public class UsuarioController {
     public String save(@ModelAttribute Usuario user) {
         user.setPassword(encoder.encode(user.getPassword()));
         usuarioService.save(user);
-        return "redirect:/login";
+        return "redirect:/usuario/login";
     }
 
     @GetMapping("/login")

@@ -36,14 +36,14 @@
                       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;"> MENU </a>
   
                       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                          <a class="dropdown-item" th:href="@{/usuario/login}">Login</a>
-                          <a class="dropdown-item" th:href="@{/carrito}">Carrito</a> 
-                          <a class="dropdown-item" th:href="@{/pedidos}">Pedidos</a>
-                          <a class="dropdown-item" th:href="@{/usuario/cerrar}">Logout</a>
-                          <a class="dropdown-item" th:href="@{/productos/lista}">Admin productos</a>
-                          <a class="dropdown-item" th:href="@{/admin/usuarios}">Admin usuarios</a>
-                          <a class="dropdown-item" th:href="@{/admin/compras}">Admin compras</a>
-                      </div>
+                        <a sec:authorize="hasAuthority('anonymousUser')" class="dropdown-item" th:href="@{/usuario/login}">Login</a>
+                        <a sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{/carrito}">Carrito</a> 
+                        <a sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{/pedidos}">Pedidos</a>
+                        <a sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{/usuario/cerrar}">Logout</a>
+                        <a sec:authorize="hasAuthority('ADMIN')" class="dropdown-item" th:href="@{/productos/lista}">Admin productos</a>
+                        <a sec:authorize="hasAuthority('ADMIN')" class="dropdown-item" th:href="@{/admin/usuarios}">Admin usuarios</a>
+                        <a sec:authorize="hasRole('ADMIN')" class="dropdown-item" th:href="@{/admin/compras}">Admin compras</a>
+                    </div>
                   </li>
   
               </ul>

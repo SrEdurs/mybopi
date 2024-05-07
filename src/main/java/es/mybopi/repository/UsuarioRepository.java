@@ -11,8 +11,7 @@ import es.mybopi.model.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Optional<Usuario> findByEmail(String email);
-
-    //Lista de todos los usuarios
+    Optional<Usuario> findByUsername(String username);
     @SuppressWarnings("null")
     List<Usuario> findAll();
 }

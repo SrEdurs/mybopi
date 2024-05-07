@@ -26,7 +26,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)    
     private Integer id;
-
+    private String username;
     private String nombre;
     private String apellidos;
     private String email;
