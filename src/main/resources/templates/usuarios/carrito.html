@@ -59,7 +59,7 @@
 
             <ul class="list-group">
               <li class="list-group-item"><h5 th:text="${pedido.total}"></h5></li>
-              <a th:href="@{/prepedido}" class="btn btn-dark">Continuar</a>
+              <a th:if="${!#lists.isEmpty(pedido.productos)}" th:href="@{/prepedido}" class="btn btn-dark">Continuar</a>
             </ul>
           </div>
 

@@ -4,75 +4,106 @@
 <div th:insert="~{usuarios/template_usuario :: header}"></div>
 
 <body>
-
   <!-- Navigation -->
   <div th:insert="~{usuarios/template_usuario :: nav}"></div>
 
-    <!-- Page Content -->
-    <div class="container">
+  <!-- Page Content -->
+  <div class="container">
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3"><small>Resumen del pedido</small></h1>
+  
+    <div class="row">
+      <!-- Lista de productos -->
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">PRODUCTOS</h5>
+            <div class="alert alert-light" role="alert">
+              <table class="table">
+                <tbody>
+                  <tr th:each="carrito : ${pedido.productos}">
+                    <td><img th:src="@{images/{img} (img = ${carrito.portada})}" width="100px" height="100px"/></td>
+                    <!-- Añade text-align: center; al estilo de las celdas para centrar el texto -->
+                    <td style="text-align: left;" th:text="${carrito.nombre}">Nombre</td>
+                    <td style="text-align: center; font-weight: bold;" th:text="${carrito.precio} + '€'">Precio</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Columna de dirección y resumen -->
+      <div class="col-lg-4">
+        <!-- Tarjeta de dirección -->
+        <div class="card mb-4" style="width: 19rem;" th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'width: 19rem; border-color: red;' : ''">
 
+          <div class="card-body" th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
+            <h5 class="card-title">Dirección</h5>
+            <br>
+            <h6 class="card-subtitle mb-2" th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellidos}"></h6>
+            <h7 class="card-text" th:text="${pedido.usuario.direccion}"></h7>
+            <br>
+            <h7 class="card-text" th:text="${pedido.usuario.localidad}"></h7>
+            <br>
+            <h7 class="card-text" th:text="'CP: ' +${pedido.usuario.CP}"></h7>
+            <br>
+            <h7 class="card-text" th:text="'Tlf: ' + ${pedido.usuario.telefono}"></h7>
+            <br>
+            <h7 class="card-text" th:text="${pedido.usuario.email}"></h7>
+            <p></p>
+            <!-- Botón de editar -->
+            <a th:href="@{/usuario/direccion/editar}"><button type="button" class="btn btn-dark">Editar</button></a>
+          </div>
+          
+          <div class="card-body" th:if="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null}">
+            <h5 class="card-title">Dirección</h5>
+            <br>
+            <h6 class="card-subtitle mb-2">Sin dirección</h6>
+            <br>
+            <!-- Botón de editar -->
+            <a th:href="@{/usuario/direccion/editar}"><button type="button" class="btn btn-dark">Agregar dirección</button></a>
+          </div>
+          
+        </div>
+  
+        <!-- Resumen -->
+        <div class="card mb-4" style="width: 19rem;">
+          
+            <ul class="list-group">
+              <li class="list-group-item"><h5 th:text="'Total: ' + ${pedido.total} + '€'"></h5></li>
+              <a th:if="${pedido.usuario.direccion}" th:href="@{/guardarPedido}" class="btn btn-dark">Pagar</a>
+              <a th:if="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null}" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style="color: white;">Pagar</a>
+            </ul>
 
-      <!-- Page Heading/Breadcrumbs -->
-      <h1 class="mt-4 mb-3">
-        Mybopi <small>Resumen del pedido</small>
-      </h1>
-
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-        <li class="breadcrumb-item active">Pedido</li>
-      </ol>
-
-      <!-- Blog Post -->
-      <div class="card mb-4">
-        <div class="card-body">
-          <div class="row">
-           <div class="col-lg-9">
-             <div class="card-body">
-              <h5 class="card-title">
-                DATOS PEDIDO
-              </h5>
-              <h6 th:text="'Nombre: ' + ${usuario.nombre}">Nombre: </h6>
-              <h6 th:text="'Correo: ' + ${usuario.email}">Correo: </h6>
-              <h6 th:text="'Tlf: ' + ${usuario.telefono}">Tlf: </h6>
-              <h6 th:text="'Dirección: ' + ${usuario.direccion}">Dirección</h6>
-
-              <h5 class="card-title">
-                PRODUCTOS
-              </h5>
-              <div class="alert alert-light" role="alert">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Producto</th>
-                      <th scope="col"></th>
-                      <th scope="col">Precio</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="carrito : ${pedido.productos}">
-                      <td><img th:src="@{images/{img} (img = ${carrito.portada})}" width="100px" height="100px"/></td>
-                     <td th:text="${carrito.nombre}">Nombre</td>
-                     <td th:text="${carrito.precio}">Precio</td>
-                   </tr>
-                 </tbody>
-               </table>
-             </div>
-
-           </div>
-         </div>
-
-
-         <div class="col-lg-3">
-          <h2 class="card-title">Resumen</h2>
-
-          <ul class="list-group">
-            <li class="list-group-item"><h5 th:text="'Total: ' + ${pedido.total}"></h5></li>
-            <a th:href="@{/guardarPedido}" class="btn btn-dark">Generar</a>
-          </ul>
         </div>
       </div>
     </div>
   </div>
+
+
+  <!-- Vertically centered modal -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Sin dirección</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Por favor, configura una dirección para que podamos realizar el envío.</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   <!-- /.container -->
 
 <!-- Footer -->
