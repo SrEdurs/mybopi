@@ -145,6 +145,7 @@ public class ProductoController {
 
         producto.setUsuario(p.getUsuario());
         productoService.update(producto);
+
         return "redirect:/productos/lista";
 
     }

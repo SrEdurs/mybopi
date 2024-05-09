@@ -21,7 +21,6 @@ import es.mybopi.repository.ProductoRepository;
 import es.mybopi.service.PedidoService;
 import es.mybopi.service.ProductoService;
 import es.mybopi.service.UsuarioService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -169,6 +168,9 @@ public class HomeController {
             if (p.isVendido()) {
                 p.setPrecio(0);
             }
+            if(p.getPrecio() != productoService.findById(p.getId()).get().getPrecio()) {
+                p.setPrecio(productoService.findById(p.getId()).get().getPrecio());
+            }
         }
         model.addAttribute("pedido", pedido);
         return "usuarios/carrito";
@@ -190,7 +192,7 @@ public class HomeController {
     }
 
     @GetMapping("/pedido")
-    public String order(Model model, HttpSession session) {
+    public String order(Model model) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
@@ -199,10 +201,18 @@ public class HomeController {
         if (user.isPresent()) {
             Usuario usuario = user.get();
             pedido.setUsuario(usuario);
+            //Comprobar si algún producto ha cambiado de precio
+            for (Producto p : productosCarro) {
+                if(p.getPrecio() != productoService.findById(p.getId()).get().getPrecio()) {
+                    p.setPrecio(productoService.findById(p.getId()).get().getPrecio());
+                }
+            }
+            pedido.setProductos(productosCarro);
             model.addAttribute("usuario", usuario);
             model.addAttribute("pedido", pedido);
             return "usuarios/resumencompra";
-        } else{
+        }
+        else{
             return "redirect:/";
         }
         
