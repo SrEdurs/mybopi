@@ -1,14 +1,14 @@
 package es.mybopi.model;
 
-import java.util.Date;
 import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,29 +23,23 @@ import lombok.ToString;
 @ToString
 
 @Entity
-@Table(name = "productos")
-public class Producto {
+@Table(name = "carritos")
+public class Carrito {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nombre;
-    private double precio;
-    private String portada;
-    private String imagen1;
-    private String imagen2;
-    private String descripcion;
-    private int categoria;
-    private boolean activo = true;
-    private boolean vendido = false;
-    private Date fecha;
+    private double total;
 
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(name = "idUsuario", referencedColumnName = "id")
     private Usuario usuario;
 
-    @ManyToOne
-    private Pedido elPedido;
-
-    @ManyToMany(mappedBy = "productos")
-    private List<Carrito> carritos;
+    @ManyToMany
+    @JoinTable(
+        name = "carrito_producto",
+        joinColumns = @JoinColumn(name = "carrito_id"),
+        inverseJoinColumns = @JoinColumn(name = "producto_id")
+    )
+    private List<Producto> productos;
 }

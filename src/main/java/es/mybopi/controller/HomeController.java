@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import es.mybopi.model.Carrito;
 import es.mybopi.model.Pedido;
 import es.mybopi.model.Producto;
 import es.mybopi.model.Usuario;
 import es.mybopi.repository.ProductoRepository;
+import es.mybopi.service.CarritoService;
 import es.mybopi.service.PedidoService;
 import es.mybopi.service.ProductoService;
 import es.mybopi.service.UsuarioService;
@@ -36,6 +39,9 @@ public class HomeController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private CarritoService carritoService;
 
     @Autowired
     private PedidoService pedidoService;
@@ -82,97 +88,111 @@ public class HomeController {
 
     @PostMapping("/carrito")
     public String addCarrito(@RequestParam("id") Integer id, Model model) {
-
-        Producto producto = new Producto();
-        double sumaTotal = 0;
+    
         Optional<Producto> optionalProducto = productoService.findById(id);
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
-
-
+        //Optional<Carrito> carritop = carritoService.findByUsuarioId(user.get().getId());
+    
         if (optionalProducto.isPresent() && user.isPresent()) {
-            Integer usuid = user.get().getId();
-
-            //Comprobar si el producto ya se encuentra en el carrito
-            for (Producto p : productosCarro) {
-                if (p.getId() == id) {
-                    return "redirect:/carrito";
-                }
+            Usuario usuario = user.get();
+            Carrito carrito = new Carrito();
+    
+            if (usuario.getCarrito() == null) {
+                System.out.println("--------------------------El usuario no tiene un carrito. se ha creado uno-----------------------------");
+                usuario.setCarrito(carrito);
+                carrito.setUsuario(usuario);
+                carritoService.save(carrito);
+                usuarioService.save(usuario);
             }
-            
-                producto = optionalProducto.get();
 
-                //Comprobar si el producto se ha vendido
-                if (producto.isVendido()) {
-                    producto.setPrecio(0);                   
-                }
+            carrito = usuario.getCarrito();
 
-                //Añadir el producto al pedido
-                productosCarro.add(producto);
-                pedido.setProductos(productosCarro);
-                
-                //Calcular el total del pedido
-                for (Producto p : productosCarro) {
-                    sumaTotal += p.getPrecio();
-                }
+            if(carrito.getProductos() == null) {
+                System.out.println("--------------------------El carrito no tiene productos. se ha creado uno vacío-----------------------------");
+                carrito.setProductos(new ArrayList<Producto>());
+            }            
+    
+            // Verificar si el producto ya está en el carrito
+            boolean productoYaExiste = carrito.getProductos().stream().anyMatch(p -> p.getId().equals(id));
+        
+            if (!productoYaExiste) {
+                System.out.println("--------------------------El producto no estaba en el carrito. se ha anadido-----------------------------");
+                carrito.getProductos().add(optionalProducto.get());
+                optionalProducto.get().getCarritos().add(carrito);
+            }
+        
+            // Calcular el total del carrito
+            double sumaTotal = carrito.getProductos().stream().mapToDouble(Producto::getPrecio).sum();
+            carrito.setTotal(sumaTotal);
+            carrito.setUsuario(usuario);
+            System.out.println("Antes de guardar el carrito---------------------------------------------------------------------------");
+            //Si el carrito existe, se añaden los productos. Si no, se crea uno nuevo
+            carritoService.save(carrito);
+            System.out.println("Despues de guardar el carrito---------------------------------------------------------------------------");       
+            model.addAttribute("carrito", carrito);
+            return "redirect:/carrito";
             
-                Usuario usuario = usuarioService.findById(usuid);
-                pedido.setUsuario(usuario);
-                pedido.setFecha(new Date());
-                pedido.setNumero(pedidoService.generarNumPedido());
-                pedido.setTotal(sumaTotal);
-                model.addAttribute("pedido", pedido);
-
-                return "usuarios/carrito";
+        } else {
             
-        } else{
             return "redirect:/carrito";
         }
-        
-        
     }
 
     //Quitar un producto del carrito
-    @GetMapping("/quitar/{id}")
-    public String quitarProducto(@PathVariable Integer id, Model model) {
+   @GetMapping("/quitar/{id}")
+   public String quitarProducto(@PathVariable Integer id, Model model) {
+   
+       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       String name = authentication.getName();
+       Optional<Usuario> user = usuarioService.findByEmail(name);
+       if (user.isPresent()) {
+           Carrito carrito = user.get().getCarrito();
+           Optional<Producto> productoToRemove = carrito.getProductos().stream()
+                                                   .filter(p -> p.getId().equals(id))
+                                                   .findFirst();
+           if (productoToRemove.isPresent()) {
+               Producto producto = productoToRemove.get();
+               carrito.getProductos().remove(producto);
+               carrito.setTotal(carrito.getTotal() - producto.getPrecio());
+               producto.getCarritos().remove(carrito);
 
-        //Quitar producto del pedido
-        List<Producto> nuevaListaPedido = new ArrayList<Producto>();
-        for (Producto p : productosCarro) {
-            if (p.getId() != id) {
-                nuevaListaPedido.add(p);
-            }
-        }
-        productosCarro = nuevaListaPedido;
-        pedido.setProductos(productosCarro);
-
-        //Calcular el total del pedido
-        double sumaTotal = 0;
-        for (Producto p : productosCarro) {
-            sumaTotal += p.getPrecio();
-        }
-        pedido.setTotal(sumaTotal);
-        model.addAttribute("pedido", pedido);
-
-        return "redirect:/carrito";
-    }
+               carritoService.save(carrito);
+           }
+       }
+   
+       return "redirect:/carrito";
+   }
 
 
     //Carrito
     @GetMapping("/carrito")
     public String carrito(Model model) {
-        //Comprobar si algún producto se ha vendido
-        for (Producto p : productosCarro) {
-            if (p.isVendido()) {
-                p.setPrecio(0);
-            }
-            if(p.getPrecio() != productoService.findById(p.getId()).get().getPrecio()) {
-                p.setPrecio(productoService.findById(p.getId()).get().getPrecio());
-            }
+        //Carrito del usuario
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
+
+        //Comprobar si el usuario tiene un carrito
+        if (user.isPresent() && user.get().getCarrito() == null) {
+            Carrito carrito = new Carrito();
+            carrito.setUsuario(user.get());
+            carrito.setProductos(new ArrayList<Producto>());
+            carritoService.save(carrito);
+            user.get().setCarrito(carrito);
+            usuarioService.save(user.get());
         }
-        model.addAttribute("pedido", pedido);
+        if (user.isPresent()) {
+            //Comprobar si un producto se ha vendido
+            for (Producto p : user.get().getCarrito().getProductos()) {
+                if (p.isVendido()) {
+                    user.get().getCarrito().getProductos().remove(p);
+                    break;
+                }
+            }
+            model.addAttribute("carrito", user.get().getCarrito());
+        }
         return "usuarios/carrito";
     }
 

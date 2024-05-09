@@ -41,13 +41,16 @@
                 <td><h3>Carrito vacío</h3></td>
                 </tr> -->
                 
-                <tr th:each="carrito : ${pedido.productos}">
-                  <td><img th:src="@{images/{img} (img = ${carrito.portada})}" width="100px" height="100px" th:classappend="${carrito.vendido} ? 'grayscale' : ''"/></td>
-                  <td th:if="${carrito.vendido}" th:text="${carrito.nombre}"></td>
-                  <td th:if="!${carrito.vendido}" th:text="${carrito.nombre}"></td>
-                  <td th:if="!${carrito.vendido}" th:text="${carrito.precio}"></td>
-                  <td th:if="${carrito.vendido}" th:text="'[VENDIDO]'" style="font-size: large; color: red"></td>
-                  <td><a th:href="@{/quitar/{id} (id = ${carrito.id})}" class="btn btn-danger">Quitar</a></td>
+                <tr th:if="${carrito != null && !#lists.isEmpty(carrito.productos)}" th:each="producto : ${carrito.productos}">
+                    <td><img th:src="@{images/{img} (img = ${producto.portada})}" width="100px" height="100px" th:classappend="${producto.vendido} ? 'grayscale' : ''"/></td>
+                    <td th:if="${producto.vendido}" th:text="${producto.nombre}"></td>
+                    <td th:if="!${producto.vendido}" th:text="${producto.nombre}"></td>
+                    <td th:if="!${producto.vendido}" th:text="${producto.precio}"></td>
+                    <td th:if="${producto.vendido}" th:text="'[VENDIDO]'" style="font-size: large; color: red"></td>
+                    <td><a th:href="@{/quitar/{id} (id = ${producto.id})}" class="btn btn-danger">Quitar</a></td>
+                </tr>
+                <tr th:if="${carrito == null || #lists.isEmpty(carrito.productos)}">
+                    <td colspan="6"><h3>Carrito vacío</h3></td>
                 </tr>
 
               </tbody>
@@ -58,8 +61,8 @@
             <h2 class="card-title">SUBTOTAL</h2>
 
             <ul class="list-group">
-              <li class="list-group-item"><h5 th:text="${pedido.total}"></h5></li>
-              <a th:if="${!#lists.isEmpty(pedido.productos)}" th:href="@{/prepedido}" class="btn btn-dark">Continuar</a>
+              <li class="list-group-item"><h5 th:text="${carrito.total}"></h5></li>
+              <a th:if="${!#lists.isEmpty(carrito.productos)}" th:href="@{/prepedido}" class="btn btn-dark">Continuar</a>
             </ul>
           </div>
 
