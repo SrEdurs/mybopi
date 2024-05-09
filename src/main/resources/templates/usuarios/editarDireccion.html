@@ -19,37 +19,37 @@
             <!-- Nombre -->
             <div class="form-group">
               <label for="nombre">Nombre</label>
-              <input th:field="${usuario.nombre}" name="nombre" type="text" class="form-control" id="nombre" placeholder="Introduce tu nombre">
+              <input th:field="${usuario.nombre}" name="nombre" type="text" class="form-control" id="nombre" placeholder="Introduce tu nombre" required>
             </div>
             <!-- Apellidos -->
             <div class="form-group">
               <label for="apellidos">Apellidos</label>
-              <input th:field="${usuario.apellidos}" name="apellidos" type="text" class="form-control" id="apellidos" placeholder="Introduce tus apellidos">
+              <input th:field="${usuario.apellidos}" name="apellidos" type="text" class="form-control" id="apellidos" placeholder="Introduce tus apellidos" required>
             </div>
             <!-- Dirección -->
             <div class="form-group">
               <label for="direccion">Dirección</label>
-              <input th:field="${usuario.direccion}" name="direccion" type="text" class="form-control" id="direccion" placeholder="Introduce tu dirección">
+              <input th:field="${usuario.direccion}" name="direccion" type="text" class="form-control" id="direccion" placeholder="Introduce tu dirección" required>
             </div>
             <!-- Localidad -->
             <div class="form-group">
               <label for="localidad">Localidad</label>
-              <input th:field="${usuario.localidad}" name="localidad" type="text" class="form-control" id="localidad" placeholder="Introduce tu localidad">
+              <input th:field="${usuario.localidad}" name="localidad" type="text" class="form-control" id="localidad" placeholder="Introduce tu localidad" required>
             </div>
             <!-- Código Postal -->
             <div class="form-group">
               <label for="codigoPostal">Código Postal</label>
-              <input th:field="${usuario.CP}" name="CP" type="text" class="form-control" id="codigoPostal" placeholder="Introduce tu código postal">
+              <input th:field="${usuario.CP}" name="CP" type="text" class="form-control" id="codigoPostal" placeholder="Introduce tu código postal" pattern="\d{5}" required title="Por favor, introduce exactamente 5 dígitos.">
             </div>
             <!-- Teléfono -->
             <div class="form-group">
               <label for="telefono">Teléfono</label>
-              <input th:field="${usuario.telefono}" name="telefono" type="tel" class="form-control" id="telefono" placeholder="Introduce tu teléfono">
+              <input th:field="${usuario.telefono}" name="telefono" type="tel" class="form-control" id="telefono" placeholder="Introduce tu teléfono" pattern="\d{9}" required title="Por favor, introduce exactamente 9 dígitos en el teléfono.">
             </div>
             <!-- Email -->
             <div class="form-group">
               <label for="email">Email</label>
-              <input th:field="${usuario.email}" name="email" type="email" class="form-control" id="email" placeholder="Introduce tu email">
+              <input th:field="${usuario.email}" name="email" type="email" class="form-control" id="email" placeholder="Introduce tu email" required>
             </div>
             <!-- Botón de envío -->
             <button type="submit" class="btn btn-dark">Guardar</button>

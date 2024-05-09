@@ -73,8 +73,8 @@
           
             <ul class="list-group">
               <li class="list-group-item"><h5 th:text="'Total: ' + ${pedido.total} + '€'"></h5></li>
-              <a th:if="${pedido.productos != null && pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null} " th:href="@{/guardarPedido}" class="btn btn-dark">Pagar</a>
-              <a th:if="${pedido.productos == null}" class="btn btn-dark" style="color: white;">Sin productos</a>
+              <a th:if="${pedido.productos != null && pedido.total != 0 && pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null} " th:href="@{/guardarPedido}" class="btn btn-dark">Pagar</a>
+              <a th:if="${pedido.productos == null || pedido.total == 0}" class="btn btn-dark" style="color: white;">Sin productos</a>
               <a th:if="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null || pedido.usuario.CP == ''}" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style="color: white;">Sin dirección</a>
             </ul>
 
