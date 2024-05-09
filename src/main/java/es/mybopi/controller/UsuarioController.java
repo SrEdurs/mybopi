@@ -121,11 +121,14 @@ public class UsuarioController {
         Optional<Usuario> usu = usuarioService.findByEmail(name);
         if (usu.isPresent()) {
             Usuario usuario = usu.get();
+            usuario.setNombre(user.getNombre());
+            usuario.setApellidos(user.getApellidos());
             usuario.setDireccion(user.getDireccion());
             usuario.setCP(user.getCP());
             usuario.setLocalidad(user.getLocalidad());
-            usuarioService.save(usuario);
-            
+            usuario.setTelefono(user.getTelefono());
+            usuario.setEmail(user.getEmail());
+            usuarioService.save(usuario);            
             return "redirect:/usuario/cuenta";
         } else {
             return "redirect:/";

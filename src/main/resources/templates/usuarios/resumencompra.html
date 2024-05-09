@@ -37,7 +37,7 @@
       <!-- Columna de dirección y resumen -->
       <div class="col-lg-4">
         <!-- Tarjeta de dirección -->
-        <div class="card mb-4" style="width: 19rem;" th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'width: 19rem; border-color: red;' : ''">
+        <div class="card mb-4" th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'width: 19rem; border-color: red;' : 'width: 19rem'">
 
           <div class="card-body" th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
             <h5 class="card-title">Dirección</h5>
@@ -73,12 +73,14 @@
           
             <ul class="list-group">
               <li class="list-group-item"><h5 th:text="'Total: ' + ${pedido.total} + '€'"></h5></li>
-              <a th:if="${pedido.usuario.direccion}" th:href="@{/guardarPedido}" class="btn btn-dark">Pagar</a>
-              <a th:if="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null}" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style="color: white;">Pagar</a>
+              <a th:if="${pedido.productos != null && pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null} " th:href="@{/guardarPedido}" class="btn btn-dark">Pagar</a>
+              <a th:if="${pedido.productos == null}" class="btn btn-dark" style="color: white;">Sin productos</a>
+              <a th:if="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null || pedido.usuario.CP == ''}" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style="color: white;">Sin dirección</a>
             </ul>
 
         </div>
       </div>
+
     </div>
   </div>
 

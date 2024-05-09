@@ -192,17 +192,13 @@ public class HomeController {
     @GetMapping("/pedido")
     public String order(Model model, HttpSession session) {
 
-        /*for (Producto p : productosCarro) {
-            if (p.isVendido()) {
-                productosCarro.remove(p);
-            }
-        }*/
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
 
         if (user.isPresent()) {
             Usuario usuario = user.get();
+            pedido.setUsuario(usuario);
             model.addAttribute("usuario", usuario);
             model.addAttribute("pedido", pedido);
             return "usuarios/resumencompra";
