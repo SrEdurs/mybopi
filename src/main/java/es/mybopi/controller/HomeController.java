@@ -45,8 +45,8 @@ public class HomeController {
 
     @Autowired
     private PedidoService pedidoService;
+
     private Pedido pedido = new Pedido();
-    private List<Producto> productosCarro = new ArrayList<Producto>();
 
     @GetMapping("/")
     public String home(Model model) {
@@ -188,6 +188,10 @@ public class HomeController {
             for (Producto p : user.get().getCarrito().getProductos()) {
                 if (p.isVendido()) {
                     user.get().getCarrito().getProductos().remove(p);
+                    user.get().getCarrito().setTotal(user.get().getCarrito().getTotal() - p.getPrecio());
+
+                    //guardar el carrito
+                    carritoService.save(user.get().getCarrito());
                     break;
                 }
             }
@@ -199,7 +203,7 @@ public class HomeController {
     @GetMapping("/prepedido")
     public String preorder(Model model) {
        
-        Iterator<Producto> iterator = productosCarro.iterator();
+        Iterator<Producto> iterator = pedido.getProductos().iterator();
 
         while(iterator.hasNext()) {
             Producto p = iterator.next();
@@ -222,12 +226,14 @@ public class HomeController {
             Usuario usuario = user.get();
             pedido.setUsuario(usuario);
             //Comprobar si algún producto ha cambiado de precio
-            for (Producto p : productosCarro) {
+            for (Producto p : usuario.getCarrito().getProductos()) {
                 if(p.getPrecio() != productoService.findById(p.getId()).get().getPrecio()) {
                     p.setPrecio(productoService.findById(p.getId()).get().getPrecio());
                 }
             }
-            pedido.setProductos(productosCarro);
+
+            pedido.setTotal(usuario.getCarrito().getTotal());
+            pedido.setProductos(usuario.getCarrito().getProductos());
             model.addAttribute("usuario", usuario);
             model.addAttribute("pedido", pedido);
             return "usuarios/resumencompra";
@@ -245,33 +251,39 @@ public class HomeController {
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
 
-        List<Producto> productos = new ArrayList<Producto>();
+        if(user.isPresent()) {
 
-         for (int i = 0; i < productosCarro.size(); i++) {
-            productos.add(productosCarro.get(i));
-            productosCarro.get(i).setElPedido(pedido);
-        }
+            Usuario usuario = user.get();
+            List<Producto> productos = new ArrayList<Producto>();
 
-        if (user.isPresent()) {
-            pedido.setUsuario(user.get());
-            pedido.setProductos(productos);
-            pedido.setTotal(pedido.getTotal());
-            Date fechaPedido = new Date();
-            pedido.setFecha(fechaPedido);
-            pedido.setNumero(pedidoService.generarNumPedido());
-            pedidoService.save(pedido);
-        } else{
+            for (int i = 0; i < usuario.getCarrito().getProductos().size(); i++) {
+                productos.add(usuario.getCarrito().getProductos().get(i));
+                usuario.getCarrito().getProductos().get(i).setElPedido(pedido);
+            }
+
+            if (user.isPresent()) {
+                pedido.setUsuario(user.get());
+                pedido.setProductos(productos);
+                pedido.setTotal(pedido.getTotal());
+                Date fechaPedido = new Date();
+                pedido.setFecha(fechaPedido);
+                pedido.setNumero(pedidoService.generarNumPedido());
+                pedidoService.save(pedido);
+            } else{
+                return "redirect:/";
+            }
+
+            //Guardar los productos del list
+            for (Producto p : productos) {
+                p.setVendido(true);
+                productoService.save(p);
+            }       
+
+            pedido = new Pedido();
+            usuario.getCarrito().getProductos().clear();
             return "redirect:/";
         }
 
-        //Guardar los productos del list
-        for (Producto p : productos) {
-            p.setVendido(true);
-            productoService.save(p);
-        }       
-
-        pedido = new Pedido();
-        productosCarro.clear();
         return "redirect:/";
     }
 
