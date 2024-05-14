@@ -42,3 +42,10 @@ body {
 .grayscale {
   filter: grayscale(70%);
 }
+
+.center-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+  }

@@ -10,7 +10,7 @@
 
 
   <!-- Page Content -->
-  <div class="container">
+  <!-- <div class="container">
 
     <div class="card mb-3">
       <div class="row no-gutters">
@@ -45,7 +45,35 @@
       </div>    
     </form>
     <a th:href="@{/usuario/registro}" class="card-link">Registrarse</a>
-  </div>
+  </div> -->
+
+  <div class="container mt-5">
+    <div class="row center-div">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Iniciar sesión</h4>
+                    <form th:action="@{/usuario/login}" method="post">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="username" placeholder="Escribe tu email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Escribe tu contraseña" required>
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100">Iniciar sesión</button>
+                    </form>
+                    <br>
+                    <a th:href="@{/usuario/registro}" class="card-link" style="color: rgb(70, 54, 30); ">Registrarse</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br>
+</div>
+
+
   <!-- /.container -->
 
     <!-- Footer -->
