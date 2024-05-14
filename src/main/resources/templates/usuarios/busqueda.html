@@ -23,13 +23,17 @@
       <div class="row">
         <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${producto}">
         <div class="card h-100">
-          <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt="" >
-          <div class="card-body">
-            <p class="card-text text-center" th:text="${producto.nombre}"></p>
+          <a th:href="@{/producto/{id}(id=${producto.id})}">
+            <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt="" th:classappend="${producto.vendido} ? 'grayscale' : ''" >
+            <div class="overlay" th:if="${producto.vendido}">
+              <img th:src="@{/images/vendido.png}" alt="Vendido" class="vendido-image"/>
+            </div>
+          </a>
+          
+          <div class="card-body" >
+            <p class="card-text text-center text" style="font-weight: bold" th:text="${producto.nombre}"></p>
           </div>
-          <div class="card-footer text-center justify-content-center" style="background-color: rgba(255, 203, 58, 0.329);">
-            <a th:href="@{/producto/{id}(id=${producto.id})}" class="btn" style="background-color: rgba(0, 0, 0, 0.295); color: rgb(255, 255, 255);">Ver producto</a>
-          </div>
+          
         </div>
         </div>
       </div>

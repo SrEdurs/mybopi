@@ -39,9 +39,6 @@ body {
     right: 0;
 }
 
-
-
-
 .grayscale {
   filter: grayscale(70%);
 }
