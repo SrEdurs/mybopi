@@ -9,8 +9,41 @@
   <div th:insert="~{usuarios/template_usuario :: nav}"></div>
 
 
+
+
  <!-- Page Content -->
-  <div class="container">
+ <div class="container mt-5">
+  <div class="row center-div">
+      <div class="col-md-6">
+          <div class="card">
+              <div class="card-body">
+                  <h4 class="card-title text-center">Crear cuenta</h4>
+                  <form th:action="@{/usuario/save}" method="post">
+                      <div class="mb-3">
+                        <label for="InputUser" class="form-label">Usuario</label>
+                        <input required type="text" id="InputUser" class="form-control" maxlength="30" name="username" pattern="^(?!\s*$).{6,}$" placeholder="Escribe un usuario">
+                      </div>
+                      <div class="mb-3">
+                          <label for="InputEmail" class="form-label">Email</label>
+                          <input required type="email" id="InputEmail" class="form-control" maxlength="100" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Escribe tu email">
+                      </div>
+                      <div class="mb-3">
+                          <label for="InputPassword" class="form-label">Contraseña</label>
+                          <input required type="password" id="InputPassword" class="form-control" maxlength="255" name="password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_])(?=\S+$).{8,}$" placeholder="Escribe tu contraseña">
+                          <input type="hidden" name="roles" value="ROLE_USER"/>
+                      </div>
+                      <button type="submit" class="btn btn-dark w-100">Crear cuenta</button>
+                  </form>
+                  <br>
+                  <a th:href="@{/usuario/login}" class="card-link" style="color: rgb(70, 54, 30); ">Iniciar sesión</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <br><br>
+</div>
+<!-- /.Page Content -->
+  <!-- <div class="container">
 
     <div class="card mb-3">
       <div class="row no-gutters">
@@ -34,11 +67,6 @@
         <input required type="email" id="InputEmail" class="form-control" maxlength="100" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
       </div>
 
-      <!-- <div class="form-group">
-        <label for="direccion">Dirección:</label>
-        <input type="text" class="form-control" id="direccion" name="direccion" required placeholder="Dirección" autocomplete="off">
-      </div> -->
-
       <div class="form-group">
         <label for="InputPassword">Contraseña</label>
         <input required type="password" id="InputPassword" class="form-control" maxlength="255" name="password" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_])(?=\S+$).{8,}$"/>
@@ -47,10 +75,9 @@
       <div class="col-sm-2">
         <button type="submit" class="btn btn-success">Guardar</button>
       </div>
-    </form>
+    </form> 
 
-  </div>
-
+  </div> -->
   <!-- /.container -->
 
     <!-- Footer -->
