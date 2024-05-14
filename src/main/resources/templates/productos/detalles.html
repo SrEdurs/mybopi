@@ -31,16 +31,16 @@
         <td th:text="${producto.nombre}"></td>
         <td th:text="${producto.precio} + '€'"></td>
         <td>
-          <img th:if="${producto.categoria} == '1'" th:src="@{/images/home/totebags.jpg}" width="30px" height="30px"/>
-          <img th:if="${producto.categoria} == '2'" th:src="@{/images/home/mochilas.jpg}" width="30px" height="30px"/>
+          <img th:if="${producto.categoria} == '1'" th:src="@{/images/home/totebags.jpg}" width="50px" height="50px"/>
+          <img th:if="${producto.categoria} == '2'" th:src="@{/images/home/mochilas.jpg}" width="50px" height="50px"/>
         <td>
            <img th:if="${producto.activo}" th:src="@{/images/admin/Verde.png}" width="30px" height="30px"/>
            <img th:if="${!producto.activo}" th:src="@{/images/admin/Rojo.png}" width="30px" height="30px"/>
 
         </td>
         <td>
-           <img th:if="${producto.vendido}" th:src="@{/images/admin/euro.png}" width="30px" height="30px"/>
-           <img th:if="${!producto.vendido}" th:src="@{/images/admin/eurogris.png}" width="30px" height="30px"/>
+           <img th:if="${producto.vendido}" th:src="@{/images/admin/Verde.png}" width="30px" height="30px"/>
+           <img th:if="${!producto.vendido}" th:src="@{/images/admin/Rojo.png}" width="30px" height="30px"/>
         </td>
         <td><a  class="btn btn-dark" th:href="@{/productos/editar/{id}(id=${producto.id})}">Editar</a> </td>
         <td><a  class="btn btn-danger" th:href="@{/productos/eliminar/{id}(id=${producto.id})}">Eliminar</a> </td>
