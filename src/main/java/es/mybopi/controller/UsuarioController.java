@@ -71,8 +71,9 @@ public class UsuarioController {
         } 
     }
 
+
     @GetMapping("/cuenta/editar")
-    public String editarCuenta(Model model) {
+    public String editarDireccion(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -87,43 +88,9 @@ public class UsuarioController {
         } 
     }
 
-    @GetMapping("/direccion/editar")
-    public String editarDireccion(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        Optional<Usuario> user = usuarioService.findByEmail(name);
-        if(user.get().getActivo() == 0) {
-            return "redirect:/usuario/banned";
-        }
-        if (user.isPresent()) {
-            model.addAttribute("usuario", user.get());
-            return "usuarios/editarDireccion";
-        } else {
-            return "redirect:/";
-        } 
-    }
 
     @PostMapping("/cuenta/editar")
     public String saveEditCuenta(@ModelAttribute("usuario") Usuario user) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        Optional<Usuario> usu = usuarioService.findByEmail(name);
-        if (usu.isPresent()) {
-            Usuario usuario = usu.get();
-            usuario.setEmail(user.getEmail());
-            usuario.setNombre(user.getNombre());
-            usuario.setApellidos(user.getApellidos());
-            usuario.setTelefono(user.getTelefono());
-            usuarioService.save(usuario);
-            
-            return "redirect:/usuario/cuenta";
-        } else {
-            return "redirect:/";
-        }        
-    }
-
-    @PostMapping("/direccion/editar")
-    public String saveEditDireccion(@ModelAttribute("usuario") Usuario user) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> usu = usuarioService.findByEmail(name);
