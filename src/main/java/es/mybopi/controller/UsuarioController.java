@@ -63,6 +63,7 @@ public class UsuarioController {
             return "redirect:/usuario/banned";
         }
         if (user.isPresent()) {
+            model.addAttribute("usuarioSesion", user.get());
             model.addAttribute("usuario", user.get());
             return "usuarios/cuenta";
         } else {
@@ -146,9 +147,17 @@ public class UsuarioController {
     @GetMapping("/perfil/{id}")
     public String perfil(Model model, @ModelAttribute("id") Integer id) {
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> usu = usuarioService.findByEmail(name);
+
+
         if (user.isPresent()) {
+            model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
-            return "usuarios/perfil";
+            return "usuarios/cuenta";
         } else {
             return "redirect:/";
         }
