@@ -15,5 +15,4 @@ public interface UsuarioService {
     List<Usuario> findAll();
     public boolean checkUserExists(String email);
     public Integer saveUser(Usuario usuario);
-    Optional<Usuario> findByUsername(String username);
 }

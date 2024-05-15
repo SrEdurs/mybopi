@@ -23,11 +23,6 @@
       <!-- ID del usuario   -->
       <input type="hidden" id="idUsuarioFormulario" th:value="${usuario.id}">
       <div class="input-group mb-3">
-        <span class="input-group-text" id="basic-addon1">Usuario @</span>
-        <input th:field="${usuario.username}" name="username" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-      </div>
-
-      <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1">Nombre</span>
         <input th:field="${usuario.nombre}" name="nombre" type="text" class="form-control" placeholder="Nombre" aria-label="Username" aria-describedby="basic-addon1">
       </div>

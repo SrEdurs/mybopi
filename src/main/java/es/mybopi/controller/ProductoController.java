@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import es.mybopi.model.Producto;
 import es.mybopi.model.Usuario;
+import es.mybopi.repository.ProductoRepository;
 import es.mybopi.service.ProductoService;
 import es.mybopi.service.UploadFileService;
 import es.mybopi.service.UsuarioService;
@@ -33,9 +34,12 @@ public class ProductoController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private ProductoRepository productoRepository;
+
     @GetMapping("/lista")
     public String detalles(Model model){
-        model.addAttribute("inventario", productoService.findAll());
+        model.addAttribute("inventario", productoRepository.findAllByOrderByFechaDesc());
         return "productos/detalles";
     }
 

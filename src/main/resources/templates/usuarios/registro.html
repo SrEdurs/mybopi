@@ -13,10 +13,6 @@
                     <h4 class="card-title text-center">Crear cuenta</h4>
                     <form th:action="@{/usuario/save}" method="post">
                         <div class="mb-3">
-                          <label for="InputUser" class="form-label">Usuario</label>
-                          <input required type="text" id="InputUser" class="form-control" maxlength="30" name="username" pattern="^(?!\s*$).{6,}$" placeholder="Escribe un usuario">
-                        </div>
-                        <div class="mb-3">
                             <label for="InputEmail" class="form-label">Email</label>
                             <input required type="email" id="InputEmail" class="form-control" maxlength="100" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Escribe tu email">
                         </div>

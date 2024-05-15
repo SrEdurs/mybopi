@@ -59,6 +59,9 @@ public class UsuarioController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
+        if(user.get().getActivo() == 0) {
+            return "redirect:/usuario/banned";
+        }
         if (user.isPresent()) {
             model.addAttribute("usuario", user.get());
             return "usuarios/cuenta";
@@ -72,6 +75,9 @@ public class UsuarioController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
+        if(user.get().getActivo() == 0) {
+            return "redirect:/usuario/banned";
+        }
         if (user.isPresent()) {
             model.addAttribute("usuario", user.get());
             return "usuarios/editarUsuario";
@@ -85,6 +91,9 @@ public class UsuarioController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
+        if(user.get().getActivo() == 0) {
+            return "redirect:/usuario/banned";
+        }
         if (user.isPresent()) {
             model.addAttribute("usuario", user.get());
             return "usuarios/editarDireccion";
@@ -100,7 +109,6 @@ public class UsuarioController {
         Optional<Usuario> usu = usuarioService.findByEmail(name);
         if (usu.isPresent()) {
             Usuario usuario = usu.get();
-            usuario.setUsername(user.getUsername());
             usuario.setEmail(user.getEmail());
             usuario.setNombre(user.getNombre());
             usuario.setApellidos(user.getApellidos());
@@ -165,11 +173,25 @@ public class UsuarioController {
         if (usu.isPresent()) {
             
             Usuario usuario = usu.get();
-            usuario.setUsername(user.getUsername());
+
+            if(user.getNombre() == ""){
+                usuario.setNombre(null);
+            } else{
+                usuario.setNombre(user.getNombre());
+            }
+            //Comprobar si user tiene campos en blanco
+            if(user.getApellidos() == ""){
+                usuario.setApellidos(null);
+            } else{
+                usuario.setApellidos(user.getApellidos());
+            }
+            if(user.getTelefono() == ""){
+                usuario.setTelefono(null);
+            } else{
+                usuario.setTelefono(user.getTelefono());
+            }
+
             usuario.setEmail(user.getEmail());
-            usuario.setNombre(user.getNombre());
-            usuario.setApellidos(user.getApellidos());
-            usuario.setTelefono(user.getTelefono());
             usuarioService.save(usuario);          
             return "redirect:/usuario/perfil/" + id;
         } else {
@@ -178,7 +200,28 @@ public class UsuarioController {
     }
 
 
+    //Marcar usuario como no activo
+    @GetMapping("/desactivar/{id}")
+    public String desactivar(@ModelAttribute("id") Integer id) {
+        Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
+        if (user.isPresent()) {
+            Usuario usuario = user.get();
+            if(usuario.getActivo() == 1){
+                usuario.setActivo(0);
+            } else {
+                usuario.setActivo(1);
+            }
+            usuarioService.save(usuario);
+            return "redirect:/admin/usuarios";
+        } else {
+            return "redirect:/admin/usuarios";
+        }
+    }
 
+    @GetMapping("/banned")
+    public String banned() {
+        return "usuarios/banned";
+    }
 
 
 }

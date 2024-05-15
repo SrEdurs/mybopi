@@ -10,10 +10,48 @@
 
     <!-- Page Content -->
     <div class="container">
+<br><br>
+      <div class="card">
+        <div class="card-header text-center">
+            <h2 th:text="'Hola! ' + ${usuario.nombre}">Perfil de Usuario</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Datos Personales</h4>
+
+                    <p>
+                        <strong>Nombre:</strong> <span th:text="${usuario.nombre} ?: 'Sin asignar'" style="display: inline;"></span>
+                    </p>
+                    <p>
+                        <strong>Apellidos:</strong> <span th:text="${usuario.apellidos} ?: 'Sin asignar'" style="display: inline;"></span>
+                    </p>
+                    <p>
+                        <strong>Email:</strong> <span th:text="${usuario.email} ?: 'Sin asignar'" style="display: inline;"></span>
+                    </p>
+                    <p>
+                        <strong>Teléfono:</strong> <span th:text="${usuario.telefono} ?: 'Sin asignar'" style="display: inline;"></span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h4>Datos de Dirección</h4>
+                    <p>
+                        <strong>Dirección:</strong> <span th:text="${usuario.direccion} ?: 'Sin asignar'" style="display: inline;"></span>
+                    </p>
+                    <p>
+                        <strong>Localidad:</strong> <span th:text="${usuario.localidad} ?: 'Sin asignar'" style="display: inline;"></span>
+                    </p>
+                    <p>
+                        <strong>CP:</strong> <span th:text="${usuario.CP} ?: 'Sin asignar'" style="display: inline;"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+<br><br>
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title" th:text="'Hola! ' + ${usuario.username}" ></h5>
-        <h6 class="card-subtitle mb-2 text-muted">Desde aquí puedes ver y editar tu información personal, tu dirección de envío y ver tus pedidos.</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Desde aquí puedes editar tu información personal, tu dirección de envío y ver tus pedidos.</h6>
         <div class="list-group">
           <a th:href="@{/usuario/direccion/editar}" class="list-group-item list-group-item-action">Editar Dirección</a>
           <a th:href="@{/usuario/cuenta/editar}" class="list-group-item list-group-item-action">Editar Detalles</a>
@@ -22,6 +60,7 @@
       </div>
     </div>
     </div>
+    <br><br>
     <!-- /.container -->
 
     <!-- Footer -->

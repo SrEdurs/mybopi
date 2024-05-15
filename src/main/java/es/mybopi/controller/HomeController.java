@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import es.mybopi.model.Carrito;
 import es.mybopi.model.Pedido;
 import es.mybopi.model.Producto;
@@ -65,14 +64,15 @@ public class HomeController {
 
     @GetMapping("/totebags")
     public String totebags(Model model) {
-        List<Producto> totebags = this.productoRepository.findByCategoriaAndActivo(1, true);
+        List<Producto> totebags = this.productoRepository.findByCategoriaAndActivoOrderByFechaDesc(1, true);
+        
         model.addAttribute("inventario", totebags);
         return "usuarios/totebags";
     }
 
     @GetMapping("/mochilas")
     public String mochilas(Model model) {
-        List<Producto> mochilas = this.productoRepository.findByCategoriaAndActivo(2, true);
+        List<Producto> mochilas = this.productoRepository.findByCategoriaAndActivoOrderByFechaDesc(2, true);
         model.addAttribute("inventario", mochilas);
         return "usuarios/mochilas";
     }
@@ -93,6 +93,9 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
+        if(user.get().getActivo() == 0) {
+            return "redirect:/usuario/banned";
+        }
         //Optional<Carrito> carritop = carritoService.findByUsuarioId(user.get().getId());
     
         if (optionalProducto.isPresent() && user.isPresent()) {
@@ -173,6 +176,9 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
+        if(user.get().getActivo() == 0) {
+            return "redirect:/usuario/banned";
+        }
 
         //Comprobar si el usuario tiene un carrito
         if (user.isPresent() && user.get().getCarrito() == null) {
@@ -200,21 +206,7 @@ public class HomeController {
         return "usuarios/carrito";
     }
 
-    @GetMapping("/prepedido")
-    public String preorder(Model model) {
-       
-        Iterator<Producto> iterator = pedido.getProductos().iterator();
-
-        while(iterator.hasNext()) {
-            Producto p = iterator.next();
-            if (p.isVendido()) {
-                iterator.remove(); // Eliminar el producto usando el iterador
-            }
-        }
-
-        return "redirect:/pedido";
-    }
-
+    
     @GetMapping("/pedido")
     public String order(Model model) {
 
@@ -234,6 +226,16 @@ public class HomeController {
 
             pedido.setTotal(usuario.getCarrito().getTotal());
             pedido.setProductos(usuario.getCarrito().getProductos());
+
+            Iterator<Producto> iterator = pedido.getProductos().iterator();
+
+        while(iterator.hasNext()) {
+            Producto p = iterator.next();
+            if (p.isVendido()) {
+                iterator.remove(); // Eliminar el producto usando el iterador
+            }
+        }
+
             model.addAttribute("usuario", usuario);
             model.addAttribute("pedido", pedido);
             return "usuarios/resumencompra";

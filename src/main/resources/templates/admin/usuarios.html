@@ -16,7 +16,6 @@
     <thead>
       <tr>
         <th scope="col">ID</th>
-        <th scope="col">Usuario</th>
         <th scope="col">Nombre</th>
         <th scope="col">Apellidos</th>
         <th scope="col">Email</th>
@@ -28,7 +27,6 @@
     <tbody>
       <tr th:each="usuario : ${usuarios}">
         <td th:text="${usuario.id}" style="font-weight: bold;">ID</td>
-        <td th:text="${usuario.username} ?: 'Sin asignar'">Usuario</td>
         <td th:text="${usuario.nombre} ?: 'Sin asignar'">Nombre</td>
         <td th:text="${usuario.apellidos} ?: 'Sin asignar'">Apellidos</td>
         <td th:text="${usuario.email} ?: 'Sin asignar'">Email</td>
@@ -38,7 +36,8 @@
           <img th:if="${usuario.activo} == 0" th:src="@{/images/admin/Rojo.png}" width="30px" height="30px"/>
         </td>
         <td><a class="btn btn-dark" th:href="@{/usuario/perfil/{id}(id=${usuario.id})}">Ver perfil</a></td>
-        <td><a class="btn btn-danger" th:href="@{/usuario/perfil/{id}(id=${usuario.id})}">Desactivar</a></td>
+        <td th:if="${usuario.activo} == 1"><a class="btn btn-danger" th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Desactivar</a></td>
+        <td th:if="${usuario.activo} == 0"><a class="btn btn-warning" th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Activar</a></td>
       </tr>       
     </tbody>
   </table>
