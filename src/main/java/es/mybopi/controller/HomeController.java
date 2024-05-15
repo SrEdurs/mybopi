@@ -50,7 +50,6 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -96,14 +95,12 @@ public class HomeController {
         if(user.get().getActivo() == 0) {
             return "redirect:/usuario/banned";
         }
-        //Optional<Carrito> carritop = carritoService.findByUsuarioId(user.get().getId());
     
         if (optionalProducto.isPresent() && user.isPresent()) {
             Usuario usuario = user.get();
             Carrito carrito = new Carrito();
     
             if (usuario.getCarrito() == null) {
-                System.out.println("--------------------------El usuario no tiene un carrito. se ha creado uno-----------------------------");
                 usuario.setCarrito(carrito);
                 carrito.setUsuario(usuario);
                 carritoService.save(carrito);
@@ -113,15 +110,12 @@ public class HomeController {
             carrito = usuario.getCarrito();
 
             if(carrito.getProductos() == null) {
-                System.out.println("--------------------------El carrito no tiene productos. se ha creado uno vacío-----------------------------");
                 carrito.setProductos(new ArrayList<Producto>());
             }            
     
             // Verificar si el producto ya está en el carrito
             boolean productoYaExiste = carrito.getProductos().stream().anyMatch(p -> p.getId().equals(id));
-        
             if (!productoYaExiste) {
-                System.out.println("--------------------------El producto no estaba en el carrito. se ha anadido-----------------------------");
                 carrito.getProductos().add(optionalProducto.get());
                 optionalProducto.get().getCarritos().add(carrito);
             }
@@ -130,15 +124,10 @@ public class HomeController {
             double sumaTotal = carrito.getProductos().stream().mapToDouble(Producto::getPrecio).sum();
             carrito.setTotal(sumaTotal);
             carrito.setUsuario(usuario);
-            System.out.println("Antes de guardar el carrito---------------------------------------------------------------------------");
-            //Si el carrito existe, se añaden los productos. Si no, se crea uno nuevo
             carritoService.save(carrito);
-            System.out.println("Despues de guardar el carrito---------------------------------------------------------------------------");       
             model.addAttribute("carrito", carrito);
             return "redirect:/carrito";
-            
-        } else {
-            
+        } else {  
             return "redirect:/carrito";
         }
     }
@@ -146,7 +135,6 @@ public class HomeController {
     //Quitar un producto del carrito
    @GetMapping("/quitar/{id}")
    public String quitarProducto(@PathVariable Integer id, Model model) {
-   
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
        String name = authentication.getName();
        Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -164,7 +152,6 @@ public class HomeController {
                carritoService.save(carrito);
            }
        }
-   
        return "redirect:/carrito";
    }
 
@@ -209,7 +196,6 @@ public class HomeController {
     
     @GetMapping("/pedido")
     public String order(Model model) {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -232,10 +218,9 @@ public class HomeController {
         while(iterator.hasNext()) {
             Producto p = iterator.next();
             if (p.isVendido()) {
-                iterator.remove(); // Eliminar el producto usando el iterador
+                iterator.remove();
             }
         }
-
             model.addAttribute("usuario", usuario);
             model.addAttribute("pedido", pedido);
             return "usuarios/resumencompra";
@@ -243,12 +228,10 @@ public class HomeController {
         else{
             return "redirect:/";
         }
-        
     }
 
     @GetMapping("/guardarPedido")
     public String guardarPedido() {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -275,7 +258,6 @@ public class HomeController {
                 return "redirect:/";
             }
 
-            //Guardar los productos del list
             for (Producto p : productos) {
                 p.setVendido(true);
                 productoService.save(p);
@@ -321,7 +303,6 @@ public class HomeController {
         return "usuarios/detallepedido";
     }
 
-    //Pedidos de un usuario
     @GetMapping("/pedidos/usuario/{id}")
     public String pedidosUsuario(@PathVariable Integer id, Model model) {
         List<Pedido> pedidos = pedidoService.findByUsuario_Id(id);

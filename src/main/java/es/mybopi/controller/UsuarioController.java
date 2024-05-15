@@ -17,14 +17,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
-
     @Autowired
     private UsuarioService usuarioService;
-
     @Autowired
     private PasswordEncoder encoder;
 
@@ -71,7 +68,6 @@ public class UsuarioController {
         } 
     }
 
-
     @GetMapping("/cuenta/editar")
     public String editarDireccion(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -87,7 +83,6 @@ public class UsuarioController {
             return "redirect:/";
         } 
     }
-
 
     @PostMapping("/cuenta/editar")
     public String saveEditCuenta(@ModelAttribute("usuario") Usuario user) {
@@ -110,16 +105,12 @@ public class UsuarioController {
         }        
     }
 
-    //Perfil de usuario
     @GetMapping("/perfil/{id}")
     public String perfil(Model model, @ModelAttribute("id") Integer id) {
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
-
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> usu = usuarioService.findByEmail(name);
-
 
         if (user.isPresent()) {
             model.addAttribute("usuarioSesion", usu.get());
@@ -130,8 +121,6 @@ public class UsuarioController {
         }
     }
 
-
-    //Editar un usuario
     @GetMapping("/edit/{id}")
     public String edit(Model model, @ModelAttribute("id") Integer id) {
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
@@ -147,7 +136,6 @@ public class UsuarioController {
     public String saveEdit(@ModelAttribute("id") Integer id, @ModelAttribute("usuario") Usuario user) {
         Optional<Usuario> usu = Optional.ofNullable(usuarioService.findById(id));
         if (usu.isPresent()) {
-            
             Usuario usuario = usu.get();
 
             if(user.getNombre() == ""){
@@ -175,8 +163,6 @@ public class UsuarioController {
         }        
     }
 
-
-    //Marcar usuario como no activo
     @GetMapping("/desactivar/{id}")
     public String desactivar(@ModelAttribute("id") Integer id) {
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
@@ -198,6 +184,4 @@ public class UsuarioController {
     public String banned() {
         return "usuarios/banned";
     }
-
-
 }
