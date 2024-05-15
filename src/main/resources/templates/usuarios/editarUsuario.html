@@ -11,9 +11,17 @@
     <!-- Page Content -->
     <div class="container">
 
+      <input type="hidden" id="urlWithId" th:value="'/edit/' + ${usuario.id}">
+      <input type="hidden" id="urlEditarCuenta" th:value="@{/usuario/cuenta/editar}">
+
 
       <h1 class="mb-4">Editar Información de Usuario</h1>
-    <form th:action="@{/usuario/cuenta/editar}" method="post">
+
+
+    <form id="myForm" method="post">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      <!-- ID del usuario   -->
+      <input type="hidden" id="idUsuarioFormulario" th:value="${usuario.id}">
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1">Usuario @</span>
         <input th:field="${usuario.username}" name="username" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
@@ -43,6 +51,23 @@
     </form>
 
     </div>
+    <script th:inline="javascript">
+      var urlWithId = document.getElementById('urlWithId').value;
+      var urlEditarCuenta = document.getElementById('urlEditarCuenta').value;
+  
+      //ID del usuario del formulario
+      var userId = document.getElementById('idUsuarioFormulario').value;
+
+      //ID del usuario de la sesión
+      var sesionId = document.getElementById('sesionId').value;
+
+      // Lógica para determinar qué URL asignar al action del formulario
+      if (userId != sesionId) {
+          document.getElementById('myForm').setAttribute('action', urlWithId);
+      } else {
+          document.getElementById('myForm').setAttribute('action', urlEditarCuenta);
+      }
+    </script>
     <!-- /.container -->
 
     <!-- Footer -->

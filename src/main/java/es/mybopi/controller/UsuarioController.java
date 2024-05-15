@@ -134,6 +134,51 @@ public class UsuarioController {
         }        
     }
 
+    //Perfil de usuario
+    @GetMapping("/perfil/{id}")
+    public String perfil(Model model, @ModelAttribute("id") Integer id) {
+        Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
+        if (user.isPresent()) {
+            model.addAttribute("usuario", user.get());
+            return "usuarios/perfil";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+
+    //Editar un usuario
+    @GetMapping("/edit/{id}")
+    public String edit(Model model, @ModelAttribute("id") Integer id) {
+        Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
+        if (user.isPresent()) {
+            model.addAttribute("usuario", user.get());
+            return "usuarios/editarUsuario";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    @PostMapping("/edit/{id}")
+    public String saveEdit(@ModelAttribute("id") Integer id, @ModelAttribute("usuario") Usuario user) {
+        Optional<Usuario> usu = Optional.ofNullable(usuarioService.findById(id));
+        if (usu.isPresent()) {
+            
+            Usuario usuario = usu.get();
+            usuario.setUsername(user.getUsername());
+            usuario.setEmail(user.getEmail());
+            usuario.setNombre(user.getNombre());
+            usuario.setApellidos(user.getApellidos());
+            usuario.setTelefono(user.getTelefono());
+            usuarioService.save(usuario);          
+            return "redirect:/usuario/perfil/" + id;
+        } else {
+            return "redirect:/admin/usuarios";
+        }        
+    }
+
+
+
 
 
 }

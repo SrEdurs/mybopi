@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+
+<div th:insert="~{usuarios/template_usuario :: nav}"></div>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header text-center" style="background-color: blanchedalmond;">
+                <h2>Perfil de Usuario</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Datos Personales</h4>
+                        <p>
+                            <strong>Usuario: </strong> <span th:text="${usuario.username}" style="display: inline;"></span>
+                        </p>
+                        <p>
+                            <strong>Nombre:</strong> <span th:text="${usuario.nombre}" style="display: inline;"></span>
+                        </p>
+                        <p>
+                            <strong>Apellidos:</strong> <span th:text="${usuario.apellidos}" style="display: inline;"></span>
+                        </p>
+                        <p>
+                            <strong>Email:</strong> <span th:text="${usuario.email}" style="display: inline;"></span>
+                        </p>
+                        <p>
+                            <strong>Teléfono:</strong> <span th:text="${usuario.telefono}" style="display: inline;"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Datos de Dirección</h4>
+                        <p>
+                            <strong>Dirección:</strong> <span th:text="${usuario.direccion}" style="display: inline;"></span>
+                        </p>
+                        <p>
+                            <strong>Localidad:</strong> <span th:text="${usuario.localidad}" style="display: inline;"></span>
+                        </p>
+                        <p>
+                            <strong>CP:</strong> <span th:text="${usuario.CP}" style="display: inline;"></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h4>Datos Adicionales</h4>
+                        <p>
+                            <strong>ID:</strong> <span th:text="${usuario.id}" style="display: inline;"></span>
+                        </p>
+                        <p>
+                            <strong>Rol:</strong> <span th:text="${usuario.roles}" style="display: inline;"></span>
+                        </p>
+                        <p>
+                            <strong>Activo:</strong> <span th:text="${usuario.activo}" style="display: inline;"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <br><br><br><br>
+                        <div class="d-flex justify-content-end">
+                            <a class="btn btn-dark" th:href="@{/usuario/edit/{id}(id=${usuario.id})}" style="margin-right: 10px;">Editar</a>
+                            <a class="btn btn-dark" th:href="@{/pedidos/usuario/{id}(id=${usuario.id})}" style="margin-right: 10px;">Ver pedidos</a>
+                            <a class="btn btn-danger" th:href="@{/usuario/perfil/{id}(id=${usuario.id})}">Desactivar usuario</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br>
+<!-- /.container -->
+
+<div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+<!-- Scripts -->
+<div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+</body>
+</html>

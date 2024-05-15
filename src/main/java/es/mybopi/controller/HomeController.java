@@ -318,6 +318,14 @@ public class HomeController {
         }
         return "usuarios/detallepedido";
     }
+
+    //Pedidos de un usuario
+    @GetMapping("/pedidos/usuario/{id}")
+    public String pedidosUsuario(@PathVariable Integer id, Model model) {
+        List<Pedido> pedidos = pedidoService.findByUsuario_Id(id);
+        model.addAttribute("pedidos", pedidos);
+        return "usuarios/pedidos";
+    }
     
 
     
