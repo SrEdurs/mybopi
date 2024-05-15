@@ -12,7 +12,7 @@
 <div class="container mt-5">
     <br><br>
     <div class="card">
-        <div class="card-header text-center" style="background-color: blanchedalmond;">
+        <div class="card-header text-center">
             <h2 th:text="'Hola! ' + ${usuario.nombre}"></h2>
         </div>
         <div class="card-body">
@@ -45,7 +45,7 @@
                     </p>
                 </div>
             </div>
-            <div class="row mt-4" sec:authorize="hasRole('ADMIN')">
+            <div class="row mt-4" sec:authorize="hasRole('ADMIN')" id="adminBotones">
                 <div class="col-md-6">
                     <h4>Datos Adicionales</h4>
                     <p>
@@ -95,6 +95,10 @@
         // Lógica para determinar qué URL asignar al action del formulario
         if (idSesion != idPerfil) {
             document.getElementById('opciones').style.display = 'none';
+        }
+
+        if (idSesion == idPerfil) {
+            document.getElementById('adminBotones').style.display = 'none';
         }
       </script>
 
