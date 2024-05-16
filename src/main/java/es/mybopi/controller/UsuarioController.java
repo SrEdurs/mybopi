@@ -26,7 +26,7 @@ public class UsuarioController {
     private PasswordEncoder encoder;
 
     @GetMapping("/registro")
-    public String registro() {
+    public String registro(@ModelAttribute("usuarioNav") Usuario usuario) {
         return "usuarios/registro";
     }
     
@@ -38,7 +38,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(@ModelAttribute("usuarioNav") Usuario usuario) {
         return "usuarios/login";
     }
 
@@ -52,7 +52,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/cuenta")
-    public String cuenta(Model model) {
+    public String cuenta(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -60,6 +60,7 @@ public class UsuarioController {
             return "redirect:/usuario/banned";
         }
         if (user.isPresent()) {
+            model.addAttribute("usuarioNav", usuario);
             model.addAttribute("usuarioSesion", user.get());
             model.addAttribute("usuario", user.get());
             return "usuarios/cuenta";
@@ -69,7 +70,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/cuenta/editar")
-    public String editarDireccion(Model model) {
+    public String editarDireccion(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -106,7 +107,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/perfil/{id}")
-    public String perfil(Model model, @ModelAttribute("id") Integer id) {
+    public String perfil(Model model, @ModelAttribute("id") Integer id, @ModelAttribute("usuarioNav") Usuario usuario) {
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
@@ -122,7 +123,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(Model model, @ModelAttribute("id") Integer id) {
+    public String edit(Model model, @ModelAttribute("id") Integer id, @ModelAttribute("usuarioNav") Usuario usuario) {
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
         if (user.isPresent()) {
             model.addAttribute("usuario", user.get());

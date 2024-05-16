@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,36 +49,28 @@ public class HomeController {
     private Pedido pedido = new Pedido();
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        Optional<Usuario> user = usuarioService.findByEmail(name);
-        if (user.isPresent()) {
-            model.addAttribute("usuarioNav", user.get());
-        }
-
         model.addAttribute("productosHome", productos);
         return "usuarios/index";
     }
 
     @GetMapping("/totebags")
-    public String totebags(Model model) {
+    public String totebags(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         List<Producto> totebags = this.productoRepository.findByCategoriaAndActivoOrderByFechaDesc(1, true);
-        
         model.addAttribute("inventario", totebags);
         return "usuarios/totebags";
     }
 
     @GetMapping("/mochilas")
-    public String mochilas(Model model) {
+    public String mochilas(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         List<Producto> mochilas = this.productoRepository.findByCategoriaAndActivoOrderByFechaDesc(2, true);
         model.addAttribute("inventario", mochilas);
         return "usuarios/mochilas";
     }
 
     @GetMapping("producto/{id}")
-    public String producto(@PathVariable Integer id, Model model) {
+    public String producto(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         Optional<Producto> optionalProducto = productoService.findById(id);
         if (optionalProducto.isPresent()) {
             model.addAttribute("producto", optionalProducto.get());
@@ -158,7 +151,7 @@ public class HomeController {
 
     //Carrito
     @GetMapping("/carrito")
-    public String carrito(Model model) {
+    public String carrito(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         //Carrito del usuario
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
@@ -195,7 +188,7 @@ public class HomeController {
 
     
     @GetMapping("/pedido")
-    public String order(Model model) {
+    public String order(Model model, @ModelAttribute("usuarioNav") Usuario usuarion) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -272,7 +265,7 @@ public class HomeController {
     }
 
     @GetMapping("/buscar")
-    public String buscarProducto(@RequestParam("nombre") String nombre, Model model) {
+    public String buscarProducto(@RequestParam("nombre") String nombre, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         final List<Producto> productos = this.productoRepository.findByNombreContainingIgnoreCaseAndActivo(nombre, true);
         //Recorremos el list por consola
         for (Producto p : productos) {
@@ -283,7 +276,7 @@ public class HomeController {
     }
 
     @GetMapping("/pedidos")
-    public String pedidos(Model model) {
+    public String pedidos(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -294,7 +287,7 @@ public class HomeController {
     }
 
     @GetMapping("/pedidos/{id}")
-    public String pedidos(@PathVariable Integer id, Model model) {
+    public String pedidos(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         Optional<Pedido> pedido = pedidoService.findById(id);
         if(pedido.isPresent()){
             model.addAttribute("pedido", pedido.get());
@@ -304,12 +297,24 @@ public class HomeController {
     }
 
     @GetMapping("/pedidos/usuario/{id}")
-    public String pedidosUsuario(@PathVariable Integer id, Model model) {
+    public String pedidosUsuario(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         List<Pedido> pedidos = pedidoService.findByUsuario_Id(id);
         model.addAttribute("pedidos", pedidos);
         return "usuarios/pedidos";
     }
     
 
+    @ModelAttribute("usuarioNav")
+    public Usuario usuarioNav(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
+        if(user.isPresent()) {
+            model.addAttribute("usuarioNav",user.get());     
+            return user.get();
+        } else{
+            return new Usuario();
+        }
+    }
     
 }

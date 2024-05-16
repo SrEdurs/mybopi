@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,13 +39,13 @@ public class ProductoController {
     private ProductoRepository productoRepository;
 
     @GetMapping("/lista")
-    public String detalles(Model model){
+    public String detalles(Model model, @ModelAttribute("usuarioNav") Usuario usuario){
         model.addAttribute("inventario", productoRepository.findAllByOrderByFechaDesc());
         return "productos/detalles";
     }
 
     @GetMapping("/crear")
-    public String crearProducto(){
+    public String crearProducto(@ModelAttribute("usuarioNav") Usuario usuario){
         return "productos/crear";
     }
 
@@ -81,7 +82,7 @@ public class ProductoController {
     }
 
     @GetMapping("/editar/{id}")
-    public String editar(@PathVariable Integer id, Model model){
+    public String editar(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario){
         Producto producto = new Producto();
         Optional<Producto> optionalProducto = productoService.findById(id);
         producto = optionalProducto.get();
