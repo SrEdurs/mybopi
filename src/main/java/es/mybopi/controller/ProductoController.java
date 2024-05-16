@@ -25,16 +25,12 @@ import es.mybopi.service.UsuarioService;
 @Controller
 @RequestMapping("/productos")
 public class ProductoController {
-
     @Autowired
     private UploadFileService upload;
-    
     @Autowired
     private ProductoService productoService;
-
     @Autowired
     private UsuarioService usuarioService;
-
     @Autowired
     private ProductoRepository productoRepository;
 
@@ -134,8 +130,6 @@ public class ProductoController {
         return "redirect:/productos/lista";
     }
 
-
-    //Acción de borrar un producto
     @GetMapping("/eliminar/{id}")
     public String eliminarProducto(@PathVariable Integer id) throws IOException{
         Producto p = new Producto();
@@ -158,8 +152,4 @@ public class ProductoController {
         productoService.deleteById(id);
         return "redirect:/productos/lista";
     }
-
-
-
-
 }

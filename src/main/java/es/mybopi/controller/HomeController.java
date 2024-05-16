@@ -30,22 +30,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequestMapping("/")
 public class HomeController {
-
     @Autowired
     private ProductoService productoService;
-
     @Autowired
     private ProductoRepository productoRepository;
-
     @Autowired
     private UsuarioService usuarioService;
-
     @Autowired
     private CarritoService carritoService;
-
     @Autowired
     private PedidoService pedidoService;
-
     private Pedido pedido = new Pedido();
 
     @GetMapping("/")

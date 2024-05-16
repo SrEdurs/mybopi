@@ -15,10 +15,8 @@ import es.mybopi.service.UsuarioService;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
     @Autowired
     private UsuarioService usuarioService;
-
     @Autowired
     private PedidoService pedidoService;
 
