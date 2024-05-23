@@ -34,24 +34,25 @@ public class WebSecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-        .authorizeHttpRequests(
-            request -> request
-                .requestMatchers("/", "/usuario/login", "/usuario/registro", "/usuario/save", "/usuario/cerrar","/images/**", "/producto/**", "/totebags/**", "/mochilas/**", "/buscar/**").permitAll()
-                .requestMatchers("/productos/**", "/admin/**").hasRole("ADMIN")
-                .requestMatchers("/pedidos/**").hasRole("USER")
-                .anyRequest().authenticated()
-        )
-        .formLogin(
-            formLogin -> formLogin
-            .loginPage("/usuario/login")
-            .defaultSuccessUrl("/", true)
-            .failureUrl("/usuario/login")
-        )
-        .logout(logout -> logout
-            .logoutUrl("/usuario/cerrar")
-            .logoutSuccessUrl("/")
-        )
-        .httpBasic(Customizer.withDefaults());
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(
+                        request -> request
+                                .requestMatchers("/", "/usuario/login", "/usuario/registro", "/usuario/save", "/usuario/cerrar", "/images/**", "/producto/**", "/totebags/**", "/mochilas/**", "/buscar/**").permitAll()
+                                .requestMatchers("/productos/**", "/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/pedidos/**").hasRole("USER")
+                                .anyRequest().authenticated()
+                )
+                .formLogin(
+                        formLogin -> formLogin
+                                .loginPage("/usuario/login")
+                                .defaultSuccessUrl("/", true)
+                                .failureUrl("/usuario/login")
+                )
+                .logout(logout -> logout
+                                .logoutUrl("/usuario/cerrar")
+                                .logoutSuccessUrl("/")
+                )
+                .httpBasic(Customizer.withDefaults());
         return http.build();
     }
 

@@ -71,12 +71,22 @@
         <!-- Resumen -->
         <div class="card mb-4" style="width: 19rem;">
           
-            <ul class="list-group">
-              <li class="list-group-item"><h5 th:text="'Total: ' + ${pedido.total} + '€'"></h5></li>
-              <a th:if="${pedido.productos != null && pedido.total != 0 && pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null} " th:href="@{/guardarPedido}" class="btn btn-dark">Pagar</a>
-              <a th:if="${pedido.productos == null || pedido.total == 0}" class="btn btn-dark" style="color: white;">Sin productos</a>
-              <a th:if="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null || pedido.usuario.CP == ''}" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style="color: white;">Sin dirección</a>
-            </ul>
+          <h1>Stripe Payment Form</h1>
+          <form id="payment-form" action="/guardarPedido" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+              <div>
+                  <label for="card-holder-name">Cardholder Name</label>
+                  <input type="text" id="card-holder-name">
+              </div>
+              <div>
+                  <label for="card-element">Credit or debit card</label>
+                  <div id="card-element">
+                      <!-- A Stripe Element will be inserted here. -->
+                  </div>
+              </div>
+              <button type="submit">Submit Payment</button>
+              <div id="error-message" role="alert"></div>
+          </form>
 
         </div>
       </div>
@@ -106,6 +116,53 @@
 </div>
 
   <!-- /.container -->
+
+
+  <!-- Include Stripe.js -->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  // Set your publishable key
+  var stripe = Stripe('pk_test_51PJXqG2M93Fl6PVfztPucpSijjnkV2UlbnP6KGYvLnAhduH2gfIOPMCZBBCvup7NcARJ9sGBPXN4U8HdpmQx7ClB00BRddCvZ7');
+  var elements = stripe.elements();
+
+  // Create an instance of the card Element
+  var card = elements.create('card');
+
+  // Add an instance of the card Element into the `card-element` div
+  card.mount('#card-element');
+
+  // Handle form submission
+  var form = document.getElementById('payment-form');
+  form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      stripe.createToken(card).then(function(result) {
+          if (result.error) {
+              // Inform the user if there was an error
+              var errorElement = document.getElementById('error-message');
+              errorElement.textContent = result.error.message;
+          } else {
+              // Send the token to your server
+              stripeTokenHandler(result.token);
+          }
+      });
+  });
+
+  // Submit token to your server
+  function stripeTokenHandler(token) {
+      // Insert the token ID into the form so it gets submitted to the server
+      var form = document.getElementById('payment-form');
+      var hiddenInput = document.createElement('input');
+      hiddenInput.setAttribute('type', 'hidden');
+      hiddenInput.setAttribute('name', 'stripeToken');
+      hiddenInput.setAttribute('value', token.id);
+      form.appendChild(hiddenInput);
+
+      // Submit the form
+      form.submit();
+  }
+</script>
+
 
 <!-- Footer -->
 <div th:insert="~{usuarios/template_usuario :: footer}"></div>

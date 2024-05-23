@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import es.mybopi.dto.StripeChargeDto;
 import es.mybopi.model.Carrito;
 import es.mybopi.model.Pedido;
 import es.mybopi.model.Producto;
@@ -23,9 +24,9 @@ import es.mybopi.repository.ProductoRepository;
 import es.mybopi.service.CarritoService;
 import es.mybopi.service.PedidoService;
 import es.mybopi.service.ProductoService;
+import es.mybopi.service.StripeService;
 import es.mybopi.service.UsuarioService;
 import org.springframework.web.bind.annotation.PostMapping;
-
 
 @Controller
 @RequestMapping("/")
@@ -38,6 +39,8 @@ public class HomeController {
     private UsuarioService usuarioService;
     @Autowired
     private CarritoService carritoService;
+    @Autowired
+    private StripeService stripeService;
     @Autowired
     private PedidoService pedidoService;
     private Pedido pedido = new Pedido();
@@ -217,46 +220,63 @@ public class HomeController {
         }
     }
 
-    @GetMapping("/guardarPedido")
-    public String guardarPedido() {
+    // Método para calcular el total de los productos en el carrito
+    private int calcularTotal(List<Producto> productos) {
+        int total = 0;
+        for (Producto producto : productos) {
+            total += producto.getPrecio(); // Suponiendo que el precio está en centavos
+        }
+        return total;
+    }
+
+
+    @PostMapping("/guardarPedido")
+    public String guardarPedido(@RequestParam("stripeToken") String stripeToken) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
-        Optional<Usuario> user = usuarioService.findByEmail(name);
+        Optional<Usuario> userOptional = usuarioService.findByEmail(name);
 
-        if(user.isPresent()) {
+        if (userOptional.isPresent()) {
+            Usuario usuario = userOptional.get();
+            List<Producto> productos = usuario.getCarrito().getProductos();
+            List<Producto> productosCarrito = usuario.getCarrito().getProductos();
 
-            Usuario usuario = user.get();
-            List<Producto> productos = new ArrayList<Producto>();
+            // Paso 2: Realizar el cargo en Stripe
+            StripeChargeDto chargeRequest = new StripeChargeDto();
+            chargeRequest.setStripeToken(stripeToken);
+            chargeRequest.setAmount(String.valueOf(calcularTotal(productos))); // El total debería estar en centavos
 
-            for (int i = 0; i < usuario.getCarrito().getProductos().size(); i++) {
-                productos.add(usuario.getCarrito().getProductos().get(i));
-                usuario.getCarrito().getProductos().get(i).setElPedido(pedido);
+            StripeChargeDto chargeResponse = stripeService.charge(chargeRequest);
+            if (!chargeResponse.isSuccess()) {
+                return "paymentError";
             }
 
-            if (user.isPresent()) {
-                pedido.setUsuario(user.get());
-                pedido.setProductos(productos);
-                pedido.setTotal(pedido.getTotal());
-                Date fechaPedido = new Date();
-                pedido.setFecha(fechaPedido);
-                pedido.setNumero(pedidoService.generarNumPedido());
-                pedidoService.save(pedido);
-            } else{
-                return "redirect:/";
+            // Paso 3: Configurar y guardar el pedido
+            Pedido pedido = new Pedido();
+            pedido.setUsuario(usuario);
+            pedido.setProductos(new ArrayList<>(productosCarrito));
+            pedido.setTotal(calcularTotal(productosCarrito));
+            pedido.setFecha(new Date());
+            pedido.setNumero(pedidoService.generarNumPedido());
+            pedidoService.save(pedido);
+
+            // Actualizar el estado de los productos y limpiar el carrito del usuario
+            for (Producto producto : productos) {
+                producto.setVendido(true);
+                producto.setElPedido(pedido);
+                productoService.save(producto);
             }
-
-            for (Producto p : productos) {
-                p.setVendido(true);
-                productoService.save(p);
-            }       
-
-            pedido = new Pedido();
             usuario.getCarrito().getProductos().clear();
+            usuario.getCarrito().setTotal(0);
+            usuarioService.save(usuario);
+
             return "redirect:/";
         }
 
         return "redirect:/";
     }
+
+
 
     @GetMapping("/buscar")
     public String buscarProducto(@RequestParam("nombre") String nombre, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
