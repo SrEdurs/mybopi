@@ -61,3 +61,51 @@ table td, table th {
     max-height: 100%; /* La imagen no puede ser más alta que el contenedor */
     object-fit: cover; /* Mantener la relación de aspecto y recortar la imagen si es necesario */
 }
+
+
+#payment-form div {
+  margin-bottom: 20px;
+}
+
+#payment-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+#payment-form input[type="text"],
+#card-element {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#payment-form .btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#payment-form .btn:hover {
+  background-color: #333;
+}
+
+#error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}
+

@@ -30,6 +30,7 @@
                 </tbody>
               </table>
             </div>
+            <h5 th:text="'Total: ' + ${pedido.total} + '€'" style="text-align: right; font-weight: bold"></h5>
           </div>
         </div>
       </div>
@@ -54,7 +55,7 @@
             <h7 class="card-text" th:text="${pedido.usuario.email}"></h7>
             <p></p>
             <!-- Botón de editar -->
-            <a th:href="@{/usuario/direccion/editar}"><button type="button" class="btn btn-dark">Editar</button></a>
+            <a th:href="@{/usuario/cuenta/editar}"><button type="button" class="btn btn-dark">Editar</button></a>
           </div>
           
           <div class="card-body" th:if="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null}">
@@ -70,31 +71,30 @@
   
         <!-- Resumen -->
         <div class="card mb-4" style="width: 19rem;">
-          
-          <h1>Stripe Payment Form</h1>
-          <form id="payment-form" action="/guardarPedido" method="post">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+          <div class="card-body">
+            <h5 class="card-title">Pago</h5>
+            <form id="payment-form" action="/guardarPedido" method="post">
+              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
               <div>
-                  <label for="card-holder-name">Cardholder Name</label>
-                  <input type="text" id="card-holder-name">
+                <label for="card-holder-name">Nombre completo</label>
+                <input type="text" id="card-holder-name" name="card-holder-name">
               </div>
               <div>
-                  <label for="card-element">Credit or debit card</label>
-                  <div id="card-element">
-                      <!-- A Stripe Element will be inserted here. -->
-                  </div>
+                <label for="card-element">Tarjeta</label>
+                <div id="card-element">
+                  <!-- A Stripe Element will be inserted here. -->
+                </div>
               </div>
-              <button type="submit">Submit Payment</button>
+              <button type="button" data-toggle="modal" data-target="#exampleModal" th:if="${pedido.usuario.direccion == null || pedido.usuario.direccion == '' || pedido.usuario.nombre == null || pedido.usuario.nombre == '' || pedido.usuario.localidad == null || pedido.usuario.localidad == '' || pedido.usuario.telefono == null || pedido.usuario.telefono == '' || pedido.usuario.email == null || pedido.usuario.email == '' || pedido.usuario.CP == null || pedido.usuario.CP == ''}"  class="btn btn-dark">Pagar</button>
+              <button th:unless="${pedido.usuario.direccion == null || pedido.usuario.direccion == '' || pedido.usuario.nombre == null || pedido.usuario.nombre == '' || pedido.usuario.localidad == null || pedido.usuario.localidad == '' || pedido.usuario.telefono == null || pedido.usuario.telefono == '' || pedido.usuario.email == null || pedido.usuario.email == '' || pedido.usuario.CP == null || pedido.usuario.CP == ''}" type="submit" class="btn btn-dark">Pagar</button>
               <div id="error-message" role="alert"></div>
-          </form>
-
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-
-  <!-- Vertically centered modal -->
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -114,8 +114,7 @@
     </div>
   </div>
 </div>
-
-  <!-- /.container -->
+<!-- /.container -->
 
 
   <!-- Include Stripe.js -->
