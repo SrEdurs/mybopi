@@ -30,7 +30,6 @@ public class Pedido {
     private Integer id;
 
     private String numero;
-
     private Date fecha;
     private double total;
     private String estado;

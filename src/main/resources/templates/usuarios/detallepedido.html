@@ -7,67 +7,96 @@
 
   <!-- Navigation -->
   <div th:insert="~{usuarios/template_usuario :: nav}"></div>
-
     <!-- Page Content -->
     <div class="container">
+      <br><br>
+      <h2>Detalles del pedido</h2>
+    <div class="row">
+            
+        <!-- Tabla datos del pedido -->
+        <div class="col-lg-8 mb-4">
+          <div class="card" style="border: 0px;">
+            <div class="card-body">
+              <table class="table" style="text-align: center;">
+                <thead>
+                  <tr>
+                    <th scope="col">Pedido</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td th:text="${pedido.numero}" style="font-weight: bold;"></td>
+                    <td th:text="${#dates.format(pedido.fecha, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${pedido.total} + '€'">Total</td>
+                    <td th:text="${pedido.estado}" style="color: green; font-weight: bold"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+           <!-- Fin tabla datos del pedido -->
 
-
-      <!-- Page Heading/Breadcrumbs -->
-      <h1 class="mt-4 mb-3">
-        Mybopi <small>Detalles</small>
-      </h1>
-
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-        <li class="breadcrumb-item"><a th:href="@{/pedidos}">Pedidos</a></li>
-        <li class="breadcrumb-item active">Detalle de pedido</li>
-      </ol>
-
-      <!-- Blog Post -->
-      <div class="card mb-4">
-        <div class="card-body">
-          <div class="row">
-           <div class="col-lg-12">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Pedido</th>                  
-                  <th scope="col">Fecha</th>
-                  <th scope="col">Total</th>                 
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td th:text="${pedido.numero}"></td>
-                  <td th:text="${pedido.fecha}"></td>
-                  <td th:text="${pedido.total}">Total</td>
-                  <td ></td>
-                </tr>
-              </tbody>
-            </table>
-
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Producto</th>
-                  <th scope="col"></th>
-                  <th scope="col">Precio</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr th:each="producto : ${pedido.productos}">
-                  <td><img th:src="@{'/images/' + ${producto.portada}}" width="100px" height="100px"/></td>
-                  <td th:text="${producto.nombre}"></td>
-                  <td th:text="${producto.precio}"></td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- Tabla de productos -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">PRODUCTOS</h5>
+              <div class="alert alert-light" role="alert">
+                <table class="table">
+                  <tbody>
+                    <tr th:each="producto : ${pedido.productos}">
+                      <td><img th:src="@{'/images/' + ${producto.portada}}" width="100px" height="100px"/></td>
+                      <!-- Añade text-align: center; al estilo de las celdas para centrar el texto -->
+                      <td style="text-align: left;" th:text="${producto.nombre}">Nombre</td>
+                      <td style="text-align: center; font-weight: bold;" th:text="${producto.precio} + '€'">Precio</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <h5 th:text="'Total: ' + ${pedido.total} + '€'" style="text-align: right; font-weight: bold"></h5>
+            </div>
           </div>
         </div>
-      </div>
+        <!-- Fin tabla de productos -->
+
+       
+
+        <!-- Card datos de la dirección -->
+        <div class="col-lg-4 mb-4">
+          <div class="card" th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'border-color: red;' : ''">
+            <div class="card-body" th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
+              <h5 class="card-title">Dirección de envío</h5>
+              <h6 class="card-subtitle mb-2" th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellidos}"></h6>
+              <br>
+              <p class="card-text" th:text="${pedido.usuario.direccion}"></p>
+              <p class="card-text" th:text="${pedido.usuario.localidad}"></p>
+              <p class="card-text" th:text="'CP: ' + ${pedido.usuario.CP}"></p>
+              <p class="card-text" th:text="'Tlf: ' + ${pedido.usuario.telefono}"></p>
+              <p class="card-text" th:text="${pedido.usuario.email}"></p>
+            </div>
+          </div>
+          <!-- Fin card datos de la dirección -->
+
+          <br>
+
+          <!-- Seguimiento -->
+          <div class="card" th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'border-color: red;' : ''">
+            <div class="card-body" th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
+              <h5 class="card-title">Seguimiento</h5>
+              <p class="card-text" th:text="${pedido.seguimiento}" style="font-weight: bold; color: blue"></p>
+              <br>
+            </div>
+          </div>
+          <!-- Fin seguimiento -->
+
+        </div>
+
     </div>
+      
   </div>
-  <!-- /.container -->
+  
 
     <!-- Footer -->
     <div th:insert="~{usuarios/template_usuario :: footer}"></div>
