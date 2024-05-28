@@ -17,4 +17,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
     @Query("SELECT p FROM Pedido p ORDER BY p.fecha DESC")
     List<Pedido> findAllWithOrderByFechaDesc();
 
+    //Pedidos de un usuario por ID de usuario ordenados por fecha descendente
+    @Query("SELECT p FROM Pedido p WHERE p.usuario.id = ?1 ORDER BY p.fecha DESC")
+    List<Pedido> findByUsuarioIdOrderByFechaDesc(int id);
+
 }

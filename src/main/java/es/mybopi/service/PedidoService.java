@@ -14,6 +14,7 @@ public interface PedidoService {
     List<Pedido> findByUsuario_Id(int id);
     Optional<Pedido> findById(int id);
     List<Pedido> findAllWithOrderByFechaDesc();
+    List<Pedido> findByUsuarioIdOrderByFechaDesc(int id);
     
 
 }

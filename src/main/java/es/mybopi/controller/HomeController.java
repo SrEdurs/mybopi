@@ -258,6 +258,8 @@ public class HomeController {
             pedido.setTotal(calcularTotal(productosCarrito));
             pedido.setFecha(new Date());
             pedido.setNumero(pedidoService.generarNumPedido());
+            pedido.setSeguimiento("Pendiente de envío");
+            pedido.setEstado("En preparación");
             pedidoService.save(pedido);
 
             // Actualizar el estado de los productos y limpiar el carrito del usuario
@@ -294,8 +296,7 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
-
-        List<Pedido> pedidos = pedidoService.findByUsuario_Id(user.get().getId());
+        List<Pedido> pedidos = pedidoService.findByUsuarioIdOrderByFechaDesc(user.get().getId());
         model.addAttribute("pedidos", pedidos);
         return "usuarios/pedidos";
     }

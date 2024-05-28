@@ -64,4 +64,8 @@ public class PedidoServiceImpl implements PedidoService {
     public List<Pedido> findAllWithOrderByFechaDesc() {
         return pedidoRepository.findAllWithOrderByFechaDesc();
     }
+    @Override
+    public List<Pedido> findByUsuarioIdOrderByFechaDesc(int id) {
+        return pedidoRepository.findByUsuarioIdOrderByFechaDesc(id);
+    }
 }
