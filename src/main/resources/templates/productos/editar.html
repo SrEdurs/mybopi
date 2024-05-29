@@ -69,6 +69,12 @@
                   </div>
                 </div>
 
+                <div class="row" style="text-align-last: right;">
+                  <div class="col-sm-2">
+                    <button type="submit" class="btn btn-dark" style="margin-top: 10px;"> Guardar</button>
+                  </div>             
+                </div>
+
 
                 <!-- Vendido  
                 <div class="form-group">
@@ -86,17 +92,33 @@
             </div>
           </div>
 
-
-
           <div class="col-lg-4">
-
             <div class="row">
               <div class="card mb-4">
-                <div class="card-body">
+                <div class="card-body" style="width: 300px;">
                   <div class="form-group">
-                    <label  class="control-label col-sm-2 card-title" for="img" style="max-width: 100%;">Portada:</label>
-                    <div class="col-sm-10">  
-                      <input type="file" class="form-control-file" id="img1" name="img1" th:value="${producto.portada}">
+                    <h6 class="control-label col-sm-2 card-title" for="img1" style="max-width: 100%;">Portada:</h6>
+                    <div class="col-sm-10 d-flex align-items-center">
+                      <label for="img1" style="cursor: pointer;">
+                        <img id="img1-preview" th:src="@{/images/{img} (img = ${producto.portada})}" alt="Vista previa" style="max-width: 100px; margin-left: 50px; margin-top: 10px;">
+                      </label>
+                      <input type="file" class="form-control-file" id="img1" name="img1" onchange="previewImage(event, 'img1-preview')" style="display: none;">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+            <div class="row">
+              <div class="card mb-4">
+                <div class="card-body" style="width: 300px;">
+                  <div class="form-group">
+                    <h6 class="control-label col-sm-2 card-title" for="img1" style="max-width: 100%;">Imagen 1:</h6>
+                    <div class="col-sm-10 d-flex align-items-center">
+                      <label for="img2" style="cursor: pointer;">
+                        <img id="img2-preview" th:src="@{/images/{img} (img = ${producto.imagen1})}" alt="Vista previa" style="max-width: 100px; margin-left: 50px; margin-top: 10px;">
+                      </label>
+                      <input type="file" class="form-control-file" id="img2" name="img2" onchange="previewImage(event, 'img2-preview')" style="display: none;">
                     </div>
                   </div>
                 </div>
@@ -105,52 +127,44 @@
 
             <div class="row">
               <div class="card mb-4">
-                <div class="card-body">
+                <div class="card-body" style="width: 300px;">
                   <div class="form-group">
-                    <label  class="control-label col-sm-2" for="img" style="max-width: 100%;">Imagen 1:</label>
-                    <div class="col-sm-10">  
-                      <input type="file" class="form-control-file" id="img2" name="img2" th:value="${producto.imagen1}">
+                    <h6 class="control-label col-sm-2 card-title" for="img1" style="max-width: 100%;">Imagen 2:</h6>
+                    <div class="col-sm-10 d-flex align-items-center">
+                      <label for="img3" style="cursor: pointer;">
+                        <img id="img3-preview" th:src="@{/images/{img} (img = ${producto.imagen2})}" alt="Vista previa" style="max-width: 100px; margin-left: 50px; margin-top: 10px;">
+                      </label>
+                      <input type="file" class="form-control-file" id="img3" name="img3" onchange="previewImage(event, 'img3-preview')" style="display: none;">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <div class="row">
-              <div class="card mb-4">
-                <div class="card-body">
-                  <div class="form-group">
-                    <label  class="control-label col-sm-2" for="img" style="max-width: 100%;">Imagen 2:</label>
-                    <div class="col-sm-10">  
-                      <input type="file" class="form-control-file" id="img3" name="img3" th:value="${producto.imagen2}">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
         </div>
-      
-
-        <div class="row">
-          <div class="col-sm-2">
-            <button type="submit" class="btn btn-dark"> Guardar</button>
-          </div>             
-        </div>
-        <br>
-
-      </form>
-
-    </div>
-    <!-- /.container -->
+      </div>
+    </form>
+  </div>
+  <!-- /.container -->
+    
+<script>
+function previewImage(event, previewId) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        var output = document.getElementById(previewId);
+        output.src = reader.result;
+        output.style.display = 'block';
+        var filenameSpan = document.getElementById(previewId + '-filename');
+        filenameSpan.style.display = 'none'; // Oculta el nombre del archivo cuando se carga la imagen
+    }
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
 
     <!-- Footer -->
     <div th:insert="~{usuarios/template_usuario :: footer}"></div>
 
-<!-- Scripts -->
-<div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+  <!-- Scripts -->
+  <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
 
   </body>
 
