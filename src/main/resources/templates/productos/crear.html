@@ -10,95 +10,128 @@
 
 <!-- Page Content -->
 <div class="container">
+  <br><br>
+  <h2>Crear producto</h2>
 
-
-<br>
-
-  <h2>Crear Producto</h2>
-  <br>
-  <form class="form-horizontal" th:action="@{/productos/guardar}" method="post" enctype="multipart/form-data">
-
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="nombre">Nombre:</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="nombre" name="nombre"
-        placeholder="Nombre del producto" autocomplete="off" required>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="descripcion">Descripción:</label>
-      <div class="col-sm-10">
-        <textarea class="form-control" id="descripcion" name="descripcion"
-        placeholder="Descripcion del producto" required
-        autocomplete="off"> </textarea>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="precio">Precio:</label>
-      <div class="col-sm-10">
-        <input type="number" class="form-control" step="any" id="precio" name="precio"
-        placeholder="Precio del producto" autocomplete="off" required>
-      </div>
-    </div>
-
-     <!-- form-group for category, choose beetween 1 and 2 -->
-     <div class="form-group">
-      <label class="control-label col-sm-2" for="categoria">Categoría:</label>
-      <div class="col-sm-10">
-        <select class="form-control" id="categoria" name="categoria">
-          <option value="1">Totebag</option>
-          <option value="2">Mochila</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- form-group for mark the product as active with a boolean -->
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="activo">Activo:</label>
-      <div class="col-sm-10">
-        <select class="form-control" id="activo" name="activo">
-          <option value="true">Si</option>
-          <option value="false">No</option>
-        </select>
-      </div>
-    </div>
+  <form class="form-horizontal" th:action="@{/productos/guardar}" method="post"  enctype="multipart/form-data">
     
 
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="img">Portada:</label>
-      <div class="col-sm-10">
-        <input type="file" class="form-control-file" id="img1" name="img1">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="img2">Imagen 1:</label>
-      <div class="col-sm-10">
-        <input type="file" class="form-control-file" id="img2" name="img2">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="img3">Imagen 2:</label>
-      <div class="col-sm-10">
-        <input type="file" class="form-control-file" id="img3" name="img3">
-      </div>
-    </div>
-
     <div class="row">
-      <div class="col-sm-2">
-        <button type="submit" class="btn btn-success">
-          <span class="glyphicon glyphicon-saved"></span> Guardar
-        </button>
+
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="form-group">
+              <h6 class="control-label col-sm-2" for="nombre" style="max-width: 100%;">Título:</h6>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Título del producto" required autocomplete="off">
+                <div id="prueba"></div>  
+              </div>
+            </div>
+
+            <div class="form-group">
+              <h6 class="control-label col-sm-2" for="descripcion" style="max-width: 100%;">Descripción:</h6>
+              <div class="col-sm-10">          
+                <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Descripcion del producto" required autocomplete="off"> </textarea>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <h6 class="control-label col-sm-2" for="precio" style="max-width: 100%;">Precio:</h6>
+              <div class="col-sm-10">          
+                <input type="number" class="form-control" step="any"  id="precio" name="precio" placeholder="Precio del producto en €" required autocomplete="off">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <h6 class="control-label col-sm-2" for="categoria" style="max-width: 100%;">Categoría:</h6>
+              <div class="form-check form-check-inline" style="margin-left: 17px;">
+                <input class="form-check-input" type="radio" name="categoria" id="inlineRadio1" value="1">
+                <label class="form-check-label" for="inlineRadio1">Totebag</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="categoria" id="inlineRadio2" value="2">
+                <label class="form-check-label" for="inlineRadio2">Mochila</label>
+              </div>
+            </div>
+
+            <div class="row" style="text-align-last: right;">
+              <div class="col-sm-2">
+                <button type="submit" class="btn btn-dark" style="margin-top: 10px;"> Guardar</button>
+              </div>             
+            </div>
+
+          </div>
+        </div>
       </div>
+
+      <div class="col-lg-4">
+        <div class="row">
+          <div class="card mb-4">
+            <div class="card-body" style="width: 300px;">
+              <div class="form-group">
+                <h6 class="control-label col-sm-2 card-title" for="img1" style="max-width: 100%;">Portada:</h6>
+                <div class="col-sm-10 d-flex align-items-center">
+                  <label for="img1" style="cursor: pointer;">
+                    <img id="img1-preview" th:src="@{/images/default.jpg}" alt="Vista previa" style="max-width: 100px; margin-left: 50px; margin-top: 10px;">
+                  </label>
+                  <input type="file" class="form-control-file" id="img1" name="img1" onchange="previewImage(event, 'img1-preview')" style="display: none;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="card mb-4">
+            <div class="card-body" style="width: 300px;">
+              <div class="form-group">
+                <h6 class="control-label col-sm-2 card-title" for="img1" style="max-width: 100%;">Imagen 1:</h6>
+                <div class="col-sm-10 d-flex align-items-center">
+                  <label for="img2" style="cursor: pointer;">
+                    <img id="img2-preview" th:src="@{/images/default.jpg}" alt="Vista previa" style="max-width: 100px; margin-left: 50px; margin-top: 10px;">
+                  </label>
+                  <input type="file" class="form-control-file" id="img2" name="img2" onchange="previewImage(event, 'img2-preview')" style="display: none;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="card mb-4">
+            <div class="card-body" style="width: 300px;">
+              <div class="form-group">
+                <h6 class="control-label col-sm-2 card-title" for="img1" style="max-width: 100%;">Imagen 2:</h6>
+                <div class="col-sm-10 d-flex align-items-center">
+                  <label for="img3" style="cursor: pointer;">
+                    <img id="img3-preview" th:src="@{/images/default.jpg}" alt="Vista previa" style="max-width: 100px; margin-left: 50px; margin-top: 10px;">
+                  </label>
+                  <input type="file" class="form-control-file" id="img3" name="img3" onchange="previewImage(event, 'img3-preview')" style="display: none;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
-
-  </form>
-
+  </div>
+</form>
 </div>
 <!-- /.container -->
+
+<script>
+  function previewImage(event, previewId) {
+      var reader = new FileReader();
+      reader.onload = function() {
+          var output = document.getElementById(previewId);
+          output.src = reader.result;
+          output.style.display = 'block';
+          var filenameSpan = document.getElementById(previewId + '-filename');
+          filenameSpan.style.display = 'none'; // Oculta el nombre del archivo cuando se carga la imagen
+      }
+      reader.readAsDataURL(event.target.files[0]);
+  }
+  </script>
 
 <div th:insert="~{usuarios/template_usuario :: footer}"></div>
 
