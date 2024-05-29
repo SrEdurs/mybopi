@@ -9,102 +9,137 @@
   <div th:insert="~{usuarios/template_usuario :: nav}"></div>
     <!-- Page Content -->
     <div class="container">
+      <br><br>
+      <h2>Actualizar producto</h2>
 
-
-
-      <!-- Page Heading/Breadcrumbs -->
-      <h1 class="mt-4 mb-3">
-        Mybopi <small>Productos</small>
-      </h1>
-
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/productos/lista}">Productos</a></li>
-        <li class="breadcrumb-item active">Actualizar Producto</li>
-      </ol>
-
-      <h2>Actualizar Producto</h2>
       <form class="form-horizontal" th:action="@{/productos/actualizar}" method="post"  enctype="multipart/form-data">
         <input type="hidden" name="id" th:value="${producto.id}">
 
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="nombre">Título:</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del producto" required autocomplete="off" th:value="${producto.nombre}">
-            <div id="prueba"></div>  
-          </div>
-        </div>
+        <div class="row">
 
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="descripcion">Descripción:</label>
-          <div class="col-sm-10">          
-            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese la descripcion del producto" required autocomplete="off" th:text="${producto.descripcion}"> </textarea>
-          </div>
-        </div>
+          <div class="col-lg-8">
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="form-group">
+                  <h6 class="control-label col-sm-2" for="nombre" style="max-width: 100%;">Título:</h6>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del producto" required autocomplete="off" th:value="${producto.nombre}">
+                    <div id="prueba"></div>  
+                  </div>
+                </div>
 
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="precio">Precio:</label>
-          <div class="col-sm-10">          
-            <input type="number" class="form-control" step="any"  id="precio" name="precio" placeholder="Ingrese el precio del producto" th:value="${producto.precio}" required autocomplete="off">
-          </div>
-        </div>
+                <div class="form-group">
+                  <h6 class="control-label col-sm-2" for="descripcion" style="max-width: 100%;">Descripción:</h6>
+                  <div class="col-sm-10">          
+                    <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese la descripcion del producto" required autocomplete="off" th:text="${producto.descripcion}"> </textarea>
+                  </div>
+                </div>
 
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="categoria">Categoría:</label>
-          <div class="col-sm-10">
-            <select class="form-control" id="categoria" name="categoria">
-              <option value="1" th:selected="${producto.categoria == 1}">Totebag</option>
-              <option value="2" th:selected="${producto.categoria == 2}">Mochila</option>
-            </select>
-          </div>
-        </div>
+                <div class="form-group">
+                  <h6 class="control-label col-sm-2" for="precio" style="max-width: 100%;">Precio:</h6>
+                  <div class="col-sm-10">          
+                    <input type="number" class="form-control" step="any"  id="precio" name="precio" placeholder="Ingrese el precio del producto" th:value="${producto.precio}" required autocomplete="off">
+                  </div>
+                </div>
 
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="activo">Activo:</label>
-          <div class="col-sm-10">
-            <select class="form-control" id="activo" name="activo">
-              <option value="true" th:selected="${producto.activo == true}">Si</option>
-              <option value="false" th:selected="${producto.activo == false}">No</option>
-            </select>
-          </div>
-        </div>
+                <div class="form-group">
+                  <h6 class="control-label col-sm-2" for="categoria" style="max-width: 100%;">Categoría:</h6>
+                  <div class="form-check form-check-inline" style="margin-left: 17px;">
+                    <input class="form-check-input" type="radio" name="categoria" id="inlineRadio1" value="1" th:checked="${producto.categoria == 1}">
+                    <label class="form-check-label" for="inlineRadio1">Totebag</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="categoria" id="inlineRadio2" value="2" th:checked="${producto.categoria == 2}">
+                    <label class="form-check-label" for="inlineRadio2">Mochila</label>
+                  </div>
+                </div>
 
-        <div class="form-group">
-          <label class="control-label col-sm-2" for="activo">Vendido:</label>
-          <div class="col-sm-10">
-            <select class="form-control" id="vendido" name="vendido">
-              <option value="true" th:selected="${producto.vendido == true}">Si</option>
-              <option value="false" th:selected="${producto.vendido == false}">No</option>
-            </select>
-          </div>
-        </div>
 
-        <div class="form-group">
-          <label  class="control-label col-sm-2" for="img">Portada:</label>
-          <img th:src="@{/images/{img} (img = ${producto.portada})}" width="100px" height="100px">
-          <div class="col-sm-10">  
-            <input type="file" class="form-control-file" id="img1" name="img1" th:value="${producto.portada}">
-          </div>
-        </div>
 
-        <div class="form-group">
-          <label  class="control-label col-sm-2" for="img">Imagen 1:</label>
-          <div class="col-sm-10">  
-            <input type="file" class="form-control-file" id="img2" name="img2" th:value="${producto.imagen1}">
-          </div>
-        </div>
 
-        <div class="form-group">
-          <label  class="control-label col-sm-2" for="img">Imagen 2:</label>
-          <div class="col-sm-10">  
-            <input type="file" class="form-control-file" id="img3" name="img3" th:value="${producto.imagen2}">
+                <div class="form-group">
+                  <h6 class="control-label col-sm-2" for="activo" style="max-width: 100%;">Activo:</h6>
+                  <div class="form-check form-check-inline" style="margin-left: 17px;">
+                    <input class="form-check-input" type="radio" name="activo" id="inlineRadio1" value="true" th:checked="${producto.activo == true}">
+                    <label class="form-check-label" for="inlineRadio1">Si</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="activo" id="inlineRadio2" value="false" th:checked="${producto.activo == false}">
+                    <label class="form-check-label" for="inlineRadio2">No</label>
+                  </div>
+                </div>
+
+
+                <!-- Vendido  
+                <div class="form-group">
+                  <h6 class="control-label col-sm-2" for="activo" style="max-width: 100%;">Vendido:</h6>
+                  <div class="col-sm-10">
+                    <select class="form-control" id="vendido" name="vendido">
+                      <option value="true" th:selected="${producto.vendido == true}">Si</option>
+                      <option value="false" th:selected="${producto.vendido == false}">No</option>
+                    </select>
+                  </div>
+                </div>
+                  -->
+
+              </div>
+            </div>
           </div>
+
+
+
+          <div class="col-lg-4">
+
+            <div class="row">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label  class="control-label col-sm-2 card-title" for="img" style="max-width: 100%;">Portada:</label>
+                    <div class="col-sm-10">  
+                      <input type="file" class="form-control-file" id="img1" name="img1" th:value="${producto.portada}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label  class="control-label col-sm-2" for="img" style="max-width: 100%;">Imagen 1:</label>
+                    <div class="col-sm-10">  
+                      <input type="file" class="form-control-file" id="img2" name="img2" th:value="${producto.imagen1}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label  class="control-label col-sm-2" for="img" style="max-width: 100%;">Imagen 2:</label>
+                    <div class="col-sm-10">  
+                      <input type="file" class="form-control-file" id="img3" name="img3" th:value="${producto.imagen2}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
+      
 
         <div class="row">
           <div class="col-sm-2">
-            <button type="submit" class="btn btn-success"> Guardar</button>
+            <button type="submit" class="btn btn-dark"> Guardar</button>
           </div>             
         </div>
+        <br>
 
       </form>
 

@@ -124,7 +124,8 @@ public class ProductoController {
             }
             String nombreImagen = upload.saveImage(imagen3);
             producto.setImagen2(nombreImagen);
-        }
+        }       
+
         producto.setUsuario(p.getUsuario());
         productoService.update(producto);
         return "redirect:/productos/lista";

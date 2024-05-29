@@ -220,14 +220,7 @@ public class HomeController {
         }
     }
 
-    // Método para calcular el total de los productos en el carrito
-    private int calcularTotal(List<Producto> productos) {
-        int total = 0;
-        for (Producto producto : productos) {
-            total += producto.getPrecio(); // Suponiendo que el precio está en centavos
-        }
-        return total;
-    }
+
 
 
     @PostMapping("/guardarPedido")
@@ -331,5 +324,14 @@ public class HomeController {
             return new Usuario();
         }
     }
+
+        // Método para calcular el total de los productos en el carrito
+        private int calcularTotal(List<Producto> productos) {
+            int total = 0;
+            for (Producto producto : productos) {
+                total += producto.getPrecio(); // Suponiendo que el precio está en centavos
+            }
+            return total;
+        }
     
 }
