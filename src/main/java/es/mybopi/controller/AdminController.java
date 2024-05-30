@@ -1,7 +1,11 @@
 package es.mybopi.controller;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,4 +38,16 @@ public class AdminController {
         return "admin/compras";
     }
     
+    @ModelAttribute("usuarioNav")
+    public Usuario usuarioNav(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
+        if(user.isPresent()) {
+            model.addAttribute("usuarioNav",user.get());     
+            return user.get();
+        } else{
+            return new Usuario();
+        }
+    }
 }

@@ -159,10 +159,24 @@ public class ProductoController {
         if(p.getCarritos() != null){
             for(Carrito c : p.getCarritos()){
                 c.getProductos().remove(p);
+                c.setTotal(c.getTotal() - p.getPrecio());
                 carritoService.save(c);
             }
         }
         productoService.deleteById(id);
         return "redirect:/productos/inventario";
+    }
+
+    @ModelAttribute("usuarioNav")
+    public Usuario usuarioNav(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
+        if(user.isPresent()) {
+            model.addAttribute("usuarioNav",user.get());     
+            return user.get();
+        } else{
+            return new Usuario();
+        }
     }
 }
