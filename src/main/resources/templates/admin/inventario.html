@@ -36,19 +36,53 @@
         <td>
            <img th:if="${producto.activo}" th:src="@{/images/admin/Verde.png}" width="30px" height="30px"/>
            <img th:if="${!producto.activo}" th:src="@{/images/admin/Rojo.png}" width="30px" height="30px"/>
-
         </td>
         <td>
            <img th:if="${producto.vendido}" th:src="@{/images/admin/Verde.png}" width="30px" height="30px"/>
            <img th:if="${!producto.vendido}" th:src="@{/images/admin/Rojo.png}" width="30px" height="30px"/>
         </td>
-        <td><a  class="btn btn-dark" th:href="@{/productos/editar/{id}(id=${producto.id})}">Editar</a> </td>
-        <td><a  class="btn btn-danger" th:href="@{/productos/eliminar/{id}(id=${producto.id})}">Eliminar</a> </td>
+        <td><a class="btn btn-dark" th:href="@{/productos/editar/{id}(id=${producto.id})}">Editar</a> </td>
+        <td>
+          <button class="delete-button btn btn-danger" th:value="${producto.id}" data-toggle="modal" data-target="#exampleModal" style="color: white;">Eliminar</button>
+        </td>
       </tr>       
     </tbody>
   </table>
 
 </div>
+<!-- /.container -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Eliminar producto</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>¿Quieres eliminar el producto del inventario?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <a id="deleteButton" href="#">
+          <button type="button" class="btn btn-danger">Eliminar</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Javascript que sustituye idProducto de th:href="@{/productos/eliminar/idProducto}" cuando se abre el modal por el id del <button id="deletes" data-id="${producto.id}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="color: white;">Eliminar</button> -->
+<script type="text/javascript">  document.querySelectorAll('.delete-button').forEach(button => {
+  button.addEventListener('click', function() {
+    var id = this.getAttribute('value');
+    document.getElementById('deleteButton').setAttribute('href', '/productos/eliminar/' + id);
+  });
+});
+</script>
 <!-- /.container -->
 
 <div th:insert="~{usuarios/template_usuario :: footer}"></div>

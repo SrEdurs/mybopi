@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import es.mybopi.model.Carrito;
 import es.mybopi.model.Producto;
 import es.mybopi.model.Usuario;
 import es.mybopi.repository.ProductoRepository;
+import es.mybopi.service.CarritoService;
 import es.mybopi.service.ProductoService;
 import es.mybopi.service.UploadFileService;
 import es.mybopi.service.UsuarioService;
@@ -33,11 +36,13 @@ public class ProductoController {
     private UsuarioService usuarioService;
     @Autowired
     private ProductoRepository productoRepository;
+    @Autowired
+    private CarritoService carritoService;
 
-    @GetMapping("/lista")
+    @GetMapping("/inventario")
     public String detalles(Model model, @ModelAttribute("usuarioNav") Usuario usuario){
         model.addAttribute("inventario", productoRepository.findAllByOrderByFechaDesc());
-        return "productos/detalles";
+        return "admin/inventario";
     }
 
     @GetMapping("/crear")
@@ -71,7 +76,7 @@ public class ProductoController {
             }
 
             productoService.save(producto);
-            return "redirect:/productos/lista";
+            return "redirect:/productos/inventario";
         } else{
             return "redirect:/";
         } 
@@ -128,7 +133,7 @@ public class ProductoController {
 
         producto.setUsuario(p.getUsuario());
         productoService.update(producto);
-        return "redirect:/productos/lista";
+        return "redirect:/productos/inventario";
     }
 
     @GetMapping("/eliminar/{id}")
@@ -150,7 +155,14 @@ public class ProductoController {
         
             upload.deleteImage(p.getImagen2());
         }
+        //eliminar el producto de todos los carritos
+        if(p.getCarritos() != null){
+            for(Carrito c : p.getCarritos()){
+                c.getProductos().remove(p);
+                carritoService.save(c);
+            }
+        }
         productoService.deleteById(id);
-        return "redirect:/productos/lista";
+        return "redirect:/productos/inventario";
     }
 }
