@@ -34,7 +34,7 @@
                   <td th:text="${pedido.productos.size()}">Artículos</td>
                   <td th:text="${pedido.total} + '€'">Total</td>
                   <td th:text="${pedido.estado}" style="color: green; font-weight: bold">Estado</td>
-                  <td><a th:href="@{/pedidos/{id}(id=${pedido.id})}" class="btn btn-dark">Ver Detalle</a></td>
+                  <td><a th:href="@{/pedidos/{id}(id=${pedido.id})}" class="btn btn-dark">Ver detalles</a></td>
                 </tr>
               </tbody>
               <tbody th:if="${pedidos.empty}">

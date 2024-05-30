@@ -8,39 +8,37 @@
   <!-- Navigation -->
   <div th:insert="~{usuarios/template_usuario :: nav}"></div>
 
-    <!-- Page Content -->
-    <div class="container">
-
-      <!-- Page Heading/Breadcrumbs -->
-      <h1 class="mt-4 mb-3">
-        Mybopi <small>Compras</small>
-      </h1>
-
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-        <li class="breadcrumb-item active">Compras</li>
-      </ol>
-
-      <!-- Blog Post -->
-      <div class="card mb-4">
+  <div class="container">
+    <br><br>
+    <h2>Pedidos de usuarios</h2>
+      <div class="card mb-4" style="border: 0px;">
         <div class="card-body">
           <div class="row">
            <div class="col-lg-12">
-            <table th:if="${pedidos} != null" class="table">
+            <table class="table" style="text-align: center;">
               <thead>
                 <tr>
                   <th scope="col">Pedido</th>
                   <th scope="col">Fecha</th>
-                  <th scope="col">Valor</th>
+                  <th scope="col">Artículos</th>
+                  <th scope="col">Total</th>
+                  <th scapope="col">Estado</th>
                   <th scope="col">Acción</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody th:unless="${pedidos.empty}">
                 <tr th:each="pedido : ${pedidos}">
-                  <td th:text="${pedido.numero}">4555454</td>
-                  <td th:text="${pedido.fecha}">Fecha de Compra</td>
-                  <td th:text="${pedido.total}">Total</td>
-                  <td><a th:href="@{/pedidos/{id}(id=${pedido.id})}" class="btn btn-success">Ver Detalle</a></td>
+                  <td th:text="${pedido.numero}" style="font-weight: bold;">4555454</td>
+                  <td th:text="${#dates.format(pedido.fecha, 'dd-MM-yyyy')}">Fecha de Compra</td>
+                  <td th:text="${pedido.productos.size()}">Artículos</td>
+                  <td th:text="${pedido.total} + '€'">Total</td>
+                  <td th:text="${pedido.estado}" style="color: green; font-weight: bold">Estado</td>
+                  <td><a th:href="@{/pedidos/{id}(id=${pedido.id})}" class="btn btn-dark">Ver detalles</a></td>
+                </tr>
+              </tbody>
+              <tbody th:if="${pedidos.empty}">
+                <tr>
+                  <td><h3>No hay pedidos</h3></td>
                 </tr>
               </tbody>
             </table>
