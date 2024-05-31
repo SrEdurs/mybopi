@@ -22,7 +22,7 @@
               <table class="table">
                 <tbody>
                   <tr th:each="carrito : ${pedido.productos}">
-                    <td><img th:src="@{images/{img} (img = ${carrito.portada})}" width="100px" height="100px"/></td>
+                    <td><img class="img-fluid" th:src="@{images/{img} (img = ${carrito.portada})}" width="100px" height="100px"/></td>
                     <!-- Añade text-align: center; al estilo de las celdas para centrar el texto -->
                     <td style="text-align: left;" th:text="${carrito.nombre}">Nombre</td>
                     <td style="text-align: center; font-weight: bold;" th:text="${carrito.precio} + '€'">Precio</td>
@@ -30,6 +30,7 @@
                 </tbody>
               </table>
             </div>
+            <h6 style="text-align: right" th:unless="${pedido.usuario.direccion == null || pedido.usuario.direccion == '' || pedido.usuario.nombre == null || pedido.usuario.nombre == '' || pedido.usuario.localidad == null || pedido.usuario.localidad == '' || pedido.usuario.telefono == null || pedido.usuario.telefono == '' || pedido.usuario.email == null || pedido.usuario.email == '' || pedido.usuario.CP == null || pedido.usuario.CP == ''}" th:text="'Gastos de envío: ' + '6,95' + '€'">Total: </h6>
             <h5 th:text="'Total: ' + ${pedido.total} + '€'" style="text-align: right; font-weight: bold"></h5>
           </div>
         </div>

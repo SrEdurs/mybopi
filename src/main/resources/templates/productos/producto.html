@@ -47,28 +47,21 @@
                 </a>
               </div>
 
-
-
-
-
               </a>
             </div>
             <div class="col-lg-6">
               <form th:action="@{/carrito}" method="POST">
-                <h2 class="card-title" th:text="${producto.nombre}"></h2>
                 <input type="hidden" name="id" th:value="${producto.id}">
                 <ul class="list-group">
-                  <li class="list-group-item"><h5 th:text="${producto.precio} + €">Precio: </h5></li>
-                  <li class="list-group-item">
+                  <li class="list-group-item" style="border-width: 0px;"><h2 class="card-title" th:text="${producto.nombre}"></h2></li>
+                  <li class="list-group-item" style="border-width: 0px;"><h4 th:text="${producto.precio} + €">Precio: </h4></li>
+                  <li class="list-group-item" style="border-width: 0px;">
+                    <h5>Descripción:</h5>
                     <p th:text="${producto.descripcion}">Descripción:</p>
                   </li>
+                  <li th:unless="${producto.vendido}" class="list-group-item" style="border-width: 0px;"><button type="submit" th:if="${!producto.vendido}" class="btn btn-dark">Añadir al carrito</button></li>
+                  <li th:if="${producto.vendido}" class="list-group-item" style="border-width: 0px;"><button class="btn btn-dark disabled">Producto vendido</button></li>
                 </ul>
-
-                <p></p>
-
-                <button type="submit" th:if="${!producto.vendido}" class="btn btn-dark">Añadir al carrito </button>
-
-                <h3 th:if="${producto.vendido}">Se ha vendio niño</h3>
               </form>
             </div>
           </div>

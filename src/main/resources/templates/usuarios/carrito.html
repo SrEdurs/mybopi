@@ -22,17 +22,11 @@
           <div class="row">
            <div class="col-lg-9">
             <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Producto</th>
-                  <th scope="col"></th>
-                  <th scope="col">Precio</th>
-                </tr>
-              </thead>
+
               <tbody>
                 
                 <tr th:if="${carrito != null && !#lists.isEmpty(carrito.productos)}" th:each="producto : ${carrito.productos}">
-                    <td><img th:src="@{images/{img} (img = ${producto.portada})}" width="100px" height="100px" th:classappend="${producto.vendido} ? 'grayscale' : ''"/></td>
+                    <td><img class="img-fluid" th:src="@{images/{img} (img = ${producto.portada})}" width="100px" height="100px" th:classappend="${producto.vendido} ? 'grayscale' : ''"/></td>
                     <td th:if="${producto.vendido}" th:text="${producto.nombre}"></td>
                     <td th:if="!${producto.vendido}" th:text="${producto.nombre}"></td>
                     <td th:if="!${producto.vendido}" th:text="${producto.precio} + '€'"></td>

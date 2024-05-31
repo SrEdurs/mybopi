@@ -211,6 +211,12 @@ public class HomeController {
                 iterator.remove();
             }
         }
+
+        //Comprobar si hay datos de dirección
+        if (usuario.getDireccion() != null && usuario.getDireccion() != "" && usuario.getNombre() != null && usuario.getNombre() != "" && usuario.getLocalidad() != null && usuario.getLocalidad() != "" && usuario.getTelefono() != null && usuario.getTelefono() != "" && usuario.getEmail() != null && usuario.getEmail() != "" && usuario.getCP() != null && usuario.getCP() != "") {
+            //Sumar 6,95 al total
+            pedido.setTotal(pedido.getTotal() + 6.95);
+        }
             model.addAttribute("usuario", usuario);
             model.addAttribute("pedido", pedido);
             return "usuarios/resumencompra";
@@ -233,11 +239,12 @@ public class HomeController {
             Usuario usuario = userOptional.get();
             List<Producto> productos = usuario.getCarrito().getProductos();
             List<Producto> productosCarrito = usuario.getCarrito().getProductos();
+            double envio = 6.95;
 
             // Paso 2: Realizar el cargo en Stripe
             StripeChargeDto chargeRequest = new StripeChargeDto();
             chargeRequest.setStripeToken(stripeToken);
-            chargeRequest.setAmount(String.valueOf(calcularTotal(productos))); // El total debería estar en centavos
+            chargeRequest.setAmount(String.valueOf(calcularTotal(productos) + envio)); // El total debería estar en centavos
 
             StripeChargeDto chargeResponse = stripeService.charge(chargeRequest);
             if (!chargeResponse.isSuccess()) {
@@ -248,7 +255,7 @@ public class HomeController {
             Pedido pedido = new Pedido();
             pedido.setUsuario(usuario);
             pedido.setProductos(new ArrayList<>(productosCarrito));
-            pedido.setTotal(calcularTotal(productosCarrito));
+            pedido.setTotal(calcularTotal(productosCarrito) + 6.95);
             pedido.setFecha(new Date());
             pedido.setNumero(pedidoService.generarNumPedido());
             pedido.setSeguimiento("Pendiente de envío");
