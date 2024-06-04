@@ -9,4 +9,8 @@ public class EmailDTO {
     private String asunto;
     private String mensaje;
 
+    public EmailDTO() {
+        // Constructor sin argumentos
+    }
+
 }

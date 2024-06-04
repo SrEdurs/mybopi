@@ -21,6 +21,10 @@ public class EmailController {
     @PostMapping
     private ResponseEntity<String> sendEmail(@RequestBody EmailDTO email) throws MessagingException {
 
+        email.setAsunto("Asunto de prueba");
+        email.setDestinatario("sredurs@outlook.es");
+        email.setMensaje("HOLAAAAAAAAAAAAA");
+
         emailService.sendMail(email);
         return ResponseEntity.ok("Email enviado");
     }

@@ -9,13 +9,18 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import es.mybopi.model.EmailDTO;
 import es.mybopi.model.Usuario;
+import es.mybopi.service.EmailService;
 import es.mybopi.service.UsuarioService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/usuario")
@@ -25,15 +30,26 @@ public class UsuarioController {
     @Autowired
     private PasswordEncoder encoder;
 
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping("/registro")
     public String registro(@ModelAttribute("usuarioNav") Usuario usuario) {
         return "usuarios/registro";
     }
     
     @PostMapping("/save")
-    public String save(@ModelAttribute Usuario user) {
+    public String save(@ModelAttribute Usuario user, EmailDTO email) throws MessagingException {
         user.setPassword(encoder.encode(user.getPassword()));
         usuarioService.save(user);
+
+        email.setAsunto("¡Bienvenid@ a Mybopi!");
+        email.setDestinatario(user.getEmail());
+        email.setMensaje("Muchas gracias por registrarte, ahora tienes acceso a numerosos artículos pintados a mano!");
+        emailService.sendMail(email);
+
+
+
         return "redirect:/usuario/login";
     }
 
