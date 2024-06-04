@@ -8,5 +8,15 @@
     "name": "stripe.apikey",
     "type": "java.lang.String",
     "description": "A description for 'stripe.apikey'"
+  },
+  {
+    "name": "email.username",
+    "type": "java.lang.String",
+    "description": "A description for 'email.username'"
+  },
+  {
+    "name": "email.password",
+    "type": "java.lang.String",
+    "description": "A description for 'email.password'"
   }
 ]}
