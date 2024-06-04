@@ -60,9 +60,9 @@
                     <p th:text="${producto.descripcion}">Descripción:</p>
                   </li>
                   <li th:unless="${producto.vendido}" class="list-group-item" style="border-width: 0px;"><button type="submit" th:if="${!producto.vendido}" class="btn btn-dark">Añadir al carrito</button></li>
-                  <li th:if="${producto.vendido}" class="list-group-item" style="border-width: 0px;"><button class="btn btn-dark disabled">Producto vendido</button></li>
                 </ul>
               </form>
+              <li th:if="${producto.vendido}" class="list-group-item" style="border-width: 0px;"> <button class="btn btn-dark disabled" th:if="${producto.vendido}">Producto vendido</button> </li>
             </div>
           </div>
         </div>

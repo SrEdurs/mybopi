@@ -34,6 +34,9 @@
             <h5 th:text="'Total: ' + ${pedido.total} + '€'" style="text-align: right; font-weight: bold"></h5>
           </div>
         </div>
+            <label class="form-check-label" for="exampleRadios1">
+              <img th:src="@{/images/admin/CorreosLogo.png}" width="30px" height="30px"/> Envío con Correos. Entrega de 3 a 5 días, con número de seguimiento.
+            </label>
       </div>
   
       <!-- Columna de dirección y resumen -->
@@ -69,6 +72,8 @@
           </div>
           
         </div>
+
+        
   
         <!-- Resumen -->
         <div class="card mb-4" style="width: 19rem;">
@@ -95,6 +100,7 @@
       </div>
     </div>
   </div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
