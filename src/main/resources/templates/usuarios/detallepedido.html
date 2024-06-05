@@ -24,6 +24,9 @@
                     <th scope="col">Fecha</th>
                     <th scope="col">Total</th>
                     <th scope="col">Estado</th>
+                    <th scope="col">
+                      <button class="btn btn-dark">Guardar estado</button>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -32,6 +35,13 @@
                     <td th:text="${#dates.format(pedido.fecha, 'dd-MM-yyyy')}"></td>
                     <td th:text="${pedido.total} + '€'">Total</td>
                     <td th:text="${pedido.estado}" style="color: green; font-weight: bold"></td>
+                    <td>
+                      <select class="form-control">
+                        <option>En preparación</option>
+                        <option>Enviado</option>
+                        <option>Entregado</option>
+                      </select>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -88,6 +98,12 @@
               <h5 class="card-title">Seguimiento</h5>
               <p class="card-text" th:text="${pedido.seguimiento}" style="font-weight: bold; color: blue"></p>
               <br>
+              <div class="form-group">
+                <label for="formGroupExampleInput">Enlace de seguimiento</label>
+                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Pon aquí el enlace de correos">
+                <br>
+                <button class="btn btn-dark">Guardar</button>
+              </div>
             </div>
           </div>
           <!-- Fin seguimiento -->
