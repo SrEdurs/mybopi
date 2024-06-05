@@ -18,14 +18,15 @@
           <div class="card" style="border: 0px;">
             <div class="card-body">
               <table class="table" style="text-align: center;">
-                <thead>
+                <form th:action="@{/actualizarEstado/{id}(id=${pedido.id})}" method="post">
+                <thead>           
                   <tr>
                     <th scope="col">Pedido</th>
                     <th scope="col">Fecha</th>
                     <th scope="col">Total</th>
                     <th scope="col">Estado</th>
-                    <th scope="col">
-                      <button class="btn btn-dark">Guardar estado</button>
+                    <th scope="col" sec:authorize="hasRole('ADMIN')">
+                      <button type="submit" class="btn btn-dark">Guardar estado</button>
                     </th>
                   </tr>
                 </thead>
@@ -34,16 +35,20 @@
                     <td th:text="${pedido.numero}" style="font-weight: bold;"></td>
                     <td th:text="${#dates.format(pedido.fecha, 'dd-MM-yyyy')}"></td>
                     <td th:text="${pedido.total} + '€'">Total</td>
-                    <td th:text="${pedido.estado}" style="color: green; font-weight: bold"></td>
-                    <td>
-                      <select class="form-control">
-                        <option>En preparación</option>
-                        <option>Enviado</option>
-                        <option>Entregado</option>
-                      </select>
+                    <td th:if="${pedido.estado == 'En preparación'}" th:text="${pedido.estado}" style="color: rgb(128, 109, 0); font-weight: bold"></td>
+                    <td th:if="${pedido.estado == 'Enviado'}" th:text="${pedido.estado}" style="color: rgb(94, 128, 0); font-weight: bold"></td>
+                    <td th:if="${pedido.estado == 'Entregado'}" th:text="${pedido.estado}" style="color: green; font-weight: bold"></td>
+                    <td sec:authorize="hasRole('ADMIN')"> 
+                        <select class="form-control" name="estado">
+                          <option disabled selected>Estado</option>
+                          <option value="En preparación">En preparación</option>
+                          <option value="Enviado">Enviado</option>
+                          <option value="Entregado">Entregado</option>
+                        </select>
                     </td>
                   </tr>
                 </tbody>
+              </form>
               </table>
             </div>
           </div>
@@ -96,13 +101,18 @@
           <div class="card" th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'border-color: red;' : ''">
             <div class="card-body" th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
               <h5 class="card-title">Seguimiento</h5>
-              <p class="card-text" th:text="${pedido.seguimiento}" style="font-weight: bold; color: blue"></p>
+              <p th:if="${pedido.seguimiento == 'Pendiente de envío'}" class="card-text" th:text="${pedido.seguimiento}" style="font-weight: bold; color: blue"></p>
+              <a th:if="${pedido.seguimiento != 'Pendiente de envío'}" th:href="${pedido.seguimiento}">
+                <p style="color: rgb(0, 81, 255)" class="card-text" th:text="${pedido.seguimiento}"></p>
+              </a>
               <br>
-              <div class="form-group">
-                <label for="formGroupExampleInput">Enlace de seguimiento</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Pon aquí el enlace de correos">
-                <br>
-                <button class="btn btn-dark">Guardar</button>
+              <div class="form-group" sec:authorize="hasRole('ADMIN')">
+                <form th:action="@{/actualizarSeguimiento/{id}(id=${pedido.id})}" method="post">
+                  <label for="seguimiento">Enlace de seguimiento</label>
+                  <input  type="text" class="form-control" id="seguimiento" name="seguimiento" placeholder="Pon aquí el enlace de correos">
+                  <br>
+                  <button type="submit" class="btn btn-dark">Guardar</button>
+                </form>
               </div>
             </div>
           </div>

@@ -27,7 +27,6 @@ public class UsuarioController {
     private UsuarioService usuarioService;
     @Autowired
     private PasswordEncoder encoder;
-
     @Autowired
     private EmailService emailService;
 

@@ -32,7 +32,9 @@
                   <td th:text="${#dates.format(pedido.fecha, 'dd-MM-yyyy')}">Fecha de Compra</td>
                   <td th:text="${pedido.productos.size()}">Artículos</td>
                   <td th:text="${pedido.total} + '€'">Total</td>
-                  <td th:text="${pedido.estado}" style="color: green; font-weight: bold">Estado</td>
+                  <td th:if="${pedido.estado == 'En preparación'}" th:text="${pedido.estado}" style="color: rgb(128, 109, 0); font-weight: bold"></td>
+                  <td th:if="${pedido.estado == 'Enviado'}" th:text="${pedido.estado}" style="color: rgb(94, 128, 0); font-weight: bold"></td>
+                  <td th:if="${pedido.estado == 'Entregado'}" th:text="${pedido.estado}" style="color: green; font-weight: bold"></td>
                   <td><a th:href="@{/pedidos/{id}(id=${pedido.id})}" class="btn btn-dark">Ver detalles</a></td>
                 </tr>
               </tbody>

@@ -16,16 +16,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import es.mybopi.dto.StripeChargeDto;
+import es.mybopi.model.EmailDTO;
 import es.mybopi.model.Carrito;
 import es.mybopi.model.Pedido;
 import es.mybopi.model.Producto;
 import es.mybopi.model.Usuario;
 import es.mybopi.repository.ProductoRepository;
+import es.mybopi.service.EmailService;
 import es.mybopi.service.CarritoService;
 import es.mybopi.service.PedidoService;
 import es.mybopi.service.ProductoService;
 import es.mybopi.service.StripeService;
 import es.mybopi.service.UsuarioService;
+import jakarta.mail.MessagingException;
+
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -41,6 +45,8 @@ public class HomeController {
     private CarritoService carritoService;
     @Autowired
     private StripeService stripeService;
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private PedidoService pedidoService;
     private Pedido pedido = new Pedido();
@@ -303,6 +309,7 @@ public class HomeController {
 
     @GetMapping("/pedidos/{id}")
     public String pedidos(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
+
         Optional<Pedido> pedido = pedidoService.findById(id);
         if(pedido.isPresent()){
             model.addAttribute("pedido", pedido.get());
@@ -311,12 +318,41 @@ public class HomeController {
         return "usuarios/detallepedido";
     }
 
-    @GetMapping("/pedidos/usuario/{id}")
-    public String pedidosUsuario(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
-        List<Pedido> pedidos = pedidoService.findByUsuario_Id(id);
-        model.addAttribute("pedidos", pedidos);
-        return "usuarios/pedidos";
+    @PostMapping("/actualizarEstado/{id}")
+    public String actualizarEstado(@ModelAttribute("id") Integer id, @RequestParam("estado") String estado, EmailDTO email) throws MessagingException {
+
+       pedido = pedidoService.findById(id).get();
+       pedido.setEstado(estado);
+       pedidoService.save(pedido);
+
+       if(pedido.getEstado().equals("Entregado")){
+        email.setAsunto("Tu pedido de Mybopi se ha entregado");
+        email.setDestinatario(pedido.getUsuario().getEmail());
+        email.setMensaje("Muchas gracias por tu compra");
+        emailService.sendMail(email);
+       }
+
+       return "redirect:/pedidos/" + id;        
     }
+
+    @PostMapping("/actualizarSeguimiento/{id}")
+    public String actualizarSeguimiento(@ModelAttribute("id") Integer id, @RequestParam("seguimiento") String seguimiento, EmailDTO email) throws MessagingException {
+
+       pedido = pedidoService.findById(id).get();
+       pedido.setSeguimiento(seguimiento);
+       pedidoService.save(pedido);
+
+       if(!pedido.getSeguimiento().equals("Pendiente de envío")){
+        email.setAsunto("Tu pedido de Mybopi se ha enviado");
+        email.setDestinatario(pedido.getUsuario().getEmail());
+        email.setMensaje("Muchas gracias por tu compra, el pedido se encuentra en camino");
+        emailService.sendMail(email);
+       }
+
+       return "redirect:/pedidos/" + id;        
+    }
+
+
     
 
     @ModelAttribute("usuarioNav")
