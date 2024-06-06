@@ -236,7 +236,7 @@ public class HomeController {
 
 
     @PostMapping("/guardarPedido")
-    public String guardarPedido(@RequestParam("stripeToken") String stripeToken) {
+    public String guardarPedido(@RequestParam("stripeToken") String stripeToken, EmailDTO email) throws MessagingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> userOptional = usuarioService.findByEmail(name);
@@ -247,7 +247,7 @@ public class HomeController {
             List<Producto> productosCarrito = usuario.getCarrito().getProductos();
             double envio = 6.95;
 
-            // Paso 2: Realizar el cargo en Stripe
+            //Realizar el cargo en Stripe
             StripeChargeDto chargeRequest = new StripeChargeDto();
             chargeRequest.setStripeToken(stripeToken);
             chargeRequest.setAmount(String.valueOf(calcularTotal(productos) + envio)); // El total debería estar en centavos
@@ -257,7 +257,7 @@ public class HomeController {
                 return "paymentError";
             }
 
-            // Paso 3: Configurar y guardar el pedido
+            //Configurar y guardar el pedido
             Pedido pedido = new Pedido();
             pedido.setUsuario(usuario);
             pedido.setProductos(new ArrayList<>(productosCarrito));
@@ -268,7 +268,16 @@ public class HomeController {
             pedido.setEstado("En preparación");
             pedidoService.save(pedido);
 
-            // Actualizar el estado de los productos y limpiar el carrito del usuario
+            //Enviar correo con los datos
+            email.setAsunto(pedido.getUsuario().getNombre() + " - Gracias por tu pedido en Mybopi");
+            email.setDestinatario(usuario.getEmail());
+            email.setTitulo("¡Muchas gracias por tu pedido!");
+            email.setMensaje("Muchas gracias por hacer tu pedido en Mybopi, te lo prepararemos y enviaremos a la mayor brevedad posible.");
+            email.setProductos(pedido.getProductos());
+            email.setTotal(pedido.getTotal());
+            emailService.sendMail(email);
+
+            //Actualizar el estado de los productos y limpiar el carrito del usuario
             for (Producto producto : productos) {
                 producto.setVendido(true);
                 producto.setElPedido(pedido);
@@ -328,7 +337,8 @@ public class HomeController {
        if(pedido.getEstado().equals("Entregado")){
         email.setAsunto("Tu pedido de Mybopi se ha entregado");
         email.setDestinatario(pedido.getUsuario().getEmail());
-        email.setMensaje("Muchas gracias por tu compra");
+        email.setTitulo("¡Tu pedido ha llegado!");
+        email.setMensaje("Muchas gracias por tu compra. ¡Esperamos que lo disfrutes!");
         emailService.sendMail(email);
        }
 
@@ -345,7 +355,9 @@ public class HomeController {
        if(!pedido.getSeguimiento().equals("Pendiente de envío")){
         email.setAsunto("Tu pedido de Mybopi se ha enviado");
         email.setDestinatario(pedido.getUsuario().getEmail());
-        email.setMensaje("Muchas gracias por tu compra, el pedido se encuentra en camino");
+        email.setTitulo("Tu pedido de Mybopi se encuentra en camino!");
+        email.setMensaje("Te informamos de que tu pedido ya se encuentra en camino. Lo recibirás dentro de 3 a 5 días laborables. ¡Ya falta poco para que puedas disfrutar!");
+        email.setEnlace(seguimiento);
         emailService.sendMail(email);
        }
 

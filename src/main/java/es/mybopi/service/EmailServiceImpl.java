@@ -6,7 +6,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-
 import es.mybopi.model.EmailDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -31,7 +30,13 @@ public class EmailServiceImpl implements EmailService {
             helper.setSubject(email.getAsunto());
 
             Context context = new Context();
+
+            context.setVariable("titulo", email.getTitulo());
             context.setVariable("message", email.getMensaje());
+            context.setVariable("enlace", email.getEnlace());
+            context.setVariable("productos", email.getProductos());
+            context.setVariable("total", email.getTotal());
+
             String contentHTML = templateEngine.process("admin/email", context);
 
             helper.setText(contentHTML, true);
