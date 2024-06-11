@@ -26,7 +26,9 @@
     <tbody>
       <tr th:each="producto : ${inventario}">
         <td>
-          <a th:href="@{/producto/{id}(id=${producto.id})}"><img th:src="@{/images/{img} (img = ${producto.portada})}" width="100px" height="100px"/></a>
+          <a th:href="@{/producto/{id}(id=${producto.id})}">
+            <img class="img-fluid" th:src="@{/images/{img} (img = ${producto.portada})}" width="100px" height="100px"/>
+          </a>
         </td>        
         <td th:text="${producto.nombre}"></td>
         <td th:text="${producto.precio} + '€'"></td>
