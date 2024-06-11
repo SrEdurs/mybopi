@@ -27,10 +27,10 @@
                 
                 <tr th:if="${carrito != null && !#lists.isEmpty(carrito.productos)}" th:each="producto : ${carrito.productos}">
                     <td><img class="img-fluid" th:src="@{images/{img} (img = ${producto.portada})}" width="100px" height="100px" th:classappend="${producto.vendido} ? 'grayscale' : ''"/></td>
-                    <td th:if="${producto.vendido}" th:text="${producto.nombre}"></td>
-                    <td th:if="!${producto.vendido}" th:text="${producto.nombre}"></td>
-                    <td th:if="!${producto.vendido}" th:text="${producto.precio} + '€'"></td>
-                    <td th:if="${producto.vendido}" th:text="'[VENDIDO]'" style="font-size: large; color: red"></td>
+                    <td th:if="${producto.vendido}" th:text="${producto.nombre}" style="font-size: large; color: black"></td>
+                    <td th:if="!${producto.vendido}" th:text="${producto.nombre}" style="font-size: large; color: black"></td>
+                    <td th:if="!${producto.vendido}" th:text="${producto.precio} + '€'" style="font-size: large; font-weight: bold"></td>
+                    <td th:if="${producto.vendido}" th:text="'[VENDIDO]'" style="font-size: large; color: red; font-weight: bold"></td>
                     <td><a th:href="@{/quitar/{id} (id = ${producto.id})}" class="btn btn-danger">Quitar</a></td>
                 </tr>
                 <tr th:if="${carrito == null || #lists.isEmpty(carrito.productos)}">

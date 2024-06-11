@@ -24,8 +24,8 @@
                   <tr th:each="carrito : ${pedido.productos}">
                     <td><img class="img-fluid" th:src="@{images/{img} (img = ${carrito.portada})}" width="100px" height="100px"/></td>
                     <!-- Añade text-align: center; al estilo de las celdas para centrar el texto -->
-                    <td style="text-align: left;" th:text="${carrito.nombre}">Nombre</td>
-                    <td style="text-align: center; font-weight: bold;" th:text="${carrito.precio} + '€'">Precio</td>
+                    <td style="text-align: left; font-size: large;" th:text="${carrito.nombre}">Nombre</td>
+                    <td style="text-align: center; font-weight: bold; font-size: large" th:text="${carrito.precio} + '€'">Precio</td>
                   </tr>
                 </tbody>
               </table>
