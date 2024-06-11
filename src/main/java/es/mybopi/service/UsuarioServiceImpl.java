@@ -2,14 +2,12 @@ package es.mybopi.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import es.mybopi.model.Usuario;
 import es.mybopi.repository.UsuarioRepository;
 
@@ -51,7 +49,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         return (int) user.getId();
     }
 
-    
     public UserDetails loadUserByUsername(String emilio) throws UsernameNotFoundException {
 
         Optional<Usuario> opt = usuarioRepository.findByEmail(emilio);
@@ -69,5 +66,4 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
     }
-
 }

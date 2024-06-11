@@ -9,6 +9,8 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import es.mybopi.model.EmailDTO;
 import es.mybopi.model.Usuario;
 import es.mybopi.service.EmailService;
@@ -39,15 +41,55 @@ public class UsuarioController {
     public String save(@ModelAttribute Usuario user, EmailDTO email) throws MessagingException {
         user.setPassword(encoder.encode(user.getPassword()));
         usuarioService.save(user);
-
         email.setAsunto("¡Bienvenid@ a Mybopi!");
         email.setDestinatario(user.getEmail());
         email.setMensaje("Muchas gracias por registrarte, ahora tienes acceso a numerosos artículos pintados a mano!");
         emailService.sendMail(email);
-
-
-
         return "redirect:/usuario/login";
+    }
+
+    @GetMapping("/password")
+    public String password(@ModelAttribute("usuarioNav") Usuario usuario, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
+        if (user.isPresent()) {
+            model.addAttribute("usuario", user.get());
+        }
+        return "usuarios/password";
+    }
+
+    //Método para cambiar la contraseña
+    @PostMapping("/password")
+    public String savePassword(@ModelAttribute("usuario") Usuario usuario, 
+                               @RequestParam("currentPassword") String currentPassword,
+                               @RequestParam("newPassword") String newPassword,
+                               @RequestParam("repeatPassword") String repeatPassword,
+                               RedirectAttributes redirectAttributes) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
+
+        if (user.isPresent()) {
+            Usuario currentUser = user.get();
+            if (!encoder.matches(currentPassword, currentUser.getPassword())) {
+                redirectAttributes.addFlashAttribute("error", "La contraseña actual es incorrecta.");
+                return "redirect:/usuario/password";
+            }
+
+            if (!newPassword.equals(repeatPassword)) {
+                redirectAttributes.addFlashAttribute("error", "La nueva contraseña y la confirmación no coinciden.");
+                return "redirect:/usuario/password";
+            }
+
+            currentUser.setPassword(encoder.encode(newPassword));
+            usuarioService.save(currentUser);
+            redirectAttributes.addFlashAttribute("success", "Contraseña cambiada con éxito.");
+            return "redirect:/usuario/password?passwordChanged";
+        }
+
+        redirectAttributes.addFlashAttribute("error", "Error al cambiar la contraseña.");
+        return "redirect:/usuario/password?passwordNOTChanged";
     }
 
     @GetMapping("/login")
@@ -198,4 +240,6 @@ public class UsuarioController {
     public String banned() {
         return "usuarios/banned";
     }
+
+
 }
