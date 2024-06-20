@@ -46,11 +46,11 @@ public class WebSecurityConfig {
                         formLogin -> formLogin
                                 .loginPage("/usuario/login")
                                 .defaultSuccessUrl("/", true)
-                                .failureUrl("/usuario/login")
+                                .failureUrl("/usuario/login?error=true")
                 )
                 .logout(logout -> logout
                                 .logoutUrl("/usuario/cerrar")
-                                .logoutSuccessUrl("/")
+                                .logoutSuccessUrl("/usuario/login?logout=true")
                 )
                 .httpBasic(Customizer.withDefaults());
         return http.build();

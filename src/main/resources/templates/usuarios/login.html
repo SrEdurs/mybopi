@@ -26,6 +26,9 @@
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Escribe tu contraseña" required>
                             </div>
                             <button type="submit" class="btn btn-dark w-100">Iniciar sesión</button>
+                            <br><br>
+                            <h5 th:if="${param.error}" style="color: red; font-weight: bold; text-align: center">Email o contraseña incorrectos.</h5>
+                            <h5 th:if="${param.logout}" style="color: green; font-weight: bold; text-align: center">Has cerrado sesión.</h5>
                         </form>
                         <br>
                         <div class="d-flex-justify" style="display: flex; justify-content: space-between;">
@@ -34,6 +37,8 @@
                         </div>
                     </div>
                 </div>
+                <br><br>
+                
             </div>
         </div>
         <br><br>
