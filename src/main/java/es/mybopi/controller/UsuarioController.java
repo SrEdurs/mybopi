@@ -92,8 +92,13 @@ public class UsuarioController {
         return "redirect:/usuario/password?passwordNOTChanged";
     }
 
+    @GetMapping("/recordar")
+    public String recordar() {
+        return "usuarios/recordarpassword";
+    }
+
     @GetMapping("/login")
-    public String login(@ModelAttribute("usuarioNav") Usuario usuario) {
+    public String login() {
         return "usuarios/login";
     }
 
