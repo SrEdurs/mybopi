@@ -55,10 +55,16 @@
     <p class="body-text" th:text="${message}"></p>
 
     <br>
+    <!-- botón para cambio de contraseña-->
+    <p th:if="${enlace2} != null">
+      Puedes cambiar tu contraseña desde <a style="text-align: center; color: rgb(206, 141, 0); font-weight: bold" th:if="${enlace2} != null" th:href="${enlace2}">aquí.</a>
+    </p>
+
     <!-- enlace si lo hay -->
     <p th:if="${enlace} != null">
       Puedes ver el seguimiento de tu pedido desde <a style="text-align: center; color: rgb(206, 141, 0); font-weight: bold" th:if="${enlace} != null" th:href="${enlace}">aquí.</a>
     </p>
+
     <!-- Lista de productos del pedido -->
      <table th:if="${productos} != null" width="100%" cellspacing="0" cellpadding="0">
       <h3>Resumen del pedido</h3>

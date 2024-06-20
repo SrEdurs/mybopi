@@ -11,6 +11,7 @@ public class EmailDTO {
     private String asunto;
     private String titulo;
     private String enlace;
+    private String enlace2;
     private String mensaje;
     private List<Producto> productos;
     private double total;

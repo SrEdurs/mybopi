@@ -97,6 +97,74 @@ public class UsuarioController {
         return "usuarios/recordarpassword";
     }
 
+    @PostMapping("/recordar")
+    public String recordarpass(@ModelAttribute Usuario user, EmailDTO email, @RequestParam("correo") String correo) throws MessagingException{
+
+         //Cadena de texto al azar
+         String randomText = "";
+         for (int i = 0; i < 10; i++) {
+             randomText += (char) (Math.random() * 26 + 'a');
+         }
+
+        //Si el email del usuario existe, mandar el mensaje
+        Optional<Usuario> usuario = usuarioService.findByEmail(correo);
+        if (usuario.isPresent()) {
+            //Guardamos el token en la base de datos
+            usuario.get().setToken(randomText);
+            usuarioService.save(usuario.get());
+
+            email.setAsunto("Cambio de contraseña");
+            email.setDestinatario(usuario.get().getEmail());
+            email.setMensaje("Hola! Hemos recibido una petición para cambiar la contraseña de tu cuenta. Si no es el caso, por favor, ignora este mensage");
+            email.setEnlace2("http://localhost:8080/usuario/cambiapassword?token=" + randomText + "&email=" + correo);
+            emailService.sendMail(email);
+
+            return "redirect:/usuario/recordar?email=true";
+        } else {
+            return "redirect:/usuario/recordar?error=true";
+        } 
+    }
+
+    @GetMapping("/cambiapassword")
+    public String cambiarPassword(@RequestParam("token") String token, @RequestParam("email") String email, Model model) {
+        Optional<Usuario> user = usuarioService.findByEmail(email);
+        if (user.isPresent() && user.get().getToken().equals(token)) {
+            model.addAttribute("token", token);
+            model.addAttribute("email", email);
+            return "usuarios/cambiapassword";
+        }
+        return "redirect:/usuario/recordar?token=caducado";
+    }
+
+
+    @PostMapping("/cambiapassword")
+    public String savePassword(@ModelAttribute EmailDTO emailConfirma, @RequestParam("token") String token, @RequestParam("email") String email,
+                            @RequestParam("password") String password, @RequestParam("confirmPassword") String confirmPassword) throws MessagingException {
+        // Verificar si las contraseñas coinciden
+        if (!password.equals(confirmPassword)) {
+            return "redirect:/usuario/cambiapassword?token=" + token + "&email=" + email + "&error=true";
+        }
+
+        // Usuario por email
+        Optional<Usuario> user = usuarioService.findByEmail(email);
+        if (user.isPresent()) {
+            user.get().setPassword(encoder.encode(password));
+            user.get().setToken("");
+            usuarioService.save(user.get());
+
+            //Mandamos un email al usuario
+            emailConfirma.setAsunto("Cambio de contraseña");
+            emailConfirma.setDestinatario(email);
+            emailConfirma.setMensaje("Hola! Tu contraseña se ha cambiado correctamente. Si no has sido tu, por favor, ponte en contacto con nosotros.");
+            emailService.sendMail(emailConfirma);
+            
+            return "redirect:/usuario/login?changed=true";
+        }
+
+        return "redirect:/usuario/recordar?token=invalid";
+    }
+
+
     @GetMapping("/login")
     public String login() {
         return "usuarios/login";

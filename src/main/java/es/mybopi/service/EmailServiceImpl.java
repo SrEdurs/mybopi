@@ -34,6 +34,7 @@ public class EmailServiceImpl implements EmailService {
             context.setVariable("titulo", email.getTitulo());
             context.setVariable("message", email.getMensaje());
             context.setVariable("enlace", email.getEnlace());
+            context.setVariable("enlace2", email.getEnlace2());
             context.setVariable("productos", email.getProductos());
             context.setVariable("total", email.getTotal());
 

@@ -29,6 +29,7 @@
                             <br><br>
                             <h5 th:if="${param.error}" style="color: red; font-weight: bold; text-align: center">Email o contraseña incorrectos.</h5>
                             <h5 th:if="${param.logout}" style="color: green; font-weight: bold; text-align: center">Has cerrado sesión.</h5>
+                            <h5 th:if="${param.changed}" style="color: green; font-weight: bold; text-align: center">Contraseña cambiada con éxito.</h5>
                         </form>
                         <br>
                         <div class="d-flex-justify" style="display: flex; justify-content: space-between;">

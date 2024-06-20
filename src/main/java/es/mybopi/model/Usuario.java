@@ -37,6 +37,7 @@ public class Usuario {
     private String roles;
     private int activo = 1;
     private String password;
+    private String token;
 
     @OneToMany(mappedBy = "usuario")
     private List<Producto> productos;
