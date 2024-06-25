@@ -4,111 +4,159 @@
 <div th:insert="~{usuarios/template_usuario :: header}"></div>
 
 <body>
+    <!-- Navigation -->
+    <div th:insert="~{usuarios/template_usuario :: nav}"></div>
 
-  <!-- Navigation -->
-  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+    <!-- Container -->
+     <div class="container">
+        <!-- Page Heading -->
+         <h1 class="mt-4 mb-3"><small>Cuenta</small></h1>
+         <div class="row">
+            <!-- Columna de dirección y resumen -->
+            <div class="col-lg-8">
+                <!-- Tarjeta de dirección -->
+                <div class="card mb-4" style="border: 0px">
+                    <div class="card-body">
+                        <div class="row" style="justify-content: center;">
+                            <h5 class="card-title">DATOS</h5>
+                        </div>
+                        <div class="row" th:style="${usuario.direccion == null || usuario.nombre == null || usuario.localidad == null || usuario.telefono == null || usuario.email == null || usuario.CP == null} ? 'border: 1px solid red' : 'border: 1px solid rgba(148, 148, 148, 0.219);'">
+                            <div class="col" style="border: 1px solid rgba(148, 148, 148, 0.219);">
+                                
+                                <br>
+                                <p>
+                                    <div class="row">
+                                        <Strong style="margin-left: 15px;">Nombre:</Strong> <span th:text="${usuario.nombre == null || usuario.nombre == ''} ? 'Sin datos' : ${usuario.nombre}" style="display: inline; margin-left: 5px;"></span>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <Strong style="margin-left: 15px;">Apellidos:</Strong> <span th:text="${usuario.apellidos == null || usuario.apellidos == ''} ? 'Sin datos' : ${usuario.apellidos}" style="display: inline; margin-left: 5px;"></span>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <Strong style="margin-left: 15px;">Tlf:</Strong> <span th:text="${usuario.telefono == null || usuario.telefono == ''} ? 'Sin datos' : ${usuario.telefono}" style="display: inline; margin-left: 5px;"></span>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <Strong style="margin-left: 15px;">Email:</Strong> <span th:text="${usuario.email == null || usuario.email == ''} ? 'Sin datos' : ${usuario.email}" style="display: inline; margin-left: 5px;"></span>
+                                    </div>
+                                </p>
+                            </div>
 
-    <!-- Page Content -->
-<div class="container mt-5">
-    <br><br>
-    <div class="card">
-        <div class="card-header text-center">
-            <h2 th:text="'Hola! ' + ${usuario.nombre}"></h2>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <h4>Datos Personales</h4>
-                    <p>
-                        <strong>Nombre:</strong> <span th:text="${usuario.nombre}" style="display: inline;"></span>
-                    </p>
-                    <p>
-                        <strong>Apellidos:</strong> <span th:text="${usuario.apellidos}" style="display: inline;"></span>
-                    </p>
-                    <p>
-                        <strong>Email:</strong> <span th:text="${usuario.email}" style="display: inline;"></span>
-                    </p>
-                    <p>
-                        <strong>Teléfono:</strong> <span th:text="${usuario.telefono}" style="display: inline;"></span>
-                    </p>
-                </div>
-                <div class="col-md-6">
-                    <h4>Datos de Dirección</h4>
-                    <p>
-                        <strong>Dirección:</strong> <span th:text="${usuario.direccion}" style="display: inline;"></span>
-                    </p>
-                    <p>
-                        <strong>Localidad:</strong> <span th:text="${usuario.localidad}" style="display: inline;"></span>
-                    </p>
-                    <p>
-                        <strong>CP:</strong> <span th:text="${usuario.CP}" style="display: inline;"></span>
-                    </p>
+                            <div class="col" style="border: 1px solid rgb(148, 148, 148, 0.219);">
+                                <br>
+                                <p>  
+                                    <div class="row">
+                                        <Strong style="margin-left: 15px;">Dirección:</Strong> <span th:text="${usuario.direccion == null || usuario.direccion == ''} ? 'Sin datos' : ${usuario.direccion}" style="display: inline; margin-left: 5px;"></span>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <Strong style="margin-left: 15px;">Localidad:</Strong> <span th:text="${usuario.localidad == null || usuario.localidad == ''} ? 'Sin datos' : ${usuario.localidad}" style="display: inline; margin-left: 5px;"></span>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <Strong style="margin-left: 15px;">CP:</Strong> <span th:text="${usuario.CP == null || usuario.CP == ''} ? 'Sin datos' : ${usuario.CP}" style="display: inline; margin-left: 5px;"></span>
+                                    </div>
+                                </p>                               
+                            </div>
+                            
+                            <div class="col" sec:authorize="hasRole('ADMIN')" th:if="${usuario.id != usuarioSesion.id}" style="border: 1px solid rgb(148, 148, 148, 0.219);">
+                                <br>
+                                <p>
+                                    <div class="row">
+                                        <strong style="margin-left: 15px;">ID:</strong> <span th:text="${usuario.id}" style="display: inline; margin-left: 5px;"></span>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <strong style="margin-left: 15px;">Rol:</strong> <span th:text="${usuario.roles}" style="display: inline; margin-left: 5px;"></span>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <strong style="margin-left: 15px;">Activo:</strong> <span th:text="${usuario.activo}" style="display: inline; margin-left: 5px;"></span>
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    
                 </div>
             </div>
-            <div class="row mt-4" sec:authorize="hasRole('ADMIN')" id="adminBotones">
-                <div class="col-md-6">
-                    <h4>Datos Adicionales</h4>
-                    <p>
-                        <strong>ID:</strong> <span th:text="${usuario.id}" style="display: inline;"></span>
-                    </p>
-                    <p>
-                        <strong>Rol:</strong> <span th:text="${usuario.roles}" style="display: inline;"></span>
-                    </p>
-                    <p>
-                        <strong>Activo:</strong> <span th:text="${usuario.activo}" style="display: inline;"></span>
-                    </p>
-                </div>
-                <div class="col-md-6">
-                    <br><br><br><br>
-                    <div class="d-flex justify-content-end">
-                        <a class="btn btn-dark" th:href="@{/usuario/edit/{id}(id=${usuario.id})}" style="margin-right: 10px;">Editar</a>
-                        <a class="btn btn-dark" th:href="@{/pedidos/usuario/{id}(id=${usuario.id})}" style="margin-right: 10px;">Ver pedidos</a>
-                        <a th:if="${usuario.activo} == 1" class="btn btn-danger" th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Desactivar usuario</a>
-                        <a th:if="${usuario.activo} == 0" class="btn btn-warning" th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Activar usuario</a>
-
+            <!-- Opdiones -->
+            <div class="col-lg-4">
+                <div class="card mb-4" style="border: 0px">
+                    <div class="card-body">
+                        <h5 class="card-title" style="text-align: center;">OPCIONES</h5>
+                        <table th:if="${usuario.id == usuarioSesion.id}" class="table" >
+                            <tbody>
+                                <tr>
+                                    <a th:href="@{/usuario/cuenta/editar}" class="list-group-item list-group-item-action" style="text-align: center;">Editar información</a>
+                                </tr>
+                                <tr>
+                                    <a th:href="@{/usuario/password}" class="list-group-item list-group-item-action" style="text-align: center;">Cambiar contraseña</a>
+                                </tr>
+                                <tr>
+                                    <a th:href="@{/pedidos}" class="list-group-item list-group-item-action" style="text-align: center;">Ver pedidos</a>
+                                </tr>
+                                <br>
+                                <p style="color: rgb(207, 0, 0);" th:if="${usuario.direccion == null || usuario.nombre == null || usuario.localidad == null || usuario.telefono == null || usuario.email == null || usuario.CP == null}">
+                                    Te faltan algunos datos que rellenar, sin ellos no podrás realizar pedidos.
+                                </p>
+                            </tbody>
+                        </table>
+                        <table class="table" sec:authorize="hasRole('ADMIN')" th:if="${usuario.id != usuarioSesion.id}">
+                            <tbody>
+                                <tr>
+                                    <a class="list-group-item list-group-item-action" th:href="@{/usuario/edit/{id}(id=${usuario.id})}" style="margin-right: 10px; text-align: center;">Editar</a>
+                                </tr>
+                                <tr>
+                                    <a class="list-group-item list-group-item-action" th:href="@{/pedidos/usuario/{id}(id=${usuario.id})}" style="margin-right: 10px; text-align: center;">Ver pedidos</a>
+                                </tr>
+                                <tr>
+                                    <a style="background-color: rgb(250, 180, 180); font-weight: bold; color: black; text-align: center;" th:if="${usuario.activo} == 1" class="list-group-item list-group-item-action" th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Desactivar usuario</a>
+                                    <a style="background-color: rgb(169, 245, 166); font-weight: bold; color: black; text-align: center;" th:if="${usuario.activo} == 0" class="list-group-item list-group-item-action" th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Activar usuario</a>
+                                </tr>
+                                <br>
+                                <p style="color: rgb(207, 0, 0);" th:if="${usuario.direccion == null || usuario.nombre == null || usuario.localidad == null || usuario.telefono == null || usuario.email == null || usuario.CP == null}">
+                                    A este usuario le faltan algunos datos que rellenar, no podrá realizar pedidos.
+                                </p>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <h1 class="mt-4 mb-3" style="margin-left: 15px;"><small>Últimas novedades</small></h1>
+          </div>
+    
+          <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${productosHome}">
+            <div class="card h-100">
+              <a th:href="@{/producto/{id}(id=${producto.id})}">
+                <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt="" th:classappend="${producto.vendido} ? 'grayscale' : ''" >
+                <div class="overlay" th:if="${producto.vendido}">
+                  <img th:src="@{/images/vendido.png}" alt="Vendido" class="vendido-image"/>
+                </div>
+              </a>
+              
+              <div class="card-body" >
+                <p class="card-text text-center text" style="font-weight: bold" th:text="${producto.nombre}"></p>
+              </div>
+              
+            </div>
+            </div>
+          </div>
     </div>
-    <br><br>
-    <div class="card" id="opciones">
-      <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Desde aquí puedes editar tu información personal, tu dirección de envío y ver tus pedidos.</h6>
-        <div class="list-group">
-          <a th:href="@{/usuario/cuenta/editar}" class="list-group-item list-group-item-action">Editar información</a>
-          <a th:href="@{/usuario/password}" class="list-group-item list-group-item-action">Cambiar contraseña</a>
-          <a th:href="@{/pedidos}" class="list-group-item list-group-item-action">Ver pedidos</a>
-        </div>
-      </div>
-    </div>
-</div>
-    <br><br>
     <!-- /.container -->
 
-    <input type="hidden" id="idSesion" th:value="${usuarioSesion.id}">
-    <input type="hidden" id="idPerfil" th:value="${usuario.id}">
 
-    <script th:inline="javascript">
-        var idSesion = document.getElementById('idSesion').value;
-        var idPerfil = document.getElementById('idPerfil').value;
-  
-        // Lógica para determinar qué URL asignar al action del formulario
-        if (idSesion != idPerfil) {
-            document.getElementById('opciones').style.display = 'none';
-        }
+<!-- Footer -->
+<div th:insert="~{usuarios/template_usuario :: footer}"></div>
 
-        if (idSesion == idPerfil) {
-            document.getElementById('adminBotones').style.display = 'none';
-        }
-      </script>
+<!-- Scripts -->
+<div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+</body>
 
-    <!-- Footer -->
-    <div th:insert="~{usuarios/template_usuario :: footer}"></div>
-
-    <!-- Scripts -->
-    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
-
-  </body>
-
-  </html>
+</html>

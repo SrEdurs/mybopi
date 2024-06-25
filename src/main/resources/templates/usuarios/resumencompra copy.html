@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+  <!-- Page Content -->
+  <div class="container">
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3"><small>Datos de la cuenta</small></h1>
+  
+    <div class="row">
+      <!-- Lista de productos -->
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">OPCIONES</h5>
+            <div class="alert alert-light" role="alert">
+              <table class="table" id="opciones">
+                <tbody>
+                  <tr>
+                    <td>
+                      <a th:href="@{/usuario/cuenta/editar}" class="list-group-item list-group-item-action">Editar información</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <a th:href="@{/usuario/password}" class="list-group-item list-group-item-action">Cambiar contraseña</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <a th:href="@{/pedidos}" class="list-group-item list-group-item-action">Ver pedidos</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Columna de dirección y resumen -->
+      <div class="col-lg-4">
+        <!-- Tarjeta de dirección -->
+        <div class="card mb-4" th:style="${usuario.direccion == null || usuario.nombre == null || usuario.localidad == null || usuario.telefono == null || usuario.email == null || usuario.CP == null} ? 'width: 19rem; border-color: red;' : 'width: 19rem'">
+
+          <div class="card-body" th:if="${usuario.direccion != null && usuario.nombre != null && usuario.localidad != null && usuario.telefono != null && usuario.email != null && usuario.CP != null}">
+            <h5 class="card-title">Dirección</h5>
+            <br>
+            <h6 class="card-subtitle mb-2" th:text="${usuario.nombre + ' ' + usuario.apellidos}"></h6>
+            <h7 class="card-text" th:text="${usuario.direccion}"></h7>
+            <br>
+            <h7 class="card-text" th:text="${usuario.localidad}"></h7>
+            <br>
+            <h7 class="card-text" th:text="'CP: ' +${usuario.CP}"></h7>
+            <br>
+            <h7 class="card-text" th:text="'Tlf: ' + ${usuario.telefono}"></h7>
+            <br>
+            <h7 class="card-text" th:text="${usuario.email}"></h7>
+            <p></p>
+            <!-- Botón de editar -->
+            <a th:href="@{/usuario/cuenta/editar}"><button type="button" class="btn btn-dark">Editar</button></a>
+          </div>
+          
+          <div class="card-body" th:if="${usuario.direccion == null || usuario.nombre == null || usuario.localidad == null || usuario.telefono == null || usuario.email == null || usuario.CP == null}">
+            <h5 class="card-title">Dirección</h5>
+            <br>
+            <h6 class="card-subtitle mb-2">Sin dirección</h6>
+            <br>
+            <!-- Botón de editar -->
+            <a th:href="@{/usuario/cuenta/editar}"><button type="button" class="btn btn-dark">Agregar dirección</button></a>
+          </div>
+          
+        </div>
+      </div>
+
+
+      <div class="row mt-4" sec:authorize="hasRole('ADMIN')" id="adminBotones">
+        <div class="col-md-6">
+            <h4>Datos Adicionales</h4>
+            <p>
+                <strong>ID:</strong> <span th:text="${usuario.id}" style="display: inline;"></span>
+            </p>
+            <p>
+                <strong>Rol:</strong> <span th:text="${usuario.roles}" style="display: inline;"></span>
+            </p>
+            <p>
+                <strong>Activo:</strong> <span th:text="${usuario.activo}" style="display: inline;"></span>
+            </p>
+        </div>
+        <div class="col-md-6">
+            <br><br><br><br>
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-dark" th:href="@{/usuario/edit/{id}(id=${usuario.id})}" style="margin-right: 10px;">Editar</a>
+                <a class="btn btn-dark" th:href="@{/pedidos/usuario/{id}(id=${usuario.id})}" style="margin-right: 10px;">Ver pedidos</a>
+                <a th:if="${usuario.activo} == 1" class="btn btn-danger" th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Desactivar usuario</a>
+                <a th:if="${usuario.activo} == 0" class="btn btn-warning" th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Activar usuario</a>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    </div>
+  </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Sin dirección</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Por favor, configura una dirección para que podamos realizar el envío.</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.container -->
+
+<input type="hidden" id="idSesion" th:value="${usuarioSesion.id}">
+<input type="hidden" id="idPerfil" th:value="${usuario.id}">
+
+<script th:inline="javascript">
+    var idSesion = document.getElementById('idSesion').value;
+    var idPerfil = document.getElementById('idPerfil').value;
+
+    // Lógica para determinar qué URL asignar al action del formulario
+    if (idSesion != idPerfil) {
+        document.getElementById('opciones').style.display = 'none';
+    }
+
+    if (idSesion == idPerfil) {
+        document.getElementById('adminBotones').style.display = 'none';
+    }
+  </script>
+
+<!-- Footer -->
+<div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+<!-- Scripts -->
+<div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+</body>
+
+</html>

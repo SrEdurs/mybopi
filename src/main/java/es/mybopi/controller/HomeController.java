@@ -327,6 +327,14 @@ public class HomeController {
         return "usuarios/detallepedido";
     }
 
+    @GetMapping("pedidos/usuario/{id}")
+    public String pedidosUsuario(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
+
+        List<Pedido> pedidos = pedidoService.findByUsuarioIdOrderByFechaDesc(id);
+        model.addAttribute("pedidos", pedidos);
+        return "usuarios/pedidos";
+    }
+
     @PostMapping("/actualizarEstado/{id}")
     public String actualizarEstado(@ModelAttribute("id") Integer id, @RequestParam("estado") String estado, EmailDTO email) throws MessagingException {
 

@@ -1,5 +1,6 @@
 package es.mybopi.controller;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import es.mybopi.model.EmailDTO;
+import es.mybopi.model.Producto;
 import es.mybopi.model.Usuario;
+import es.mybopi.repository.ProductoRepository;
 import es.mybopi.service.EmailService;
 import es.mybopi.service.UsuarioService;
 import jakarta.mail.MessagingException;
@@ -20,6 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -31,6 +35,8 @@ public class UsuarioController {
     private PasswordEncoder encoder;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private ProductoRepository productoRepository;
 
     @GetMapping("/registro")
     public String registro(@ModelAttribute("usuarioNav") Usuario usuario) {
@@ -188,6 +194,8 @@ public class UsuarioController {
             return "redirect:/usuario/banned";
         }
         if (user.isPresent()) {
+            List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
+            model.addAttribute("productosHome", productos);
             model.addAttribute("usuarioNav", usuario);
             model.addAttribute("usuarioSesion", user.get());
             model.addAttribute("usuario", user.get());
@@ -235,13 +243,15 @@ public class UsuarioController {
     }
 
     @GetMapping("/perfil/{id}")
-    public String perfil(Model model, @ModelAttribute("id") Integer id, @ModelAttribute("usuarioNav") Usuario usuario) {
-        Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
+    public String perfil(Model model, @PathVariable("id") Integer id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> usu = usuarioService.findByEmail(name);
+        Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
 
-        if (user.isPresent()) {
+        if (usu.isPresent()) {
+            List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
+            model.addAttribute("productosHome", productos);
             model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
             return "usuarios/cuenta";
@@ -314,5 +324,16 @@ public class UsuarioController {
         return "usuarios/banned";
     }
 
-
+    @ModelAttribute("usuarioNav")
+    public Usuario usuarioNav(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
+        if(user.isPresent()) {
+            model.addAttribute("usuarioNav",user.get());     
+            return user.get();
+        } else{
+            return new Usuario();
+        }
+    }
 }
