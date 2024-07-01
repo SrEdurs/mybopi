@@ -10,15 +10,15 @@
     <!-- Container -->
      <div class="container">
         <!-- Page Heading -->
-         <h1 class="mt-4 mb-3"><small>Cuenta</small></h1>
+        <h3 class="mt-4 mb-3" style="margin-left: 7px; font-weight:normal">CUENTA</h3>
          <div class="row">
             <!-- Columna de dirección y resumen -->
             <div class="col-lg-8">
                 <!-- Tarjeta de dirección -->
                 <div class="card mb-4" style="border: 0px">
                     <div class="card-body">
-                        <div class="row" style="justify-content: center;">
-                            <h5 class="card-title">DATOS</h5>
+                        <div class="row">
+                            <h5 class="card-title" style="margin-left: 7px;">Datos</h5>
                         </div>
                         <div class="row" th:style="${usuario.direccion == null || usuario.nombre == null || usuario.localidad == null || usuario.telefono == null || usuario.email == null || usuario.CP == null} ? 'border: 1px solid red' : 'border: 1px solid rgba(148, 148, 148, 0.219);'">
                             <div class="col" style="border: 1px solid rgba(148, 148, 148, 0.219);">
@@ -86,14 +86,14 @@
             <div class="col-lg-4">
                 <div class="card mb-4" style="border: 0px">
                     <div class="card-body">
-                        <h5 class="card-title" style="text-align: center;">OPCIONES</h5>
+                        <h5 class="card-title" style="text-align: center;">Opciones</h5>
                         <table th:if="${usuario.id == usuarioSesion.id}" class="table" >
                             <tbody>
                                 <tr>
                                     <a th:href="@{/usuario/cuenta/editar}" class="list-group-item list-group-item-action" style="text-align: center;">Editar datos</a>
                                 </tr>
                                 <tr>
-                                    <a th:href="@{/usuario/cuenta/editar}" class="list-group-item list-group-item-action" style="text-align: center;">Cambiar email</a>
+                                    <a th:href="@{/usuario/cuenta/email}" class="list-group-item list-group-item-action" style="text-align: center;">Cambiar email</a>
                                 </tr>
                                 <tr>
                                     <a th:href="@{/usuario/password}" class="list-group-item list-group-item-action" style="text-align: center;">Cambiar contraseña</a>
@@ -113,7 +113,7 @@
                                     <a class="list-group-item list-group-item-action" th:href="@{/usuario/edit/{id}(id=${usuario.id})}" style="margin-right: 10px; text-align: center;">Editar</a>
                                 </tr>
                                 <tr>
-                                    <a th:href="@{/usuario/cuenta/editar}" class="list-group-item list-group-item-action" style="text-align: center;">Cambiar email</a>
+                                    <a th:href="@{/usuario/cuenta/email}" class="list-group-item list-group-item-action" style="text-align: center;">Cambiar email</a>
                                 </tr>
                                 <tr>
                                     <a th:href="@{/usuario/password}" class="list-group-item list-group-item-action" style="text-align: center;">Cambiar contraseña</a>

@@ -3,6 +3,7 @@ package es.mybopi.controller;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,19 +60,27 @@ public class UsuarioController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
+        Optional<Usuario> usu = usuarioService.findByEmail(name);
         if (user.isPresent()) {
+            List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
+            model.addAttribute("productosHome", productos);
+            model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
+            return "usuarios/password";
+        } else{
+            return "redirect:/";
         }
-        return "usuarios/password";
+        
     }
 
     //Método para cambiar la contraseña
     @PostMapping("/password")
-    public String savePassword(@ModelAttribute("usuario") Usuario usuario, 
-                               @RequestParam("currentPassword") String currentPassword,
+    public String savePassword(@ModelAttribute EmailDTO emailConfirma,
+                                @ModelAttribute("usuario") Usuario usuario, 
+                                @RequestParam("currentPassword") String currentPassword,
                                @RequestParam("newPassword") String newPassword,
                                @RequestParam("repeatPassword") String repeatPassword,
-                               RedirectAttributes redirectAttributes) {
+                               RedirectAttributes redirectAttributes) throws MessagingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -88,9 +97,20 @@ public class UsuarioController {
                 return "redirect:/usuario/password";
             }
 
+            if (newPassword.equals(currentPassword) && newPassword.equals(repeatPassword)) {
+                redirectAttributes.addFlashAttribute("error", "La nueva contraseña no puede ser igual que la anterior.");
+                return "redirect:/usuario/password";
+            }
+
             currentUser.setPassword(encoder.encode(newPassword));
             usuarioService.save(currentUser);
             redirectAttributes.addFlashAttribute("success", "Contraseña cambiada con éxito.");
+
+            //Mandamos un email al usuario
+            emailConfirma.setAsunto("Cambio de contraseña Mybopi");
+            emailConfirma.setDestinatario(user.get().getEmail());
+            emailConfirma.setMensaje("Hola! Tu contraseña se ha cambiado correctamente. Si no has sido tu, por favor, ponte en contacto con nosotros.");
+            emailService.sendMail(emailConfirma);
             return "redirect:/usuario/password?passwordChanged";
         }
 
@@ -206,7 +226,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/cuenta/editar")
-    public String editarDireccion(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
+    public String editarDatos(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -219,7 +239,7 @@ public class UsuarioController {
             model.addAttribute("productosHome", productos);
             model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
-            return "usuarios/editarprueba";
+            return "usuarios/editarusuario";
         } else {
             return "redirect:/";
         } 
@@ -239,8 +259,7 @@ public class UsuarioController {
             usuario.setLocalidad(user.getLocalidad());
             usuario.setTelefono(user.getTelefono());
             usuarioService.save(usuario);
-            String mensaje = "Tu cuenta se ha actualizado correctamente";
-            redirectAttributes.addFlashAttribute("mensaje", mensaje);
+            redirectAttributes.addFlashAttribute("mensaje", "Tu cuenta se ha actualizado correctamente");
             return "redirect:/usuario/cuenta/editar";
         } else {
             return "redirect:/";
@@ -278,7 +297,7 @@ public class UsuarioController {
             model.addAttribute("productosHome", productos);
             model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
-            return "usuarios/editarprueba";
+            return "usuarios/editarusuario";
         } else {
             return "redirect:/";
         }
@@ -326,6 +345,56 @@ public class UsuarioController {
         return "usuarios/banned";
     }
 
+    @GetMapping("/cuenta/email")
+    public String editarEmail(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
+        Optional<Usuario> usu = usuarioService.findByEmail(name);
+
+        if (user.isPresent()) {
+            List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
+            model.addAttribute("productosHome", productos);
+            model.addAttribute("usuarioSesion", usu.get());
+            model.addAttribute("usuario", user.get());
+            return "usuarios/cambiaremail";
+        } else {
+            return "redirect:/";
+        } 
+    }
+
+    @PostMapping("/cuenta/email")
+    public String saveEditEmail(@ModelAttribute EmailDTO emailConfirma, RedirectAttributes redirectAttributes, @ModelAttribute("usuario") Usuario user) throws MessagingException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> usu = usuarioService.findByEmail(name);
+        if (usu.isPresent()) {
+            Usuario usuario = usu.get();
+            if(user.getEmail().equals(usuario.getEmail())) {
+                redirectAttributes.addFlashAttribute("error", "El nuevo email no puede ser el actual");
+                return "redirect:/usuario/cuenta/email";
+            }
+            //Comprobar si el email ya está en uso por otro usuario
+            Optional<Usuario> user2 = usuarioService.findByEmail(user.getEmail());
+            if(user2.isPresent()) {
+                redirectAttributes.addFlashAttribute("error", "El email ya se encuentra en uso");
+                return "redirect:/usuario/cuenta/email";
+            }
+            usuario.setEmail(user.getEmail());
+            usuarioService.save(usuario);
+            changeUsername(usuario.getEmail());
+            //Mandamos un email al usuario
+            emailConfirma.setAsunto("Cambio de email Mybopi");
+            emailConfirma.setDestinatario(usuario.getEmail());
+            emailConfirma.setMensaje("Hola! Tu email se ha cambiado correctamente. A partir de ahora usaremos este correo para las notificaciones.");
+            emailService.sendMail(emailConfirma);
+            redirectAttributes.addFlashAttribute("mensaje", "Tu email se ha actualizado correctamente");
+            return "redirect:/usuario/cuenta/email";
+        } else {
+            return "redirect:/";
+        }        
+    }
+
     @ModelAttribute("usuarioNav")
     public Usuario usuarioNav(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -336,6 +405,19 @@ public class UsuarioController {
             return user.get();
         } else{
             return new Usuario();
+        }
+    }
+
+    public static void changeUsername(String newUsername) {
+        Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (currentAuth != null) {
+            // Crea un nuevo objeto de autenticación con el nuevo nombre de usuario
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                    newUsername, currentAuth.getCredentials(), currentAuth.getAuthorities());
+
+            // Actualiza el contexto de seguridad con el nuevo objeto de autenticación
+            SecurityContextHolder.getContext().setAuthentication(newAuth);
         }
     }
 }
