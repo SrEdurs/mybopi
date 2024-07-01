@@ -30,7 +30,12 @@
                 </tbody>
               </table>
             </div>
-            <h6 style="text-align: right" th:unless="${pedido.usuario.direccion == null || pedido.usuario.direccion == '' || pedido.usuario.nombre == null || pedido.usuario.nombre == '' || pedido.usuario.localidad == null || pedido.usuario.localidad == '' || pedido.usuario.telefono == null || pedido.usuario.telefono == '' || pedido.usuario.email == null || pedido.usuario.email == '' || pedido.usuario.CP == null || pedido.usuario.CP == ''}" th:text="'Gastos de envío: ' + '6,95' + '€'">Total: </h6>
+            <h6 style="text-align: right" th:unless="${pedido.usuario.direccion == null or pedido.usuario.direccion.trim().length() == 0 or 
+              pedido.usuario.nombre == null or pedido.usuario.nombre.trim().length() == 0 or 
+              pedido.usuario.localidad == null or pedido.usuario.localidad.trim().length() == 0 or 
+              pedido.usuario.telefono == null or pedido.usuario.telefono.trim().length() == 0 or 
+              pedido.usuario.email == null or pedido.usuario.email.trim().length() == 0 or 
+              pedido.usuario.CP == null or pedido.usuario.CP.trim().length() == 0}" th:text="'Gastos de envío: ' + '6,95' + '€'">Total: </h6>
             <h5 th:text="'Total: ' + ${pedido.total} + '€'" style="text-align: right; font-weight: bold"></h5>
           </div>
         </div>
@@ -42,7 +47,13 @@
       <!-- Columna de dirección y resumen -->
       <div class="col-lg-4">
         <!-- Tarjeta de dirección -->
-        <div class="card mb-4" th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'width: 19rem; border-color: red;' : 'width: 19rem'">
+        <div class="card mb-4" th:style="${pedido.usuario.direccion == null or pedido.usuario.direccion.trim().length() == 0 or 
+          pedido.usuario.nombre == null or pedido.usuario.nombre.trim().length() == 0 or 
+          pedido.usuario.localidad == null or pedido.usuario.localidad.trim().length() == 0 or 
+          pedido.usuario.telefono == null or pedido.usuario.telefono.trim().length() == 0 or 
+          pedido.usuario.email == null or pedido.usuario.email.trim().length() == 0 or 
+          pedido.usuario.CP == null or pedido.usuario.CP.trim().length() == 0 
+          ? 'width: 19rem; border-color: red;' : 'width: 19rem' }">
 
           <div class="card-body" th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
             <h5 class="card-title">Dirección</h5>

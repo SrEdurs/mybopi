@@ -210,19 +210,23 @@ public class UsuarioController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
+        Optional<Usuario> usu = usuarioService.findByEmail(name);
         if(user.get().getActivo() == 0) {
             return "redirect:/usuario/banned";
         }
         if (user.isPresent()) {
+            List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
+            model.addAttribute("productosHome", productos);
+            model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
-            return "usuarios/editarUsuario";
+            return "usuarios/editarprueba";
         } else {
             return "redirect:/";
         } 
     }
 
     @PostMapping("/cuenta/editar")
-    public String saveEditCuenta(@ModelAttribute("usuario") Usuario user) {
+    public String saveEditCuenta(RedirectAttributes redirectAttributes, @ModelAttribute("usuario") Usuario user) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> usu = usuarioService.findByEmail(name);
@@ -234,9 +238,10 @@ public class UsuarioController {
             usuario.setCP(user.getCP());
             usuario.setLocalidad(user.getLocalidad());
             usuario.setTelefono(user.getTelefono());
-            usuario.setEmail(user.getEmail());
-            usuarioService.save(usuario);            
-            return "redirect:/usuario/cuenta";
+            usuarioService.save(usuario);
+            String mensaje = "Tu cuenta se ha actualizado correctamente";
+            redirectAttributes.addFlashAttribute("mensaje", mensaje);
+            return "redirect:/usuario/cuenta/editar";
         } else {
             return "redirect:/";
         }        
@@ -254,6 +259,7 @@ public class UsuarioController {
             model.addAttribute("productosHome", productos);
             model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
+            model.addAttribute("usuarioNav",usu.get());  
             return "usuarios/cuenta";
         } else {
             return "redirect:/";
@@ -261,42 +267,38 @@ public class UsuarioController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(Model model, @ModelAttribute("id") Integer id, @ModelAttribute("usuarioNav") Usuario usuario) {
+    public String edit(Model model, @PathVariable("id") Integer id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> usu = usuarioService.findByEmail(name);
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
+   
         if (user.isPresent()) {
+            List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
+            model.addAttribute("productosHome", productos);
+            model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
-            return "usuarios/editarUsuario";
+            return "usuarios/editarprueba";
         } else {
             return "redirect:/";
         }
     }
 
     @PostMapping("/edit/{id}")
-    public String saveEdit(@ModelAttribute("id") Integer id, @ModelAttribute("usuario") Usuario user) {
+    public String saveEdit(RedirectAttributes redirectAttributes, @ModelAttribute("id") Integer id, @ModelAttribute("usuario") Usuario user) {
         Optional<Usuario> usu = Optional.ofNullable(usuarioService.findById(id));
         if (usu.isPresent()) {
             Usuario usuario = usu.get();
-
-            if(user.getNombre() == ""){
-                usuario.setNombre(null);
-            } else{
-                usuario.setNombre(user.getNombre());
-            }
-            //Comprobar si user tiene campos en blanco
-            if(user.getApellidos() == ""){
-                usuario.setApellidos(null);
-            } else{
-                usuario.setApellidos(user.getApellidos());
-            }
-            if(user.getTelefono() == ""){
-                usuario.setTelefono(null);
-            } else{
-                usuario.setTelefono(user.getTelefono());
-            }
-
-            usuario.setEmail(user.getEmail());
-            usuarioService.save(usuario);          
-            return "redirect:/usuario/perfil/" + id;
+            usuario.setNombre(user.getNombre());
+            usuario.setApellidos(user.getApellidos());
+            usuario.setDireccion(user.getDireccion());
+            usuario.setCP(user.getCP());
+            usuario.setLocalidad(user.getLocalidad());
+            usuario.setTelefono(user.getTelefono());
+            usuarioService.save(usuario);
+            String mensaje = "La cuenta se ha actualizado correctamente";
+            redirectAttributes.addFlashAttribute("mensaje", mensaje);
+            return "redirect:/usuario/edit/" + id;
         } else {
             return "redirect:/admin/usuarios";
         }        

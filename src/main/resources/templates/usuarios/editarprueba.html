@@ -10,7 +10,7 @@
     <!-- Container -->
      <div class="container">
         <!-- Page Heading -->
-         <h1 class="mt-4 mb-3"><small>Cuenta</small></h1>
+         <h1 class="mt-4 mb-3"><small>Editar datos de usuario</small></h1>
          <div class="row">
             <!-- Columna de dirección y resumen -->
             <div class="col-lg-8">
@@ -20,63 +20,69 @@
                         <div class="row" style="justify-content: center;">
                             <h5 class="card-title">DATOS</h5>
                         </div>
-                        <div class="row" th:style="${usuario.direccion == null || usuario.nombre == null || usuario.localidad == null || usuario.telefono == null || usuario.email == null || usuario.CP == null} ? 'border: 1px solid red' : 'border: 1px solid rgba(148, 148, 148, 0.219);'">
-                            <div class="col" style="border: 1px solid rgba(148, 148, 148, 0.219);">
-                                
-                                <br>
-                                <p>
-                                    <div class="row">
-                                        <Strong style="margin-left: 15px;">Nombre:</Strong> <span th:text="${usuario.nombre == null || usuario.nombre == ''} ? 'Sin datos' : ${usuario.nombre}" style="display: inline; margin-left: 5px;"></span>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <Strong style="margin-left: 15px;">Apellidos:</Strong> <span th:text="${usuario.apellidos == null || usuario.apellidos == ''} ? 'Sin datos' : ${usuario.apellidos}" style="display: inline; margin-left: 5px;"></span>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <Strong style="margin-left: 15px;">Tlf:</Strong> <span th:text="${usuario.telefono == null || usuario.telefono == ''} ? 'Sin datos' : ${usuario.telefono}" style="display: inline; margin-left: 5px;"></span>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <Strong style="margin-left: 15px;">Email:</Strong> <span th:text="${usuario.email == null || usuario.email == ''} ? 'Sin datos' : ${usuario.email}" style="display: inline; margin-left: 5px;"></span>
-                                    </div>
-                                </p>
-                            </div>
-
-                            <div class="col" style="border: 1px solid rgb(148, 148, 148, 0.219);">
-                                <br>
-                                <p>  
-                                    <div class="row">
-                                        <Strong style="margin-left: 15px;">Dirección:</Strong> <span th:text="${usuario.direccion == null || usuario.direccion == ''} ? 'Sin datos' : ${usuario.direccion}" style="display: inline; margin-left: 5px;"></span>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <Strong style="margin-left: 15px;">Localidad:</Strong> <span th:text="${usuario.localidad == null || usuario.localidad == ''} ? 'Sin datos' : ${usuario.localidad}" style="display: inline; margin-left: 5px;"></span>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <Strong style="margin-left: 15px;">CP:</Strong> <span th:text="${usuario.CP == null || usuario.CP == ''} ? 'Sin datos' : ${usuario.CP}" style="display: inline; margin-left: 5px;"></span>
-                                    </div>
-                                </p>                               
-                            </div>
+                        <form id="myForm" method="post">
+                        <div class="row" style="border: 1px solid rgba(148, 148, 148, 0.219); border-bottom: 0px;">
                             
-                            <div class="col" sec:authorize="hasRole('ADMIN')" th:if="${usuario.id != usuarioSesion.id}" style="border: 1px solid rgb(148, 148, 148, 0.219);">
-                                <br>
-                                <p>
-                                    <div class="row">
-                                        <strong style="margin-left: 15px;">ID:</strong> <span th:text="${usuario.id}" style="display: inline; margin-left: 5px;"></span>
-                                    </div>
+                                <div class="col">
                                     <br>
-                                    <div class="row">
-                                        <strong style="margin-left: 15px;">Rol:</strong> <span th:text="${usuario.roles}" style="display: inline; margin-left: 5px;"></span>
-                                    </div>
+                                    <p>
+                                        
+                                            <Strong style="margin-left: 15px;">Nombre:</Strong>
+                                            <span>
+                                                <input th:field="${usuario.nombre}" name="nombre" type="text" class="form-control" id="nombre" placeholder="Introduce tu nombre" required>
+                                            </span>
+                                        
+                                        <br>
+                                        
+                                            <Strong style="margin-left: 15px;">Apellidos:</Strong>
+                                            <span>
+                                                <input th:field="${usuario.apellidos}" name="apellidos" type="text" class="form-control" id="apellidos" placeholder="Introduce tus apellidos" required>
+                                            </span>
+                                        
+                                        <br>
+                                        
+                                            <Strong style="margin-left: 15px;">Tlf:</Strong>
+                                            <span>
+                                                <input th:field="${usuario.telefono}" name="telefono" type="tel" class="form-control" id="telefono" placeholder="Introduce tu teléfono" pattern="\d{9}" required title="Por favor, introduce exactamente 9 dígitos en el teléfono.">
+                                            </span>
+
+                                        
+                                    </p>
+                                </div>
+                                <div class="col">
                                     <br>
-                                    <div class="row">
-                                        <strong style="margin-left: 15px;">Activo:</strong> <span th:text="${usuario.activo}" style="display: inline; margin-left: 5px;"></span>
-                                    </div>
-                                </p>
-                            </div>
+                                    <p>  
+                                        
+                                            <Strong style="margin-left: 15px;">Dirección:</Strong>
+                                            <span>
+                                                <input th:field="${usuario.direccion}" name="direccion" type="text" class="form-control" id="direccion" placeholder="Introduce tu dirección" required>
+                                            </span>
+                                        
+                                        <br>
+                                        
+                                            <strong style="margin-left: 15px;">Localidad:</strong>
+                                            <span>
+                                                <input th:field="${usuario.localidad}" name="localidad" type="text" class="form-control" id="localidad" placeholder="Introduce tu localidad" required>
+                                            </span>
+                                        
+                                        <br>
+                                        
+                                            <strong style="margin-left: 15px;">Código Postal:</strong>
+                                            <span>
+                                                <input th:field="${usuario.CP}" name="CP" type="text" class="form-control" id="codigoPostal" placeholder="Introduce tu código postal" pattern="\d{5}" required title="Por favor, introduce exactamente 5 dígitos.">
+                                            </span>
+
+                                             
+                                    </p>                               
+                                </div>
+                            
                         </div>
+                        
+                        <div class="row d-flex justify-content-center" style="align-items: center; border: 1px solid rgba(148, 148, 148, 0.219); border-top: 0px;">
+                            <button type="submit" class="btn btn-dark" style="margin-bottom: 15px; margin-top: 10px;">Guardar Cambios</button>
+                        </div>
+                    </form>
+
                     </div>
 
                     
@@ -87,10 +93,10 @@
                 <div class="card mb-4" style="border: 0px">
                     <div class="card-body">
                         <h5 class="card-title" style="text-align: center;">OPCIONES</h5>
-                        <table th:if="${usuario.id == usuarioSesion.id}" class="table" >
+                        <table  class="table" th:if="${usuario.id == usuarioSesion.id}">
                             <tbody>
                                 <tr>
-                                    <a th:href="@{/usuario/cuenta/editar}" class="list-group-item list-group-item-action" style="text-align: center;">Editar datos</a>
+                                    <a th:href="@{/usuario/cuenta}" class="list-group-item list-group-item-action" style="text-align: center;">Mi cuenta</a>
                                 </tr>
                                 <tr>
                                     <a th:href="@{/usuario/cuenta/editar}" class="list-group-item list-group-item-action" style="text-align: center;">Cambiar email</a>
@@ -101,16 +107,20 @@
                                 <tr>
                                     <a th:href="@{/pedidos}" class="list-group-item list-group-item-action" style="text-align: center;">Ver pedidos</a>
                                 </tr>
+                                <tr>
+                                    <a th:href="@{/pedidos}" class="list-group-item list-group-item-action" style="text-align: center; color: red;">Eliminar cuenta</a>
+                                </tr>
                                 <br>
-                                <p style="color: rgb(207, 0, 0);" th:if="${usuario.direccion == null || usuario.nombre == null || usuario.localidad == null || usuario.telefono == null || usuario.email == null || usuario.CP == null}">
+                                <p style="color: rgb(207, 0, 0);" th:if="${usuario.direccion == null || usuario.direccion == ''|| usuario.nombre == null || usuario.localidad == null || usuario.telefono == null || usuario.email == null || usuario.CP == null}">
                                     Te faltan algunos datos por rellenar, sin ellos no podrás realizar pedidos.
                                 </p>
+                                <p style="color: rgb(17, 207, 0);" th:if="${mensaje}" th:text="${mensaje}"></p>
                             </tbody>
                         </table>
                         <table class="table" sec:authorize="hasRole('ADMIN')" th:if="${usuario.id != usuarioSesion.id}">
                             <tbody>
                                 <tr>
-                                    <a class="list-group-item list-group-item-action" th:href="@{/usuario/edit/{id}(id=${usuario.id})}" style="margin-right: 10px; text-align: center;">Editar</a>
+                                    <a class="list-group-item list-group-item-action" th:href="@{/usuario/perfil/{id}(id=${usuario.id})}" style="margin-right: 10px; text-align: center;">Volver al perfil</a>
                                 </tr>
                                 <tr>
                                     <a th:href="@{/usuario/cuenta/editar}" class="list-group-item list-group-item-action" style="text-align: center;">Cambiar email</a>
@@ -129,6 +139,7 @@
                                 <p style="color: rgb(207, 0, 0);" th:if="${usuario.direccion == null || usuario.nombre == null || usuario.localidad == null || usuario.telefono == null || usuario.email == null || usuario.CP == null}">
                                     A este usuario le faltan algunos datos por rellenar, no podrá realizar pedidos.
                                 </p>
+                                <p style="color: rgb(17, 207, 0);" th:if="${mensaje}" th:text="${mensaje}"></p>
                             </tbody>
                         </table>
                     </div>
@@ -158,6 +169,9 @@
             </div>
           </div>
     </div>
+</div>
+</div>
+
     <!-- /.container -->
 
 

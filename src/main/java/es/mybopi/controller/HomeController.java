@@ -219,8 +219,13 @@ public class HomeController {
         }
 
         //Comprobar si hay datos de dirección
-        if (usuario.getDireccion() != null && usuario.getDireccion() != "" && usuario.getNombre() != null && usuario.getNombre() != "" && usuario.getLocalidad() != null && usuario.getLocalidad() != "" && usuario.getTelefono() != null && usuario.getTelefono() != "" && usuario.getEmail() != null && usuario.getEmail() != "" && usuario.getCP() != null && usuario.getCP() != "") {
-            //Sumar 6,95 al total
+        if (usuario.getDireccion() != null && !usuario.getDireccion().trim().isEmpty() &&
+            usuario.getNombre() != null && !usuario.getNombre().trim().isEmpty() &&
+            usuario.getLocalidad() != null && !usuario.getLocalidad().trim().isEmpty() &&
+            usuario.getTelefono() != null && !usuario.getTelefono().trim().isEmpty() &&
+            usuario.getEmail() != null && !usuario.getEmail().trim().isEmpty() &&
+            usuario.getCP() != null && !usuario.getCP().trim().isEmpty()) {
+            // Sumar 6,95 al total
             pedido.setTotal(pedido.getTotal() + 6.95);
         }
             model.addAttribute("usuario", usuario);
