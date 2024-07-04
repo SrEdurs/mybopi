@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+    <!-- Navigation -->
+    <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+    <!-- Container -->
+     <div class="container">
+        <!-- Page Heading -->
+        <h3 class="mt-4 mb-3" style="margin-left: 7px; font-weight:normal">¡Gracias!</h3>
+         <div class="row">
+            <div class="col">
+                <div class="card" style="border-radius: 10px; background-color: rgb(232, 255, 231); border: 0px;">
+                    <div class="card-body">
+                        <div class="row">
+                            <h5 class="card-title" style="margin-left: 7px;" th:text="'Número de pedido: ' + ${pedido.numero}">Pedido realizado</h5>
+                        </div>
+                        <div class="row">
+                            <div class="col"> 
+                                <br>
+                                <p>
+                                    Muchas gracias por tu pedido, te lo prepararemos y enviaremos lo antes posible. 😉
+                                </p>
+                                <p>
+                                    Te actualizaremos de todo vía email y te mandaremos el enlace de seguimiento en cuanto lo tengamos.
+                                </p>
+                                <p th:text="'Se enviará a ' + ${pedido.usuario.direccion} + ', ' + ${pedido.usuario.localidad} + ' CP: ' + ${pedido.usuario.CP}" style="font-weight:600"></p>
+                                <p>
+                                    Puedes comprobar el estado y el seguimiento del pedido desde los <a th:href="@{/pedidos/{id} (id = ${pedido.id})}" style="color: rgb(165, 202, 0); font-weight: 600">DETALLES</a>
+                                </p>
+                                <br>
+                            </div> 
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <h1 class="mt-4 mb-3" style="margin-left: 15px;"><small>Últimas novedades</small></h1>
+          </div>
+    
+          <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${productosHome}">
+            <div class="card h-100">
+              <a th:href="@{/producto/{id}(id=${producto.id})}">
+                <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt="" th:classappend="${producto.vendido} ? 'grayscale' : ''" >
+                <div class="overlay" th:if="${producto.vendido}">
+                  <img th:src="@{/images/vendido.png}" alt="Vendido" class="vendido-image"/>
+                </div>
+              </a>
+              
+              <div class="card-body" >
+                <p class="card-text text-center text" style="font-weight: bold" th:text="${producto.nombre}"></p>
+              </div>
+              
+            </div>
+            </div>
+          </div>
+    </div>
+    <!-- /.container -->
+
+
+<!-- Footer -->
+<div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+<!-- Scripts -->
+<div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+</body>
+
+</html>

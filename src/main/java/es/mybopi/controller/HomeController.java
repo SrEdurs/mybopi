@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -262,6 +264,16 @@ public class HomeController {
                 return "paymentError";
             }
 
+            //Cadena de texto aleatoria
+            String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            StringBuilder sb = new StringBuilder();
+            Random random = new Random();
+            for (int i = 0; i < 8; i++) {
+                int index = random.nextInt(chars.length());
+                sb.append(chars.charAt(index));
+            }
+            String randomString = sb.toString();
+
             //Configurar y guardar el pedido
             Pedido pedido = new Pedido();
             pedido.setUsuario(usuario);
@@ -271,6 +283,8 @@ public class HomeController {
             pedido.setNumero(pedidoService.generarNumPedido());
             pedido.setSeguimiento("Pendiente de envío");
             pedido.setEstado("En preparación");
+            pedido.setCancelado(false);
+            pedido.setToken(randomString);
             pedidoService.save(pedido);
 
             //Enviar correo con los datos
@@ -278,6 +292,16 @@ public class HomeController {
             email.setDestinatario(usuario.getEmail());
             email.setTitulo("¡Muchas gracias por tu pedido!");
             email.setMensaje("Muchas gracias por hacer tu pedido en Mybopi, te lo prepararemos y enviaremos a la mayor brevedad posible.");
+            email.setProductos(pedido.getProductos());
+            email.setTotal(pedido.getTotal());
+            emailService.sendMail(email);
+
+            //Enviar correo a Mybopi
+            email.setAsunto("Nuevo pedido en Mybopi - Pedido número: " + pedido.getNumero());
+            email.setDestinatario("mybopii@gmail.com");
+            email.setTitulo("Pedido " + pedido.getNumero());
+            email.setMensaje("Se ha realizado un nuevo pedido de " + usuario.getNombre() + " con el siguiente número de pedido: " +
+            pedido.getNumero() + " La dirección de envío es: " + pedido.getUsuario().getDireccion() + ", Localidad: " + pedido.getUsuario().getLocalidad() + ", CP: " + pedido.getUsuario().getCP() + ", Teléfono: " + pedido.getUsuario().getTelefono() + " Más información en los detalles del pedido de la app.");
             email.setProductos(pedido.getProductos());
             email.setTotal(pedido.getTotal());
             emailService.sendMail(email);
@@ -292,9 +316,28 @@ public class HomeController {
             usuario.getCarrito().setTotal(0);
             usuarioService.save(usuario);
 
-            return "redirect:/";
+            
+            
+
+            return "redirect:/gracias?num=" + randomString + "&id=" + pedido.getId();
         }
 
+        return "redirect:/";
+    }
+
+    @GetMapping("/gracias")
+    public String gracias(@RequestParam("num") String num, @RequestParam("id") Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
+        Optional<Pedido> pedido = pedidoService.findById(id);
+        if(pedido.isPresent()){
+            if(num.equals(pedido.get().getToken())){
+                List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
+                model.addAttribute("productosHome", productos);
+                model.addAttribute("pedido", pedido.get());
+                return "usuarios/graciaspedido";
+            } else{
+                return "redirect:/";
+            }
+        } 
         return "redirect:/";
     }
 

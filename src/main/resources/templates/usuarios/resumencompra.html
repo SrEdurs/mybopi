@@ -1,9 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resumen del Pedido</title>
+  <!-- Incluye los estilos de Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .loading-spinner {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1050; /* Asegúrate de que está por encima de otros elementos */
+    }
 
-<div th:insert="~{usuarios/template_usuario :: header}"></div>
-
+    .loading-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1040; /* Debe estar debajo de .loading-spinner pero por encima del contenido */
+      display: none;
+    }
+  </style>
+</head>
 <body>
+  <div th:insert="~{usuarios/template_usuario :: header}"></div>
+
   <!-- Navigation -->
   <div th:insert="~{usuarios/template_usuario :: nav}"></div>
 
@@ -23,7 +49,6 @@
                 <tbody>
                   <tr th:each="carrito : ${pedido.productos}">
                     <td><img class="img-fluid" th:src="@{images/{img} (img = ${carrito.portada})}" width="100px" height="100px"/></td>
-                    <!-- Añade text-align: center; al estilo de las celdas para centrar el texto -->
                     <td style="text-align: left; font-size: large;" th:text="${carrito.nombre}">Nombre</td>
                     <td style="text-align: center; font-weight: bold; font-size: large" th:text="${carrito.precio} + '€'">Precio</td>
                   </tr>
@@ -39,9 +64,9 @@
             <h5 th:text="'Total: ' + ${pedido.total} + '€'" style="text-align: right; font-weight: bold"></h5>
           </div>
         </div>
-            <label class="form-check-label" for="exampleRadios1">
-              <img th:src="@{/images/admin/CorreosLogo.png}" width="30px" height="30px"/> Envío con Correos. Entrega de 3 a 5 días, con número de seguimiento.
-            </label>
+        <label class="form-check-label" for="exampleRadios1">
+          <img th:src="@{/images/admin/CorreosLogo.png}" width="30px" height="30px"/> Envío con Correos. Entrega de 3 a 5 días, con número de seguimiento.
+        </label>
       </div>
   
       <!-- Columna de dirección y resumen -->
@@ -84,8 +109,6 @@
           
         </div>
 
-        
-  
         <!-- Resumen -->
         <div class="card mb-4" style="width: 19rem;">
           <div class="card-body">
@@ -112,80 +135,92 @@
     </div>
   </div>
 
+  <!-- Fondo oscurecido -->
+  <div id="loading-background" class="loading-background"></div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Sin dirección</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h5>Por favor, configura una dirección para que podamos realizar el envío.</h5>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">OK</button>
+  <!-- Contenedor de la rueda de carga centrada -->
+  <div id="loading" class="loading-spinner" style="display:none;">
+    <div class="spinner-border text-warning" role="status">
+      <span class="sr-only">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 5);"><b>Aviso</b></h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h5>Debes rellenar todos los datos de envío antes de completar el pedido</h5>
+        </div>
+        <div class="modal-footer">
+          <a th:href="@{/usuario/cuenta/editar}"><button type="button" class="btn btn-dark">Aceptar</button></a>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<!-- /.container -->
 
+  <!-- Incluye los scripts de Bootstrap y Stripe -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    // Inicializa Stripe
+    var stripe = Stripe('pk_test_51PJXqG2M93Fl6PVfztPucpSijjnkV2UlbnP6KGYvLnAhduH2gfIOPMCZBBCvup7NcARJ9sGBPXN4U8HdpmQx7ClB00BRddCvZ7');
+    var elements = stripe.elements();
 
-  <!-- Include Stripe.js -->
-<script src="https://js.stripe.com/v3/"></script>
-<script>
-  // Set your publishable key
-  var stripe = Stripe('pk_test_51PJXqG2M93Fl6PVfztPucpSijjnkV2UlbnP6KGYvLnAhduH2gfIOPMCZBBCvup7NcARJ9sGBPXN4U8HdpmQx7ClB00BRddCvZ7');
-  var elements = stripe.elements();
+    // Crea una instancia del elemento de tarjeta
+    var card = elements.create('card');
 
-  // Create an instance of the card Element
-  var card = elements.create('card');
+    // Añade una instancia del elemento de tarjeta al div `card-element`
+    card.mount('#card-element');
 
-  // Add an instance of the card Element into the `card-element` div
-  card.mount('#card-element');
+    // Maneja el envío del formulario
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
 
-  // Handle form submission
-  var form = document.getElementById('payment-form');
-  form.addEventListener('submit', function(event) {
-      event.preventDefault();
+        // Muestra la rueda de carga y el fondo oscurecido
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('loading-background').style.display = 'block';
 
-      stripe.createToken(card).then(function(result) {
-          if (result.error) {
-              // Inform the user if there was an error
-              var errorElement = document.getElementById('error-message');
-              errorElement.textContent = result.error.message;
-          } else {
-              // Send the token to your server
-              stripeTokenHandler(result.token);
-          }
-      });
-  });
+        // Oculta el botón de submit para evitar múltiples envíos
+        form.querySelector('button[type="submit"]').style.display = 'none';
 
-  // Submit token to your server
-  function stripeTokenHandler(token) {
-      // Insert the token ID into the form so it gets submitted to the server
-      var form = document.getElementById('payment-form');
-      var hiddenInput = document.createElement('input');
-      hiddenInput.setAttribute('type', 'hidden');
-      hiddenInput.setAttribute('name', 'stripeToken');
-      hiddenInput.setAttribute('value', token.id);
-      form.appendChild(hiddenInput);
+        stripe.createToken(card).then(function(result) {
+            if (result.error) {
+                // Informa al usuario si hubo un error
+                var errorElement = document.getElementById('error-message');
+                errorElement.textContent = result.error.message;
 
-      // Submit the form
-      form.submit();
-  }
-</script>
+                // Oculta la rueda de carga y muestra el botón de submit de nuevo
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loading-background').style.display = 'none';
+                form.querySelector('button[type="submit"]').style.display = 'block';
+            } else {
+                // Envía el token al servidor
+                stripeTokenHandler(result.token);
+            }
+        });
+    });
 
+    // Envía el token al servidor
+    function stripeTokenHandler(token) {
+        // Inserta el ID del token en el formulario para que se envíe al servidor
+        var form = document.getElementById('payment-form');
+        var hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'stripeToken');
+        hiddenInput.setAttribute('value', token.id);
+        form.appendChild(hiddenInput);
 
-<!-- Footer -->
-<div th:insert="~{usuarios/template_usuario :: footer}"></div>
-
-<!-- Scripts -->
-<div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+        // Envía el formulario
+        form.submit();
+    }
+  </script>
 </body>
-
 </html>
