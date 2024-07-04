@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -283,7 +282,7 @@ public class HomeController {
             pedido.setNumero(pedidoService.generarNumPedido());
             pedido.setSeguimiento("Pendiente de envío");
             pedido.setEstado("En preparación");
-            pedido.setCancelado(false);
+            pedido.setCancelacion(false);
             pedido.setToken(randomString);
             pedidoService.save(pedido);
 
@@ -398,6 +397,22 @@ public class HomeController {
         emailService.sendMail(email);
        }
 
+       if(pedido.getEstado().equals("Cancelado")){
+        pedido.setCancelacion(false);
+        email.setAsunto("Tu pedido de Mybopi se ha cancelado - " + pedido.getNumero());
+        email.setDestinatario(pedido.getUsuario().getEmail());
+        email.setTitulo("Pedido numero " + pedido.getNumero());
+        email.setMensaje("Tu pedido se ha cancelado correctamente y se ha realizado la devolución de la compra. Recibirás el importe completo en tu cuenta, esto podría demorarse entre 5 y 10 días dependiento de tu banco. ¡Esperamos que vuelvas a relaizar un pedido en Mybopi! Si tienes algún problema no dudes en ponerte en contacto con nosotros a través de nuestras redes sociales");
+        emailService.sendMail(email);
+
+        //Marcar todos los productos del pedido como no vendidos
+        List<Producto> productos = pedido.getProductos();
+        for (Producto producto : productos) {
+            producto.setVendido(false);
+            productoService.save(producto);
+        }
+       }
+
        return "redirect:/pedidos/" + id;        
     }
 
@@ -434,6 +449,34 @@ public class HomeController {
         } else{
             return new Usuario();
         }
+    }
+
+    @GetMapping("/cancelar/{id}")
+    public String cancelarPedido(@PathVariable Integer id, Model model, EmailDTO email) throws MessagingException {
+
+        pedido = pedidoService.findById(id).get();
+        pedido.setCancelacion(true);
+        pedidoService.save(pedido);
+
+        email.setAsunto("Cancelación del pedido " + pedido.getNumero());
+        email.setDestinatario("mybopii@gmail.com");
+        email.setTitulo("Cancelación del pedido " + pedido.getNumero());
+        email.setMensaje("El usuario ha pedido la cancelación del pedido, al no haberse enviado, se puede hacer la devolución");
+        email.setProductos(pedido.getProductos());
+        email.setTotal(pedido.getTotal());
+        emailService.sendMail(email);
+
+        email.setAsunto("Confirmación de la cancelación del pedido " + pedido.getNumero());
+        email.setDestinatario(pedido.getUsuario().getEmail());
+        email.setTitulo("Cancelación del pedido " + pedido.getNumero());
+        email.setMensaje("Te confirmamos que has solicitado la cancelación del pedido, procederemos a la devolución íntegra del importe a la mayor brevedad posible.");
+        email.setProductos(pedido.getProductos());
+        email.setTotal(pedido.getTotal());
+        emailService.sendMail(email);
+
+
+        
+        return "redirect:/pedidos/" + id;
     }
 
         // Método para calcular el total de los productos en el carrito

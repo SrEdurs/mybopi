@@ -179,7 +179,7 @@ public class UsuarioController {
             usuarioService.save(user.get());
 
             //Mandamos un email al usuario
-            emailConfirma.setAsunto("Cambio de contraseña");
+            emailConfirma.setAsunto("Contraseña cambiada con éxito");
             emailConfirma.setDestinatario(email);
             emailConfirma.setMensaje("Hola! Tu contraseña se ha cambiado correctamente. Si no has sido tu, por favor, ponte en contacto con nosotros.");
             emailService.sendMail(emailConfirma);

@@ -35,6 +35,7 @@
                   <td th:if="${pedido.estado == 'En preparación'}" th:text="${pedido.estado}" style="color: rgb(128, 109, 0); font-weight: bold"></td>
                   <td th:if="${pedido.estado == 'Enviado'}" th:text="${pedido.estado}" style="color: rgb(94, 128, 0); font-weight: bold"></td>
                   <td th:if="${pedido.estado == 'Entregado'}" th:text="${pedido.estado}" style="color: green; font-weight: bold"></td>
+                  <td th:if="${pedido.estado == 'Cancelado'}" th:text="${pedido.estado}" style="color: red; font-weight: bold"></td>
                   <td><a th:href="@{/pedidos/{id}(id=${pedido.id})}" class="btn btn-dark">Ver detalles</a></td>
                 </tr>
               </tbody>
