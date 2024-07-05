@@ -32,7 +32,7 @@
     <!-- Page Content -->
     <div class="container">
       <br><br>
-      <h2>Detalles del pedido</h2>
+      <h2 th:text="${'Devolución del pedido ' + pedido.numero}">Devolución del pedido</h2>
     <div class="row">
             
         <!-- Tabla datos del pedido -->
@@ -44,14 +44,11 @@
                 <form id="estado" th:action="@{/actualizarEstado/{id}(id=${pedido.id})}" method="post">
                 <thead>           
                   <tr>
-                    <th scope="col">Pedido</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col" sec:authorize="hasRole('ADMIN')">
-                      <button type="submit" class="btn btn-dark">Guardar estado</button>
-                    </th>
-                    <th scope="col" sec:authorize="hasRole('USER')">
+                    <th scope="col" style="border-top: 0px;">Instrucciones</th>
+                    <th scope="col" style="border-top: 0px;"></th>
+                    <th scope="col" style="border-top: 0px;"></th>
+                    <th scope="col" style="border-top: 0px;"></th>
+                    <th scope="col"  style="border-top: 0px;">
                       <button th:if="${pedido.cancelacion == false && pedido.estado != 'Cancelado' && pedido.estado != 'Entregado'}" th:value="${pedido.id}"  data-toggle="modal" id="cancelar-pedido" data-target="#exampleModal" class="btn btn-dark cancel-button">Cancelar pedido</button>
                       <button th:if="${pedido.devolucion == false && pedido.estado == 'Entregado'}" th:value="${pedido.id}"  data-toggle="modal" id="cancelar-pedido" data-target="#exampleModal2" class="btn btn-dark devolver-button">Devolver pedido</button>
                     </th>
@@ -59,22 +56,12 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td th:text="${pedido.numero}" style="font-weight: bold;"></td>
-                    <td th:text="${#dates.format(pedido.fecha, 'dd-MM-yyyy')}"></td>
-                    <td th:text="${pedido.total} + '€'">Total</td>
-                    <td th:if="${pedido.estado == 'En preparación'}" th:text="${pedido.estado}" style="color: rgb(128, 109, 0); font-weight: bold"></td>
-                    <td th:if="${pedido.estado == 'Enviado'}" th:text="${pedido.estado}" style="color: rgb(94, 128, 0); font-weight: bold"></td>
-                    <td th:if="${pedido.estado == 'Entregado'}" th:text="${pedido.estado}" style="color: green; font-weight: bold"></td>
-                    <td th:if="${pedido.estado == 'Cancelado'}" th:text="${pedido.estado}" style="color: red; font-weight: bold"></td>
-                    <td sec:authorize="hasRole('ADMIN')"> 
-                        <select class="form-control" name="estado">
-                          <option disabled selected>Estado</option>
-                          <option value="En preparación">En preparación</option>
-                          <option value="Enviado">Enviado</option>
-                          <option value="Entregado">Entregado</option>
-                          <option value="Cancelado" style="color: red;">Cancelado</option>
-                        </select>
-                    </td>
+                    <td style="font-weight: bold;">Paso 1.</td>
+                    <td>Meter los artículos en una caja.</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: bold; border-top: 0px;">Paso 2.</td>
+                    <td style="border-top: 0px;">Entregar el pedido.</td>
                   </tr>
                 </tbody>
               </form>
@@ -109,9 +96,9 @@
 
         <!-- Card datos de la dirección -->
         <div class="col-lg-4 mb-4">
-          <div class="card" th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'border-color: red;' : ''">
-            <div class="card-body" th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
-              <h5 class="card-title">Dirección de envío</h5>
+          <div class="card" style="border-color: aquamarine; border-width: 3px;">
+            <div class="card-body">
+              <h5 class="card-title">Dirección de devolución</h5>
               <h6 class="card-subtitle mb-2" th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellidos}"></h6>
               <br>
               <p class="card-text" th:text="${pedido.usuario.direccion}"></p>
@@ -125,26 +112,7 @@
 
           <br>
 
-          <!-- Seguimiento -->
-          <div class="card" th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'border-color: red;' : ''">
-            <div class="card-body" th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
-              <h5 class="card-title">Seguimiento</h5>
-              <p th:if="${pedido.seguimiento == 'Pendiente de envío'}" class="card-text" th:text="${pedido.seguimiento}" style="font-weight: bold; color: blue"></p>
-              <a th:if="${pedido.seguimiento != 'Pendiente de envío'}" th:href="${pedido.seguimiento}">
-                <p style="color: rgb(0, 81, 255)" class="card-text" th:text="${pedido.seguimiento}"></p>
-              </a>
-              <br>
-              <div class="form-group" sec:authorize="hasRole('ADMIN')">
-                <form id="seguimiento" th:action="@{/actualizarSeguimiento/{id}(id=${pedido.id})}" method="post">
-                  <label for="seguimiento">Enlace de seguimiento</label>
-                  <input  type="text" class="form-control" id="seguimiento" name="seguimiento" placeholder="Pon aquí el enlace de correos">
-                  <br>
-                  <button type="submit" class="btn btn-dark">Guardar</button>
-                </form>
-              </div>
-            </div>
-          </div>
-          <!-- Fin seguimiento -->
+          
 
         </div>
 

@@ -283,6 +283,7 @@ public class HomeController {
             pedido.setSeguimiento("Pendiente de envío");
             pedido.setEstado("En preparación");
             pedido.setCancelacion(false);
+            pedido.setDevolucion(false);
             pedido.setToken(randomString);
             pedidoService.save(pedido);
 
@@ -372,6 +373,17 @@ public class HomeController {
             return "usuarios/detallepedido";
         }
         return "usuarios/detallepedido";
+    }
+
+    @GetMapping("/devolver/{id}")
+    public String devolverPedido(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
+
+        Optional<Pedido> pedido = pedidoService.findById(id);
+        if(pedido.isPresent()){
+            model.addAttribute("pedido", pedido.get());
+            return "usuarios/devolucion";
+        }
+        return "usuarios/devolucion";
     }
 
     @GetMapping("pedidos/usuario/{id}")

@@ -35,6 +35,7 @@ public class Pedido {
     private String estado;
     private String seguimiento;
     private boolean cancelacion = false;
+    private boolean devolucion = false;
     private String token;
 
     @ManyToOne
