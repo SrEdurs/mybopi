@@ -1,5 +1,8 @@
 package es.mybopi.controller;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -366,24 +369,76 @@ public class HomeController {
 
     @GetMapping("/pedidos/{id}")
     public String pedidos(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
-
-        Optional<Pedido> pedido = pedidoService.findById(id);
-        if(pedido.isPresent()){
-            model.addAttribute("pedido", pedido.get());
-            return "usuarios/detallepedido";
-        }
+    Optional<Pedido> pedido = pedidoService.findById(id);
+    if(pedido.isPresent()){
+        Pedido pedidoObtenido = pedido.get();
+        LocalDate fechaPedido = pedidoObtenido.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate fechaActual = LocalDate.now();
+        
+        boolean hanPasado30Dias = ChronoUnit.DAYS.between(fechaPedido, fechaActual) > 30;
+        model.addAttribute("pedido", pedidoObtenido);
+        model.addAttribute("hanPasado30Dias", hanPasado30Dias);
+        
         return "usuarios/detallepedido";
     }
+    return "usuarios/detallepedido";
+}
 
     @GetMapping("/devolver/{id}")
-    public String devolverPedido(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
-
+    public String devolverPedido(@PathVariable Integer id, Model model, EmailDTO email) throws MessagingException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        Optional<Usuario> user = usuarioService.findByEmail(name);
         Optional<Pedido> pedido = pedidoService.findById(id);
-        if(pedido.isPresent()){
-            model.addAttribute("pedido", pedido.get());
+        
+        if (pedido.isPresent() && user.isPresent()) {
+            Pedido pedidoObtenido = pedido.get();
+            LocalDate fechaPedido = pedidoObtenido.getFecha().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate fechaActual = LocalDate.now();
+            
+            boolean hanPasado30Dias = ChronoUnit.DAYS.between(fechaPedido, fechaActual) > 30;
+            
+            if (hanPasado30Dias) {
+                System.out.println("Ha pasado los 30 días>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                return "redirect:/"; // Redirigir a otra página si han pasado los 30 días
+            }
+            
+            if (!pedidoObtenido.isDevolucion()) {
+                pedidoObtenido.setDevolucion(true);
+                pedidoService.save(pedidoObtenido);
+
+                email.setAsunto("Devolución de pedido Mybopi");
+                email.setDestinatario(pedidoObtenido.getUsuario().getEmail());
+                email.setTitulo("Devolución");
+                email.setMensaje("Si necesitas devolver el pedido, puedes hacerlo dentro de los 30 días a partir de la fecha de compra. Sigue las instrucciones de la app para realizar la devolución.");
+                email.setProductos(pedidoObtenido.getProductos());
+                email.setTotal(pedidoObtenido.getTotal());
+                emailService.sendMail(email);
+            }
+            
+            model.addAttribute("usuarioNav", user.get());
+            model.addAttribute("pedido", pedidoObtenido);
             return "usuarios/devolucion";
         }
         return "usuarios/devolucion";
+    }
+
+    @GetMapping("/devolucionenviada/{id}")
+    public String devolucionenviada(@PathVariable Integer id, EmailDTO email) throws MessagingException {
+
+        Optional<Pedido> pedido = pedidoService.findById(id);
+        if(pedido.isPresent()){
+            pedido.get().setEnviadoDevolucion(true);
+            pedidoService.save(pedido.get());
+            email.setAsunto("El pedido " + pedido.get().getNumero() + " se ha enviado para su devolución");
+            email.setDestinatario("mybopii@gmail.com");
+            email.setTitulo("Devolución enviada");
+            email.setMensaje("Se ha enviado un pedido para su devolución.");
+            email.setProductos(pedido.get().getProductos());
+            email.setTotal(pedido.get().getTotal());
+            emailService.sendMail(email);
+        }
+        return "redirect:/devolver/" + id;
     }
 
     @GetMapping("pedidos/usuario/{id}")

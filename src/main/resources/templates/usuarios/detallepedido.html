@@ -196,7 +196,7 @@
 </div>
 
 <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div th:if="${pedido.estado != 'Enviado'}" class="modal-dialog modal-dialog-centered">
+  <div th:if="${pedido.estado != 'Enviado' && hanPasado30Dias == false}" class="modal-dialog modal-dialog-centered">
     <form action="#" id="cancelar" >
       <div class="modal-content">
         <div class="modal-header">
@@ -218,6 +218,26 @@
       </div>
     </form>
   </div>
+
+  <div th:if="${hanPasado30Dias == true}" class="modal-dialog modal-dialog-centered">
+    <form action="#" id="cancelar" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Devolver pedido</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>¿Quieres devolver el pedido?</h5>
+                <h5 style="font-weight: lighter;">Han pasado 30 días desde que realizaste la compra del producto y ya no puedes tramitar la devolución.</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Vale</button>
+            </div>
+        </div>
+    </form>
+</div>
 </div>
   
 

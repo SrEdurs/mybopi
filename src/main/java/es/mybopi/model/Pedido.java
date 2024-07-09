@@ -39,6 +39,7 @@ public class Pedido {
     private boolean cancelacion = false;
     private boolean devolucion = false;
     private String token;
+    private boolean enviadoDevolucion = false;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)

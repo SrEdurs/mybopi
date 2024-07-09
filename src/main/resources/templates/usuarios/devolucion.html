@@ -39,7 +39,6 @@
         <div class="col-lg-8 mb-4">
           <div class="card" style="border: 0px;">
             <div class="card-body">
-              <h5 th:if="${pedido.cancelacion == true}" style="color: red;">Se ha solicitado la cancelación del pedido</h5>
               <table class="table" style="text-align: center;">
                 <form id="estado" th:action="@{/actualizarEstado/{id}(id=${pedido.id})}" method="post">
                 <thead>           
@@ -48,20 +47,25 @@
                     <th scope="col" style="border-top: 0px;"></th>
                     <th scope="col" style="border-top: 0px;"></th>
                     <th scope="col" style="border-top: 0px;"></th>
-                    <th scope="col"  style="border-top: 0px;">
-                      <button th:if="${pedido.cancelacion == false && pedido.estado != 'Cancelado' && pedido.estado != 'Entregado'}" th:value="${pedido.id}"  data-toggle="modal" id="cancelar-pedido" data-target="#exampleModal" class="btn btn-dark cancel-button">Cancelar pedido</button>
-                      <button th:if="${pedido.devolucion == false && pedido.estado == 'Entregado'}" th:value="${pedido.id}"  data-toggle="modal" id="cancelar-pedido" data-target="#exampleModal2" class="btn btn-dark devolver-button">Devolver pedido</button>
-                    </th>
+                    <th scope="col"  style="border-top: 0px;"></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td style="font-weight: bold;">Paso 1.</td>
-                    <td>Meter los artículos en una caja.</td>
+                    <td>Mete los artículos en una caja. De preferencia la de Mybopi, aunque puede ser cualquiera.</td>
                   </tr>
                   <tr>
                     <td style="font-weight: bold; border-top: 0px;">Paso 2.</td>
-                    <td style="border-top: 0px;">Entregar el pedido.</td>
+                    <td style="border-top: 0px;">Lleva el paquete a Correos o a la empresa de paquetería de tu preferencia.</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: bold; border-top: 0px;">Paso 3.</td>
+                    <td style="border-top: 0px;">Envía el pedido a la dirección de devolución.</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: bold; border-top: 0px;">Paso 4.</td>
+                    <td style="border-top: 0px;">Espera a que nos llegue el paquete. Una vez lo haga, y si está todo correcto, te haremos el reembolso completo.</td>
                   </tr>
                 </tbody>
               </form>
@@ -69,6 +73,10 @@
             </div>
           </div>
            <!-- Fin tabla datos del pedido -->
+            <p><b>RECUERDA</b> tienes 30 días para devolver tu pedido.
+              El comprador es responsable de los gastos de envío de la devolución y de cualquier pérdida de valor
+               si el artículo no se devuelve en su estado original.</p>
+            <p>Puedes consultar nuestras políticas desde aquí: <a href="https://mybopi.es/politica-de-privacidad/">POLÍTICAS</a></p>
 
           <!-- Tabla de productos -->
           <div class="card mb-4" style="border-width: 0px;">
@@ -99,16 +107,19 @@
           <div class="card" style="border-color: aquamarine; border-width: 3px;">
             <div class="card-body">
               <h5 class="card-title">Dirección de devolución</h5>
-              <h6 class="card-subtitle mb-2" th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellidos}"></h6>
-              <br>
-              <p class="card-text" th:text="${pedido.usuario.direccion}"></p>
-              <p class="card-text" th:text="${pedido.usuario.localidad}"></p>
-              <p class="card-text" th:text="'CP: ' + ${pedido.usuario.CP}"></p>
-              <p class="card-text" th:text="'Tlf: ' + ${pedido.usuario.telefono}"></p>
-              <p class="card-text" th:text="${pedido.usuario.email}"></p>
+              <p class="card-text"><b>Nombre: </b>Mybopi</p>
+              <p class="card-text"><b>Dirección: </b>Calle Ramón y Cajal Nº 7</p>
+              <p class="card-text"><b>Localidad: </b>El Viso del Alcor</p>
+              <p class="card-text"><b>CP: </b>41520</p>
             </div>
           </div>
           <!-- Fin card datos de la dirección -->
+           <br><br>
+           <p th:if="${pedido.enviadoDevolucion == false}">Una vez hayas enviado el pedido, puedes avisarnos pulsando este botón, aunque no es necesario.</p>
+           <h5 th:if="${pedido.enviadoDevolucion == true}" style="color: rgb(0, 255, 55);">Has marcado la devolución como enviada.</h5>
+
+
+           <button th:if="${pedido.enviadoDevolucion == false}" th:value="${pedido.id}" data-toggle="modal" id="cancelar-pedido" data-target="#exampleModal" class="btn btn-dark devolver-button cancelar-pedido">He enviado el pedido</button>
 
           <br>
 
@@ -120,73 +131,30 @@
       
   </div>
 
-  <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div th:if="${pedido.estado != 'Enviado'}" class="modal-dialog modal-dialog-centered">
-    <form action="#" id="cancelar" >
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Cancelar pedido</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div th:if="${pedido.estado != 'Enviado'}" class="modal-dialog modal-dialog-centered">
+      <form action="#" id="cancelar">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Devolución</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5>¿Has enviado el pedido?</h5>
+            <h5 style="font-weight: lighter;">Si ya has enviado el pedido para la devolución, puedes hacérnoslo saber, aunque no es necesario, ya que no influye en el proceso de entrega.</h5>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark" data-dismiss="modal">NO</button>
+            <a id="devolverbutton" href="#">
+              <button type="button" class="btn btn-success">SI</button>
+            </a>
+          </div>
         </div>
-        <div class="modal-body">
-          <h5>¿Quieres solicitar la cancelación del pedido?</h5>
-          <h5></h5>
-        </div>
-        <div class="modal-footer">
-          <a id="cancelbutton" href="#">
-            <button type="button" class="btn btn-danger">SI</button>
-          </a>
-          <button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div th:if="${pedido.estado == 'Enviado'}" class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Cancelar pedido</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h5>El pedido ya se ha enviado y no puede ser cancelado pero cuando lo recibas puedes realizar la devolución.</h5>
-        <h5></h5>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Vale</button>
-      </div>
+      </form>
     </div>
   </div>
-</div>
-
-<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div th:if="${pedido.estado != 'Enviado'}" class="modal-dialog modal-dialog-centered">
-    <form action="#" id="cancelar" >
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Devolver pedido</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <h5>¿Quieres devolver el pedido?</h5>
-          <h5 style="font-weight: lighter;">Te recordamos que para tramitar la devolución deberás cargar con los gastos de envío. Una vez recibamos el producto y lo revisemos, procederemos a realizar la devolución del importe, recibirás una confirmación en tu email.</h5>
-        </div>
-        <div class="modal-footer">
-          <a id="devolverbutton" href="#">
-            <button type="button" class="btn btn-danger">SI</button>
-          </a>
-          <button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
   
 
  <!-- Fondo oscurecido -->
@@ -207,58 +175,28 @@
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 
-   <!-- Script para mostrar la rueda de carga -->
-   <script>
-    function showLoading() {
-        // Muestra el fondo oscurecido y la rueda de carga
-        document.getElementById('loading-background').style.display = 'block';
-        document.getElementById('loading').style.display = 'block';
-    }
-
-    function hideSubmitButton(form) {
-        // Oculta el botón de submit para evitar múltiples envíos
-        form.querySelector('button[type="submit"]').style.display = 'none';
-    }
-
-    // Añade el evento de submit a ambos formularios
-    document.getElementById('estado').addEventListener('submit', function(event) {
-        showLoading();
-        hideSubmitButton(this);
-    });
-
-    document.getElementById('seguimiento').addEventListener('submit', function(event) {
-        showLoading();
-        hideSubmitButton(this);
-    });
-
-    document.getElementById('cancelar').addEventListener('submit', function(event) {
-        showLoading();
-        hideSubmitButton(this);
-    });
-</script>
-
+<!-- Script para mostrar la rueda de carga -->
 <script>
-  document.getElementById('cancelar-pedido').addEventListener('click', function(event) {
-      // Previene el comportamiento por defecto del botón
-      event.preventDefault();
+  function showLoading() {
+    // Muestra el fondo oscurecido y la rueda de carga
+    document.getElementById('loading-background').style.display = 'block';
+    document.getElementById('loading').style.display = 'block';
+  }
+
+  // Agrega el evento a los botones de cancelar pedido
+  document.querySelectorAll('.cancelar-pedido').forEach(button => {
+    button.addEventListener('click', function() {
+      var id = this.getAttribute('value');
+      document.getElementById('devolverbutton').setAttribute('href', '/devolucionenviada/' + id);
+    });
+  });
+
+  // Agrega el evento al botón de devolución en el modal
+  document.getElementById('devolverbutton').addEventListener('click', function() {
+    showLoading();
   });
 </script>
 
-<script type="text/javascript">  document.querySelectorAll('.cancel-button').forEach(button => {
-  button.addEventListener('click', function() {
-    var id = this.getAttribute('value');
-    document.getElementById('cancelbutton').setAttribute('href', '/cancelar/' + id);
-  });
-});
-</script>
-
-<script type="text/javascript">  document.querySelectorAll('.devolver-button').forEach(button => {
-  button.addEventListener('click', function() {
-    var id = this.getAttribute('value');
-    document.getElementById('devolverbutton').setAttribute('href', '/devolver/' + id);
-  });
-});
-</script>
 </body>
 
 </html>
