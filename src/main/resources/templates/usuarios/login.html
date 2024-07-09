@@ -45,12 +45,43 @@
         <br><br>
     </div>
     <!-- /.Page Content -->
+       <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Cuenta creada</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                <h5>Has creado una cuenta con este email. Ya puedes iniciar sesión.</h5>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Vale</button>
+                </div>
+            </div>
+            </div>
+        </div>
 
     <!-- Footer -->
     <div th:insert="~{usuarios/template_usuario :: footer}"></div>
 
     <!-- Scripts -->
     <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+      <!-- Incluye Bootstrap JS y jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <!-- Script para mostrar el modal -->
+  <script th:if="${accountCreated}">
+    $(document).ready(function() {
+        $('#exampleModal').modal('show');
+    });
+  </script>
 
 </body>
 

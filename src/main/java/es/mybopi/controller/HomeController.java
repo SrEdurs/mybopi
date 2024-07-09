@@ -33,6 +33,8 @@ import es.mybopi.service.ProductoService;
 import es.mybopi.service.StripeService;
 import es.mybopi.service.UsuarioService;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -56,9 +58,19 @@ public class HomeController {
     private Pedido pedido = new Pedido();
 
     @GetMapping("/")
-    public String home(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
+    public String home(Model model, @ModelAttribute("usuarioNav") Usuario usuario, HttpServletRequest request) {
         List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
         model.addAttribute("productosHome", productos);
+
+        // Verifica si el mensaje existe en la sesión
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("mensaje") != null) {
+            // Añade el mensaje al modelo
+            model.addAttribute("mensaje", session.getAttribute("mensaje"));
+            // Elimina el mensaje de la sesión
+            session.removeAttribute("mensaje");
+        }
+
         return "usuarios/index";
     }
 
@@ -399,7 +411,6 @@ public class HomeController {
             boolean hanPasado30Dias = ChronoUnit.DAYS.between(fechaPedido, fechaActual) > 30;
             
             if (hanPasado30Dias) {
-                System.out.println("Ha pasado los 30 días>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 return "redirect:/"; // Redirigir a otra página si han pasado los 30 días
             }
             

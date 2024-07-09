@@ -46,13 +46,22 @@ public class UsuarioController {
     }
     
     @PostMapping("/save")
-    public String save(@ModelAttribute Usuario user, EmailDTO email) throws MessagingException {
+    public String save(@ModelAttribute Usuario user, @RequestParam("confirmPassword") String confirmPassword, EmailDTO email, RedirectAttributes redirectAttributes) throws MessagingException {
+        if (!user.getPassword().equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("passwordMismatch", true);
+            return "redirect:/usuario/registro";
+        }
         user.setPassword(encoder.encode(user.getPassword()));
+        if ("mybopii@gmail.com".equals(user.getEmail())) {
+            System.out.println("------------------------------------ HOLAAAAAAAAAAAAAAAAAA");
+            user.setRoles("ROLE_USER,ROLE_ADMIN");
+        }
         usuarioService.save(user);
         email.setAsunto("¡Bienvenid@ a Mybopi!");
         email.setDestinatario(user.getEmail());
         email.setMensaje("Muchas gracias por registrarte, ahora tienes acceso a numerosos artículos pintados a mano!");
         emailService.sendMail(email);
+        redirectAttributes.addFlashAttribute("accountCreated", true);
         return "redirect:/usuario/login";
     }
 

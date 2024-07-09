@@ -11,8 +11,29 @@
     <!-- Page Content -->
     <div class="container">
 
+      
+
       <!-- Page Features -->
       <div class="row text-center allign-content-center justify-content-center mb-4" style="margin-top: 50px;">
+    <!-- Modal -->
+    <div class="modal" id="myModal" th:if="${mensaje}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5 th:text="${mensaje}">Texto</h5>
+          </div>
+          <div class="modal-footer">
+            <p></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
         <!-- dos columnas con una card cada una-->
         <div class="col-lg-4 col-md-6 mb-4">
@@ -72,6 +93,23 @@
 
     <!-- Scripts -->
     <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+     <!-- Añade JavaScript para abrir y cerrar el modal -->
+     <script>
+      // Espera a que el documento esté completamente cargado
+      $(document).ready(function() {
+          // Si hay un mensaje, muestra el modal
+          if (document.getElementById("myModal")) {
+              var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+              myModal.show();  // Muestra el modal
+
+              // Cierra el modal después de 2 segundos (2000 milisegundos)
+              setTimeout(function() {
+                  myModal.hide();  // Oculta el modal
+              }, 2000);
+          }
+      });
+  </script>
 
   </body>
 
