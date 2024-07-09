@@ -51,9 +51,14 @@ public class UsuarioController {
             redirectAttributes.addFlashAttribute("passwordMismatch", true);
             return "redirect:/usuario/registro";
         }
+
+        if (usuarioService.checkUserExists(user.getEmail())) {
+            redirectAttributes.addFlashAttribute("emailInUse", true);
+            return "redirect:/usuario/registro";
+        }
+
         user.setPassword(encoder.encode(user.getPassword()));
         if ("mybopii@gmail.com".equals(user.getEmail())) {
-            System.out.println("------------------------------------ HOLAAAAAAAAAAAAAAAAAA");
             user.setRoles("ROLE_USER,ROLE_ADMIN");
         }
         usuarioService.save(user);

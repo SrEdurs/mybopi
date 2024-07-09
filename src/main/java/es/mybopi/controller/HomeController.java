@@ -200,6 +200,8 @@ public class HomeController {
                     break;
                 }
             }
+            List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
+            model.addAttribute("productosHome", productos);
             model.addAttribute("carrito", user.get().getCarrito());
         }
         return "usuarios/carrito";
