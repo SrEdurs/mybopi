@@ -27,7 +27,7 @@ import lombok.ToString;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)    
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String email;
     private String nombre;
@@ -50,5 +50,5 @@ public class Usuario {
     private List<Pedido> pedidos;
 
     @OneToOne(mappedBy = "usuario")
-    private Carrito carrito;   
+    private Carrito carrito;
 }

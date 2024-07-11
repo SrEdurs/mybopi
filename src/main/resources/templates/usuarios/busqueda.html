@@ -8,46 +8,47 @@
   <!-- Navigation -->
   <div th:insert="~{usuarios/template_usuario :: nav}"></div>
 
-    <!-- Page Content -->
-    <div class="container">
+  <!-- Page Content -->
+  <div class="container">
 
-      <!-- Page Features -->
-      <div class="row text-center allign-content-center justify-content-center mb-4" style="margin-top: 50px;">
-
-      </div>
-
-      <div class="row">
-        <h4>Resultado de la búsqueda</h4>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${producto}">
-        <div class="card h-100">
-          <a th:href="@{/producto/{id}(id=${producto.id})}">
-            <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt="" th:classappend="${producto.vendido} ? 'grayscale' : ''" >
-            <div class="overlay" th:if="${producto.vendido}">
-              <img th:src="@{/images/vendido.png}" alt="Vendido" class="vendido-image"/>
-            </div>
-          </a>
-          
-          <div class="card-body" >
-            <p class="card-text text-center text" style="font-weight: bold" th:text="${producto.nombre}"></p>
-          </div>
-          
-        </div>
-        </div>
-      </div>
-      
+    <!-- Page Features -->
+    <div class="row text-center allign-content-center justify-content-center mb-4" style="margin-top: 50px;">
 
     </div>
-    <!-- /.container -->
 
-    <!-- Footer -->
-    <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+    <div class="row">
+      <h4>Resultado de la búsqueda</h4>
+    </div>
 
-    <!-- Scripts -->
-    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+    <div class="row">
+      <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${producto}">
+        <div class="card h-100">
+          <a th:href="@{/producto/{id}(id=${producto.id})}">
+            <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt=""
+              th:classappend="${producto.vendido} ? 'grayscale' : ''">
+            <div class="overlay" th:if="${producto.vendido}">
+              <img th:src="@{/images/vendido.png}" alt="Vendido" class="vendido-image" />
+            </div>
+          </a>
 
-  </body>
+          <div class="card-body">
+            <p class="card-text text-center text" style="font-weight: bold" th:text="${producto.nombre}"></p>
+          </div>
 
-  </html>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+  <!-- Scripts -->
+  <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+</body>
+
+</html>

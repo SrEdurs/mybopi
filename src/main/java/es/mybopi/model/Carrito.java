@@ -38,10 +38,6 @@ public class Carrito {
     private Usuario usuario;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
-    @JoinTable(
-        name = "carrito_producto",
-        joinColumns = @JoinColumn(name = "carrito_id"),
-        inverseJoinColumns = @JoinColumn(name = "producto_id")
-    )
+    @JoinTable(name = "carrito_producto", joinColumns = @JoinColumn(name = "carrito_id"), inverseJoinColumns = @JoinColumn(name = "producto_id"))
     private List<Producto> productos;
 }

@@ -15,6 +15,7 @@ public class EmailDTO {
     private String mensaje;
     private List<Producto> productos;
     private double total;
+
     public EmailDTO() {
         // Constructor sin argumentos
     }

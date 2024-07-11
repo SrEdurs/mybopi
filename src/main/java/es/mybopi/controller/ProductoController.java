@@ -39,31 +39,32 @@ public class ProductoController {
     private CarritoService carritoService;
 
     @GetMapping("/inventario")
-    public String detalles(Model model, @ModelAttribute("usuarioNav") Usuario usuario){
+    public String detalles(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         model.addAttribute("inventario", productoRepository.findAllByOrderByFechaDesc());
         return "admin/inventario";
     }
 
     @GetMapping("/crear")
-    public String crearProducto(@ModelAttribute("usuarioNav") Usuario usuario){
+    public String crearProducto(@ModelAttribute("usuarioNav") Usuario usuario) {
         return "productos/crear";
     }
 
     @PostMapping("/guardar")
-    public String guardar(Producto producto, @RequestParam("img1") MultipartFile file, @RequestParam("img2") MultipartFile file2, @RequestParam("img3") MultipartFile file3) throws IOException{
+    public String guardar(Producto producto, @RequestParam("img1") MultipartFile file,
+            @RequestParam("img2") MultipartFile file2, @RequestParam("img3") MultipartFile file3) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
 
-        if(user.isPresent()){
+        if (user.isPresent()) {
             Usuario u = user.get();
             producto.setUsuario(u);
 
-            //Fecha
+            // Fecha
             Date date = new Date();
             producto.setFecha(date);
 
-            if(producto.getId() == null){ //Creando un producto
+            if (producto.getId() == null) { // Creando un producto
                 String nombreImagen = upload.saveImage(file);
                 producto.setPortada(nombreImagen);
 
@@ -76,13 +77,13 @@ public class ProductoController {
 
             productoService.save(producto);
             return "redirect:/productos/inventario";
-        } else{
+        } else {
             return "redirect:/";
-        } 
+        }
     }
 
     @GetMapping("/editar/{id}")
-    public String editar(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario){
+    public String editar(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         Producto producto = new Producto();
         Optional<Producto> optionalProducto = productoService.findById(id);
         producto = optionalProducto.get();
@@ -91,44 +92,46 @@ public class ProductoController {
     }
 
     @PostMapping("/actualizar")
-    public String actualizar(Producto producto, @RequestParam("img1") MultipartFile portada, @RequestParam("img2") MultipartFile imagen2, @RequestParam("img3") MultipartFile imagen3) throws IOException{
+    public String actualizar(Producto producto, @RequestParam("img1") MultipartFile portada,
+            @RequestParam("img2") MultipartFile imagen2, @RequestParam("img3") MultipartFile imagen3)
+            throws IOException {
         Producto p = new Producto();
         p = productoService.findById(producto.getId()).get();
         Date date = new Date();
         producto.setFecha(date);
 
-        if(portada.isEmpty()){
+        if (portada.isEmpty()) {
             producto.setPortada(p.getPortada());
-        } else { //Editando cambiando la imagen
+        } else { // Editando cambiando la imagen
 
-            if(!p.getPortada().equals("default.jpg")){ //Si hay una portada por defecto
-            upload.deleteImage(p.getPortada());
+            if (!p.getPortada().equals("default.jpg")) { // Si hay una portada por defecto
+                upload.deleteImage(p.getPortada());
             }
             String nombreImagen = upload.saveImage(portada);
             producto.setPortada(nombreImagen);
         }
 
-        //Imagen 1
-        if(imagen2.isEmpty()){
+        // Imagen 1
+        if (imagen2.isEmpty()) {
             producto.setImagen1(p.getImagen1());
-        } else { //Editando cambiando la imagen
-            if(!p.getImagen1().equals("default.jpg")){ //Si hay una imagen por defecto
-            upload.deleteImage(p.getImagen1());
+        } else { // Editando cambiando la imagen
+            if (!p.getImagen1().equals("default.jpg")) { // Si hay una imagen por defecto
+                upload.deleteImage(p.getImagen1());
             }
             String nombreImagen = upload.saveImage(imagen2);
             producto.setImagen1(nombreImagen);
         }
 
-        //Imagen 2
-        if(imagen3.isEmpty()){
+        // Imagen 2
+        if (imagen3.isEmpty()) {
             producto.setImagen2(p.getImagen2());
-        } else { //Editando cambiando la imagen
-            if(!p.getImagen2().equals("default.jpg")){ //Si hay una imagen por defecto
-            upload.deleteImage(p.getImagen2());
+        } else { // Editando cambiando la imagen
+            if (!p.getImagen2().equals("default.jpg")) { // Si hay una imagen por defecto
+                upload.deleteImage(p.getImagen2());
             }
             String nombreImagen = upload.saveImage(imagen3);
             producto.setImagen2(nombreImagen);
-        }       
+        }
 
         producto.setUsuario(p.getUsuario());
         productoService.update(producto);
@@ -136,27 +139,27 @@ public class ProductoController {
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarProducto(@PathVariable Integer id) throws IOException{
+    public String eliminarProducto(@PathVariable Integer id) throws IOException {
         Producto p = new Producto();
         p = productoService.findById(id).get();
-        //Si la portada es por defecto no la borramos
-        if(!p.getPortada().equals("default.jpg")){ 
-        
+        // Si la portada es por defecto no la borramos
+        if (!p.getPortada().equals("default.jpg")) {
+
             upload.deleteImage(p.getPortada());
         }
-        //Si la imagen 1 es por defecto no la borramos
-        if(!p.getImagen1().equals("default.jpg")){ 
-        
+        // Si la imagen 1 es por defecto no la borramos
+        if (!p.getImagen1().equals("default.jpg")) {
+
             upload.deleteImage(p.getImagen1());
         }
-        //Si la imagen 2 es por defecto no la borramos
-        if(!p.getImagen2().equals("default.jpg")){ 
-        
+        // Si la imagen 2 es por defecto no la borramos
+        if (!p.getImagen2().equals("default.jpg")) {
+
             upload.deleteImage(p.getImagen2());
         }
-        //eliminar el producto de todos los carritos
-        if(p.getCarritos() != null){
-            for(Carrito c : p.getCarritos()){
+        // eliminar el producto de todos los carritos
+        if (p.getCarritos() != null) {
+            for (Carrito c : p.getCarritos()) {
                 c.getProductos().remove(p);
                 c.setTotal(c.getTotal() - p.getPrecio());
                 carritoService.save(c);
@@ -171,10 +174,10 @@ public class ProductoController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
-        if(user.isPresent()) {
-            model.addAttribute("usuarioNav",user.get());     
+        if (user.isPresent()) {
+            model.addAttribute("usuarioNav", user.get());
             return user.get();
-        } else{
+        } else {
             return new Usuario();
         }
     }

@@ -44,9 +44,10 @@ public class UsuarioController {
     public String registro(@ModelAttribute("usuarioNav") Usuario usuario) {
         return "usuarios/registro";
     }
-    
+
     @PostMapping("/save")
-    public String save(@ModelAttribute Usuario user, @RequestParam("confirmPassword") String confirmPassword, EmailDTO email, RedirectAttributes redirectAttributes) throws MessagingException {
+    public String save(@ModelAttribute Usuario user, @RequestParam("confirmPassword") String confirmPassword,
+            EmailDTO email, RedirectAttributes redirectAttributes) throws MessagingException {
         if (!user.getPassword().equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("passwordMismatch", true);
             return "redirect:/usuario/registro";
@@ -82,20 +83,20 @@ public class UsuarioController {
             model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
             return "usuarios/password";
-        } else{
+        } else {
             return "redirect:/";
         }
-        
+
     }
 
-    //Método para cambiar la contraseña
+    // Método para cambiar la contraseña
     @PostMapping("/password")
     public String savePassword(@ModelAttribute EmailDTO emailConfirma,
-                                @ModelAttribute("usuario") Usuario usuario, 
-                                @RequestParam("currentPassword") String currentPassword,
-                               @RequestParam("newPassword") String newPassword,
-                               @RequestParam("repeatPassword") String repeatPassword,
-                               RedirectAttributes redirectAttributes) throws MessagingException {
+            @ModelAttribute("usuario") Usuario usuario,
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("repeatPassword") String repeatPassword,
+            RedirectAttributes redirectAttributes) throws MessagingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
@@ -113,7 +114,8 @@ public class UsuarioController {
             }
 
             if (newPassword.equals(currentPassword) && newPassword.equals(repeatPassword)) {
-                redirectAttributes.addFlashAttribute("error", "La nueva contraseña no puede ser igual que la anterior.");
+                redirectAttributes.addFlashAttribute("error",
+                        "La nueva contraseña no puede ser igual que la anterior.");
                 return "redirect:/usuario/password";
             }
 
@@ -121,10 +123,11 @@ public class UsuarioController {
             usuarioService.save(currentUser);
             redirectAttributes.addFlashAttribute("success", "Contraseña cambiada con éxito.");
 
-            //Mandamos un email al usuario
+            // Mandamos un email al usuario
             emailConfirma.setAsunto("Cambio de contraseña Mybopi");
             emailConfirma.setDestinatario(user.get().getEmail());
-            emailConfirma.setMensaje("Hola! Tu contraseña se ha cambiado correctamente. Si no has sido tu, por favor, ponte en contacto con nosotros.");
+            emailConfirma.setMensaje(
+                    "Hola! Tu contraseña se ha cambiado correctamente. Si no has sido tu, por favor, ponte en contacto con nosotros.");
             emailService.sendMail(emailConfirma);
             return "redirect:/usuario/password?passwordChanged";
         }
@@ -139,35 +142,38 @@ public class UsuarioController {
     }
 
     @PostMapping("/recordar")
-    public String recordarpass(@ModelAttribute Usuario user, EmailDTO email, @RequestParam("correo") String correo) throws MessagingException{
+    public String recordarpass(@ModelAttribute Usuario user, EmailDTO email, @RequestParam("correo") String correo)
+            throws MessagingException {
 
-         //Cadena de texto al azar
-         String randomText = "";
-         for (int i = 0; i < 10; i++) {
-             randomText += (char) (Math.random() * 26 + 'a');
-         }
+        // Cadena de texto al azar
+        String randomText = "";
+        for (int i = 0; i < 10; i++) {
+            randomText += (char) (Math.random() * 26 + 'a');
+        }
 
-        //Si el email del usuario existe, mandar el mensaje
+        // Si el email del usuario existe, mandar el mensaje
         Optional<Usuario> usuario = usuarioService.findByEmail(correo);
         if (usuario.isPresent()) {
-            //Guardamos el token en la base de datos
+            // Guardamos el token en la base de datos
             usuario.get().setToken(randomText);
             usuarioService.save(usuario.get());
 
             email.setAsunto("Cambio de contraseña");
             email.setDestinatario(usuario.get().getEmail());
-            email.setMensaje("Hola! Hemos recibido una petición para cambiar la contraseña de tu cuenta. Si no es el caso, por favor, ignora este mensage");
+            email.setMensaje(
+                    "Hola! Hemos recibido una petición para cambiar la contraseña de tu cuenta. Si no es el caso, por favor, ignora este mensage");
             email.setEnlace2("http://localhost:8080/usuario/cambiapassword?token=" + randomText + "&email=" + correo);
             emailService.sendMail(email);
 
             return "redirect:/usuario/recordar?email=true";
         } else {
             return "redirect:/usuario/recordar?error=true";
-        } 
+        }
     }
 
     @GetMapping("/cambiapassword")
-    public String cambiarPassword(@RequestParam("token") String token, @RequestParam("email") String email, Model model) {
+    public String cambiarPassword(@RequestParam("token") String token, @RequestParam("email") String email,
+            Model model) {
         Optional<Usuario> user = usuarioService.findByEmail(email);
         if (user.isPresent() && user.get().getToken().equals(token)) {
             model.addAttribute("token", token);
@@ -177,10 +183,11 @@ public class UsuarioController {
         return "redirect:/usuario/recordar?token=caducado";
     }
 
-
     @PostMapping("/cambiapassword")
-    public String savePassword(@ModelAttribute EmailDTO emailConfirma, @RequestParam("token") String token, @RequestParam("email") String email,
-                            @RequestParam("password") String password, @RequestParam("confirmPassword") String confirmPassword) throws MessagingException {
+    public String savePassword(@ModelAttribute EmailDTO emailConfirma, @RequestParam("token") String token,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password, @RequestParam("confirmPassword") String confirmPassword)
+            throws MessagingException {
         // Verificar si las contraseñas coinciden
         if (!password.equals(confirmPassword)) {
             return "redirect:/usuario/cambiapassword?token=" + token + "&email=" + email + "&error=true";
@@ -193,18 +200,18 @@ public class UsuarioController {
             user.get().setToken("");
             usuarioService.save(user.get());
 
-            //Mandamos un email al usuario
+            // Mandamos un email al usuario
             emailConfirma.setAsunto("Contraseña cambiada con éxito");
             emailConfirma.setDestinatario(email);
-            emailConfirma.setMensaje("Hola! Tu contraseña se ha cambiado correctamente. Si no has sido tu, por favor, ponte en contacto con nosotros.");
+            emailConfirma.setMensaje(
+                    "Hola! Tu contraseña se ha cambiado correctamente. Si no has sido tu, por favor, ponte en contacto con nosotros.");
             emailService.sendMail(emailConfirma);
-            
+
             return "redirect:/usuario/login?changed=true";
         }
 
         return "redirect:/usuario/recordar?token=invalid";
     }
-
 
     @GetMapping("/login")
     public String login() {
@@ -226,7 +233,7 @@ public class UsuarioController {
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
 
-        if(user.get().getActivo() == 0) {
+        if (user.get().getActivo() == 0) {
             return "redirect:/usuario/banned";
         }
         if (user.isPresent()) {
@@ -238,7 +245,7 @@ public class UsuarioController {
             return "usuarios/cuenta";
         } else {
             return "redirect:/";
-        } 
+        }
     }
 
     @GetMapping("/cuenta/editar")
@@ -247,7 +254,7 @@ public class UsuarioController {
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
         Optional<Usuario> usu = usuarioService.findByEmail(name);
-        if(user.get().getActivo() == 0) {
+        if (user.get().getActivo() == 0) {
             return "redirect:/usuario/banned";
         }
         if (user.isPresent()) {
@@ -259,7 +266,7 @@ public class UsuarioController {
             return "usuarios/editarusuario";
         } else {
             return "redirect:/";
-        } 
+        }
     }
 
     @PostMapping("/cuenta/editar")
@@ -280,7 +287,7 @@ public class UsuarioController {
             return "redirect:/usuario/cuenta/editar";
         } else {
             return "redirect:/";
-        }        
+        }
     }
 
     @GetMapping("/perfil/{id}")
@@ -295,7 +302,7 @@ public class UsuarioController {
             model.addAttribute("productosHome", productos);
             model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
-            model.addAttribute("usuarioNav",usu.get());  
+            model.addAttribute("usuarioNav", usu.get());
             return "usuarios/cuenta";
         } else {
             return "redirect:/";
@@ -308,7 +315,7 @@ public class UsuarioController {
         String name = authentication.getName();
         Optional<Usuario> usu = usuarioService.findByEmail(name);
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
-   
+
         if (user.isPresent()) {
             List<Producto> productos = this.productoRepository.findTop4ByActivoOrderByFechaDesc(true);
             model.addAttribute("productosHome", productos);
@@ -321,7 +328,8 @@ public class UsuarioController {
     }
 
     @PostMapping("/edit/{id}")
-    public String saveEdit(RedirectAttributes redirectAttributes, @ModelAttribute("id") Integer id, @ModelAttribute("usuario") Usuario user) {
+    public String saveEdit(RedirectAttributes redirectAttributes, @ModelAttribute("id") Integer id,
+            @ModelAttribute("usuario") Usuario user) {
         Optional<Usuario> usu = Optional.ofNullable(usuarioService.findById(id));
         if (usu.isPresent()) {
             Usuario usuario = usu.get();
@@ -337,7 +345,7 @@ public class UsuarioController {
             return "redirect:/usuario/edit/" + id;
         } else {
             return "redirect:/admin/usuarios";
-        }        
+        }
     }
 
     @GetMapping("/desactivar/{id}")
@@ -345,7 +353,7 @@ public class UsuarioController {
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
         if (user.isPresent()) {
             Usuario usuario = user.get();
-            if(usuario.getActivo() == 1){
+            if (usuario.getActivo() == 1) {
                 usuario.setActivo(0);
             } else {
                 usuario.setActivo(1);
@@ -377,43 +385,46 @@ public class UsuarioController {
             return "usuarios/cambiaremail";
         } else {
             return "redirect:/";
-        } 
+        }
     }
 
     @PostMapping("/cuenta/email")
-    public String saveEditEmail(@ModelAttribute EmailDTO emailConfirma, RedirectAttributes redirectAttributes, @ModelAttribute("usuario") Usuario user) throws MessagingException {
+    public String saveEditEmail(@ModelAttribute EmailDTO emailConfirma, RedirectAttributes redirectAttributes,
+            @ModelAttribute("usuario") Usuario user) throws MessagingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> usu = usuarioService.findByEmail(name);
         if (usu.isPresent()) {
             Usuario usuario = usu.get();
-            if(user.getEmail().equals(usuario.getEmail())) {
+            if (user.getEmail().equals(usuario.getEmail())) {
                 redirectAttributes.addFlashAttribute("error", "El nuevo email no puede ser el actual");
                 return "redirect:/usuario/cuenta/email";
             }
-            //Comprobar si el email ya está en uso por otro usuario
+            // Comprobar si el email ya está en uso por otro usuario
             Optional<Usuario> user2 = usuarioService.findByEmail(user.getEmail());
-            if(user2.isPresent()) {
+            if (user2.isPresent()) {
                 redirectAttributes.addFlashAttribute("error", "El email ya se encuentra en uso");
                 return "redirect:/usuario/cuenta/email";
             }
             usuario.setEmail(user.getEmail());
             usuarioService.save(usuario);
             changeUsername(usuario.getEmail());
-            //Mandamos un email al usuario
+            // Mandamos un email al usuario
             emailConfirma.setAsunto("Cambio de email Mybopi");
             emailConfirma.setDestinatario(usuario.getEmail());
-            emailConfirma.setMensaje("Hola! Tu email se ha cambiado correctamente. A partir de ahora usaremos este correo para las notificaciones.");
+            emailConfirma.setMensaje(
+                    "Hola! Tu email se ha cambiado correctamente. A partir de ahora usaremos este correo para las notificaciones.");
             emailService.sendMail(emailConfirma);
             redirectAttributes.addFlashAttribute("mensaje", "Tu email se ha actualizado correctamente");
             return "redirect:/usuario/cuenta/email";
         } else {
             return "redirect:/";
-        }        
+        }
     }
 
     @GetMapping("/cuenta/borrar/{id}")
-    public String marcarParaBorrado(@PathVariable("id") Integer id, @ModelAttribute EmailDTO emailConfirma) throws MessagingException {
+    public String marcarParaBorrado(@PathVariable("id") Integer id, @ModelAttribute EmailDTO emailConfirma)
+            throws MessagingException {
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
         if (user.isPresent()) {
             Usuario usuario = user.get();
@@ -421,10 +432,11 @@ public class UsuarioController {
             usuario.setFechaBorrado(LocalDateTime.now());
             usuarioService.save(usuario);
 
-            //Mandamos un email al usuario
+            // Mandamos un email al usuario
             emailConfirma.setAsunto("Tu cuenta se ha marcado para el borrado");
             emailConfirma.setDestinatario(usuario.getEmail());
-            emailConfirma.setMensaje("Hola! Tu cuenta se eliminará en 2 días desde tu solicitud. Borraremos toda tu información de nuestra base de datos. También puedes cancelar el borrado en cualquier momento desde el apartado de editar los datos de tu cuenta.");
+            emailConfirma.setMensaje(
+                    "Hola! Tu cuenta se eliminará en 2 días desde tu solicitud. Borraremos toda tu información de nuestra base de datos. También puedes cancelar el borrado en cualquier momento desde el apartado de editar los datos de tu cuenta.");
             emailService.sendMail(emailConfirma);
 
             return "redirect:/usuario/cuenta/editar";
@@ -433,7 +445,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/cuenta/cancelarborrado/{id}")
-    public String cancelarBorrado(@PathVariable("id") Integer id, @ModelAttribute EmailDTO emailConfirma) throws MessagingException {
+    public String cancelarBorrado(@PathVariable("id") Integer id, @ModelAttribute EmailDTO emailConfirma)
+            throws MessagingException {
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
         if (user.isPresent()) {
             Usuario usuario = user.get();
@@ -441,7 +454,7 @@ public class UsuarioController {
             usuario.setFechaBorrado(null);
             usuarioService.save(usuario);
 
-            //Mandamos un email al usuario
+            // Mandamos un email al usuario
             emailConfirma.setAsunto("Se ha cancelado el borrado de tu cuenta");
             emailConfirma.setDestinatario(usuario.getEmail());
             emailConfirma.setMensaje("Hola! Hemos cancelado el borrado de tu cuenta conforme a tu solicitud.");
@@ -457,10 +470,10 @@ public class UsuarioController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
-        if(user.isPresent()) {
-            model.addAttribute("usuarioNav",user.get());     
+        if (user.isPresent()) {
+            model.addAttribute("usuarioNav", user.get());
             return user.get();
-        } else{
+        } else {
             return new Usuario();
         }
     }

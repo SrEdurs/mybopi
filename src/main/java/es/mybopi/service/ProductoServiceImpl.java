@@ -2,10 +2,8 @@ package es.mybopi.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import es.mybopi.model.Producto;
 import es.mybopi.repository.ProductoRepository;
 
@@ -44,7 +42,4 @@ public class ProductoServiceImpl implements ProductoService {
     public List<Producto> findTop4ByActivoOrderByFechaDesc(boolean activo) {
         return productoRepository.findTop4ByActivoOrderByFechaDesc(activo);
     }
-
-
-
 }

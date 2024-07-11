@@ -43,25 +43,30 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario findById(Integer id) {
         return usuarioRepository.findById(id).get();
     }
+
     @Override
     public Usuario save(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
+
     @Override
     public Optional<Usuario> findByEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
+
     @Override
     public List<Usuario> findAll() {
         return usuarioRepository.findAll();
     }
+
     @Override
     public boolean checkUserExists(String email) {
         return findByEmail(email).isPresent();
     }
+
     @Override
     public Integer saveUser(Usuario user) {
-        String passwd= user.getPassword();
+        String passwd = user.getPassword();
         String encodedPasswod = passwordEncoder.encode(passwd);
         user.setPassword(encodedPasswod);
         user = usuarioRepository.save(user);
@@ -72,24 +77,23 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         Optional<Usuario> opt = usuarioRepository.findByEmail(emilio);
 
-        if(opt.isEmpty()){
-            throw new UsernameNotFoundException("User with email: " +emilio +" not found !");
+        if (opt.isEmpty()) {
+            throw new UsernameNotFoundException("User with email: " + emilio + " not found !");
         } else {
             Usuario user = opt.get();
             return new org.springframework.security.core.userdetails.User(
                     user.getEmail(),
                     user.getPassword(),
-                    List.of(new SimpleGrantedAuthority("ADMIN"))
-            );
-            
+                    List.of(new SimpleGrantedAuthority("ADMIN")));
+
         }
 
     }
+
     @Override
     public void delete(Usuario usuario) {
         usuarioRepository.delete(usuario);
     }
-
 
     @Scheduled(cron = "0 0 0 * * *") // Ejecuta a medianoche todos los días
     @Transactional // Asegura que la operación es transaccional
@@ -97,12 +101,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         List<Usuario> usuarios = usuarioRepository.findAllByBorrandoTrue();
         LocalDateTime now = LocalDateTime.now();
         for (Usuario usuario : usuarios) {
-            Duration duration = Duration.between(usuario.getFechaBorrado(), now); 
+            Duration duration = Duration.between(usuario.getFechaBorrado(), now);
 
             if (duration.toDays() >= 2) {
 
                 // Manda un email al usuario
-                EmailDTO email = new EmailDTO();                
+                EmailDTO email = new EmailDTO();
                 email.setAsunto("Tu cuenta ha sido eliminada");
                 email.setDestinatario(usuario.getEmail());
                 email.setMensaje("Hola, tu cuenta ha sido eliminada conforme a tu solicitud.");
@@ -124,13 +128,12 @@ public class UsuarioServiceImpl implements UsuarioService {
                     pedido.setProductos(null); // Elimina los productos del pedido
                     pedidoRepository.delete(pedido); // Elimina el pedido
                 }
-                
+
                 // Elimina el usuario
                 usuarioRepository.delete(usuario);
             }
         }
     }
-
 
     @SuppressWarnings("null")
     private void cerrarSesion(Usuario usuario) {
@@ -140,7 +143,9 @@ public class UsuarioServiceImpl implements UsuarioService {
             if (userDetails.getUsername().equals(usuario.getEmail())) {
                 // Usar SecurityContextLogoutHandler para manejar el cierre de sesión
                 SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
-                logoutHandler.logout(((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest(), null, authentication);
+                logoutHandler.logout(
+                        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest(), null,
+                        authentication);
             }
         }
     }

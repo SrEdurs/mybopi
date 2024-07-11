@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <div th:fragment="header">
 
@@ -15,60 +14,76 @@
     <script src="https://js.stripe.com/v3/"></script>
   </head>
 
-</div>  
-  
-  
+</div>
+
+
 <div th:fragment="nav">
   <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgb(241, 193, 120);">
     <div class="container">
       <a class="navbar-brand" th:href="@{/}" style="color: black; font-weight: bold;">Mybopi</a>
-        <form class="form-inline my-2 my-lg-0" method="get" th:action="@{/buscar}">
-          <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search" name="nombre" autocomplete="off">
-          <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Buscar</button>
-        </form>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" style="background-color: aquamarine;">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-          <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item dropdown" style="display: flex;">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;" sec:authorize="isAuthenticated()"> MENU </a>
-                <a sec:authorize="!isAuthenticated()" class="nav-link d-inline" th:href="@{/usuario/login}" style="color: black;">Iniciar sesión</a>
-                <a sec:authorize="!isAuthenticated()" class="nav-link d-inline" th:href="@{/usuario/registro}" style="color: black;">Registrarse</a>
-                <a sec:authorize="isAuthenticated()" th:if="${usuarioNav.carrito == null}" class="nav-link" th:href="@{/carrito}" style="color: black; order: -1;" th:text="'Carrito 🛒 '">Carrito</a>
-                <a sec:authorize="isAuthenticated()" th:if="${usuarioNav.carrito != null && usuarioNav.carrito.productos.size() == 0}" class="nav-link" th:href="@{/carrito}" style="color: black; order: -1;" th:text="'Carrito 🛒 '">Carrito</a>
-                <a sec:authorize="isAuthenticated()" th:if="${usuarioNav.carrito != null && usuarioNav.carrito.productos.size() > 0}" class="nav-link" th:href="@{/carrito}" style="color: black; order: -1;" th:text="' 🛒 ' + ${usuarioNav.carrito.productos.size} + '  '">Carrito</a>
+      <form class="form-inline my-2 my-lg-0" method="get" th:action="@{/buscar}">
+        <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search" name="nombre"
+          autocomplete="off">
+        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Buscar</button>
+      </form>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"
+        style="background-color: aquamarine;">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown" style="display: flex;">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;"
+              sec:authorize="isAuthenticated()"> MENU </a>
+            <a sec:authorize="!isAuthenticated()" class="nav-link d-inline" th:href="@{/usuario/login}"
+              style="color: black;">Iniciar sesión</a>
+            <a sec:authorize="!isAuthenticated()" class="nav-link d-inline" th:href="@{/usuario/registro}"
+              style="color: black;">Registrarse</a>
+            <a sec:authorize="isAuthenticated()" th:if="${usuarioNav.carrito == null}" class="nav-link"
+              th:href="@{/carrito}" style="color: black; order: -1;" th:text="'Carrito 🛒 '">Carrito</a>
+            <a sec:authorize="isAuthenticated()"
+              th:if="${usuarioNav.carrito != null && usuarioNav.carrito.productos.size() == 0}" class="nav-link"
+              th:href="@{/carrito}" style="color: black; order: -1;" th:text="'Carrito 🛒 '">Carrito</a>
+            <a sec:authorize="isAuthenticated()"
+              th:if="${usuarioNav.carrito != null && usuarioNav.carrito.productos.size() > 0}" class="nav-link"
+              th:href="@{/carrito}" style="color: black; order: -1;"
+              th:text="' 🛒 ' + ${usuarioNav.carrito.productos.size} + '  '">Carrito</a>
 
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" sec:authorize="isAuthenticated()">   
-                  <a class="dropdown-item" th:href="@{/pedidos}" style="text-align: center;">Pedidos</a>
-                  <a class="dropdown-item" th:href="@{/usuario/cuenta}" style="text-align: center;">Mi cuenta</a>
-                  <a class="dropdown-item" th:href="@{/usuario/cerrar}" style="text-align: center;">Cerrar sesión</a>
-                  <a sec:authorize="hasRole('ADMIN')" class="dropdown-item" th:href="@{/productos/inventario}" style="background-color: rgb(184, 214, 231); text-align: center;font-weight: bold">Inventario</a>
-                  <a sec:authorize="hasRole('ADMIN')" class="dropdown-item" th:href="@{/admin/usuarios}" style="background-color: rgb(184, 214, 231); text-align: center;font-weight: bold">Usuarios</a>
-                  <a sec:authorize="hasRole('ADMIN')" class="dropdown-item" th:href="@{/admin/compras}" style="background-color: rgb(184, 214, 231); text-align: center;font-weight: bold">Lista de pedidos</a>  
-                </div>
-              </li>
-            </ul>
-          </div>
-      </div>   
-    </nav>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" sec:authorize="isAuthenticated()">
+              <a class="dropdown-item" th:href="@{/pedidos}" style="text-align: center;">Pedidos</a>
+              <a class="dropdown-item" th:href="@{/usuario/cuenta}" style="text-align: center;">Mi cuenta</a>
+              <a class="dropdown-item" th:href="@{/usuario/cerrar}" style="text-align: center;">Cerrar sesión</a>
+              <a sec:authorize="hasRole('ADMIN')" class="dropdown-item" th:href="@{/productos/inventario}"
+                style="background-color: rgb(184, 214, 231); text-align: center;font-weight: bold">Inventario</a>
+              <a sec:authorize="hasRole('ADMIN')" class="dropdown-item" th:href="@{/admin/usuarios}"
+                style="background-color: rgb(184, 214, 231); text-align: center;font-weight: bold">Usuarios</a>
+              <a sec:authorize="hasRole('ADMIN')" class="dropdown-item" th:href="@{/admin/compras}"
+                style="background-color: rgb(184, 214, 231); text-align: center;font-weight: bold">Lista de pedidos</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 </div>
 
 
-  <div th:fragment="footer">
+<div th:fragment="footer">
 
-    <footer class="py-5" style="background-color: rgb(241, 193, 120);">
-      <div class="container">
-        <p class="m-0 text-center text-black">Copyright &copy; Mybopi 2024</p>
-      </div>
-    </footer>
+  <footer class="py-5" style="background-color: rgb(241, 193, 120);">
+    <div class="container">
+      <p class="m-0 text-center text-black">Copyright &copy; Mybopi 2024</p>
+    </div>
+  </footer>
 
-  </div>
+</div>
 
-  <!-- Bootstrap core JavaScript -->
-  <div th:fragment="scripts">
-  
-    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
-    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- Bootstrap core JavaScript -->
+<div th:fragment="scripts">
 
-  </div>
+  <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+  <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+</div>

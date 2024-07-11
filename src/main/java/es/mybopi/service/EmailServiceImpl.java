@@ -19,10 +19,9 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
-
     @Override
     public void sendMail(EmailDTO email) throws MessagingException {
-        try{
+        try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 

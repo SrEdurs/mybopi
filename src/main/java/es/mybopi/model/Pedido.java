@@ -30,7 +30,6 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String numero;
     private Date fecha;
     private double total;

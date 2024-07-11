@@ -9,77 +9,91 @@
   <div th:insert="~{usuarios/template_usuario :: nav}"></div>
 
   <br><br><br>
-    <!-- Page Content -->
-    <div class="container">
-      <!-- Blog Post -->
-      <div class="card mb-4">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-lg-6">
-              
-              <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators" th:unless="${producto.imagen1 == 'default.jpg'} and ${producto.imagen2 == 'default.jpg'}">
-                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="1" th:if="${producto.imagen1 != 'default.jpg'}"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="2" th:if="${producto.imagen2 != 'default.jpg'}"></li>
-                </ol>
-                <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <img class="d-block w-100" th:src="@{/images/{img} (img = ${producto.portada})}" th:classappend="${producto.vendido} ? 'grayscale' : ''" alt="First slide">
-                  </div>
-                  <div class="overlay" th:if="${producto.vendido}">
-                    <img th:src="@{/images/vendido.png}" alt="Vendido" class="vendido-image"/>
-                  </div>
-                  <div class="carousel-item" th:if="${producto.imagen1 != 'default.jpg'}">
-                    <img class="d-block w-100" th:src="@{/images/{img} (img = ${producto.imagen1})}" th:classappend="${producto.vendido} ? 'grayscale' : ''" alt="Second slide">
-                  </div>
-                  <div class="carousel-item" th:if="${producto.imagen2 != 'default.jpg'}">
-                    <img class="d-block w-100" th:src="@{/images/{img} (img = ${producto.imagen2})}" th:classappend="${producto.vendido} ? 'grayscale' : ''" alt="Third slide">
-                  </div>
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" th:unless="${producto.imagen1 == 'default.jpg'} and ${producto.imagen2 == 'default.jpg'}">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" th:unless="${producto.imagen1 == 'default.jpg'} and ${producto.imagen2 == 'default.jpg'}">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </div>
+  <!-- Page Content -->
+  <div class="container">
+    <!-- Blog Post -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-6">
 
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+              <ol class="carousel-indicators"
+                th:unless="${producto.imagen1 == 'default.jpg'} and ${producto.imagen2 == 'default.jpg'}">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"
+                  th:if="${producto.imagen1 != 'default.jpg'}"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"
+                  th:if="${producto.imagen2 != 'default.jpg'}"></li>
+              </ol>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img class="d-block w-100" th:src="@{/images/{img} (img = ${producto.portada})}"
+                    th:classappend="${producto.vendido} ? 'grayscale' : ''" alt="First slide">
+                </div>
+                <div class="overlay" th:if="${producto.vendido}">
+                  <img th:src="@{/images/vendido.png}" alt="Vendido" class="vendido-image" />
+                </div>
+                <div class="carousel-item" th:if="${producto.imagen1 != 'default.jpg'}">
+                  <img class="d-block w-100" th:src="@{/images/{img} (img = ${producto.imagen1})}"
+                    th:classappend="${producto.vendido} ? 'grayscale' : ''" alt="Second slide">
+                </div>
+                <div class="carousel-item" th:if="${producto.imagen2 != 'default.jpg'}">
+                  <img class="d-block w-100" th:src="@{/images/{img} (img = ${producto.imagen2})}"
+                    th:classappend="${producto.vendido} ? 'grayscale' : ''" alt="Third slide">
+                </div>
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev"
+                th:unless="${producto.imagen1 == 'default.jpg'} and ${producto.imagen2 == 'default.jpg'}">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next"
+                th:unless="${producto.imagen1 == 'default.jpg'} and ${producto.imagen2 == 'default.jpg'}">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
               </a>
             </div>
-            <div class="col-lg-6">
-              <form th:action="@{/carrito}" method="POST">
-                <input type="hidden" name="id" th:value="${producto.id}">
-                <ul class="list-group">
-                  <li class="list-group-item" style="border-width: 0px;"><h2 class="card-title" th:text="${producto.nombre}"></h2></li>
-                  <li class="list-group-item" style="border-width: 0px;"><h4 th:text="${producto.precio} + €">Precio: </h4></li>
-                  <li class="list-group-item" style="border-width: 0px;">
-                    <h5>Descripción:</h5>
-                    <p th:text="${producto.descripcion}">Descripción:</p>
-                  </li>
-                  <li th:unless="${producto.vendido}" class="list-group-item" style="border-width: 0px;"><button type="submit" th:if="${!producto.vendido}" class="btn btn-dark">Añadir al carrito</button></li>
-                </ul>
-              </form>
-              <li th:if="${producto.vendido}" class="list-group-item" style="border-width: 0px;"> <button class="btn btn-dark disabled" th:if="${producto.vendido}">Producto vendido</button> </li>
-            </div>
+
+            </a>
+          </div>
+          <div class="col-lg-6">
+            <form th:action="@{/carrito}" method="POST">
+              <input type="hidden" name="id" th:value="${producto.id}">
+              <ul class="list-group">
+                <li class="list-group-item" style="border-width: 0px;">
+                  <h2 class="card-title" th:text="${producto.nombre}"></h2>
+                </li>
+                <li class="list-group-item" style="border-width: 0px;">
+                  <h4 th:text="${producto.precio} + €">Precio: </h4>
+                </li>
+                <li class="list-group-item" style="border-width: 0px;">
+                  <h5>Descripción:</h5>
+                  <p th:text="${producto.descripcion}">Descripción:</p>
+                </li>
+                <li th:unless="${producto.vendido}" class="list-group-item" style="border-width: 0px;"><button
+                    type="submit" th:if="${!producto.vendido}" class="btn btn-dark">Añadir al carrito</button></li>
+              </ul>
+            </form>
+            <li th:if="${producto.vendido}" class="list-group-item" style="border-width: 0px;"> <button
+                class="btn btn-dark disabled" th:if="${producto.vendido}">Producto vendido</button> </li>
           </div>
         </div>
       </div>
-
-
     </div>
-    <br><br><br>
-    <!-- /.container -->
-
-    <!-- Footer -->
-    <div th:insert="~{usuarios/template_usuario :: footer}"></div>
-
-    <!-- Scripts -->
-    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
 
 
-  </body>
+  </div>
+  <br><br><br>
+  <!-- /.container -->
 
-  </html>
+  <!-- Footer -->
+  <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+  <!-- Scripts -->
+  <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+
+</body>
+
+</html>

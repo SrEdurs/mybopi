@@ -3,7 +3,6 @@ package es.mybopi.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import es.mybopi.model.Pedido;
@@ -14,16 +13,18 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
     @Override
     public Pedido save(Pedido pedido) {
         return pedidoRepository.save(pedido);
     }
+
     @Override
     public List<Pedido> findAll() {
         return pedidoRepository.findAll();
     }
 
-    public String generarNumPedido(){
+    public String generarNumPedido() {
         int numero = 0;
         String numconcact = "";
 
@@ -31,39 +32,43 @@ public class PedidoServiceImpl implements PedidoService {
         List<Integer> numeros = new ArrayList<Integer>();
 
         pedidos.stream().forEach(p -> numeros.add(Integer.parseInt(p.getNumero())));
-        if(pedidos.isEmpty()){
+        if (pedidos.isEmpty()) {
             numero = 1;
-        }else{
+        } else {
             numero = numeros.stream().max(Integer::compare).get();
             numero++;
         }
 
-        if(numero<10){
+        if (numero < 10) {
             numconcact = "00000" + String.valueOf(numero);
-        } else if(numero<100){
+        } else if (numero < 100) {
             numconcact = "0000" + String.valueOf(numero);
-        } else if(numero<1000){
+        } else if (numero < 1000) {
             numconcact = "000" + String.valueOf(numero);
-        } else if(numero<10000){
+        } else if (numero < 10000) {
             numconcact = "00" + String.valueOf(numero);
-        } else if(numero<100000){
+        } else if (numero < 100000) {
             numconcact = "0" + String.valueOf(numero);
         }
 
         return numconcact;
     }
+
     @Override
     public List<Pedido> findByUsuario_Id(int id) {
         return pedidoRepository.findByUsuario_Id(id);
     }
+
     @Override
     public Optional<Pedido> findById(int id) {
         return pedidoRepository.findById(id);
     }
+
     @Override
     public List<Pedido> findAllWithOrderByFechaDesc() {
         return pedidoRepository.findAllWithOrderByFechaDesc();
     }
+
     @Override
     public List<Pedido> findByUsuarioIdOrderByFechaDesc(int id) {
         return pedidoRepository.findByUsuarioIdOrderByFechaDesc(id);

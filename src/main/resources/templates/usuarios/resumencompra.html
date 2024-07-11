@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 1050; /* Asegúrate de que está por encima de otros elementos */
+      z-index: 1050;
+      /* Asegúrate de que está por encima de otros elementos */
     }
 
     .loading-background {
@@ -21,11 +23,13 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
-      z-index: 1040; /* Debe estar debajo de .loading-spinner pero por encima del contenido */
+      z-index: 1040;
+      /* Debe estar debajo de .loading-spinner pero por encima del contenido */
       display: none;
     }
   </style>
 </head>
+
 <body>
   <div th:insert="~{usuarios/template_usuario :: header}"></div>
 
@@ -36,7 +40,7 @@
   <div class="container">
     <!-- Page Heading/Breadcrumbs -->
     <h1 class="mt-4 mb-3"><small>Resumen del pedido</small></h1>
-  
+
     <div class="row">
       <!-- Lista de productos -->
       <div class="col-lg-8">
@@ -47,9 +51,11 @@
               <table class="table">
                 <tbody>
                   <tr th:each="carrito : ${pedido.productos}">
-                    <td><img class="img-fluid" th:src="@{images/{img} (img = ${carrito.portada})}" width="100px" height="100px"/></td>
+                    <td><img class="img-fluid" th:src="@{images/{img} (img = ${carrito.portada})}" width="100px"
+                        height="100px" /></td>
                     <td style="text-align: left; font-size: large;" th:text="${carrito.nombre}">Nombre</td>
-                    <td style="text-align: center; font-weight: bold; font-size: large" th:text="${carrito.precio} + '€'">Precio</td>
+                    <td style="text-align: center; font-weight: bold; font-size: large"
+                      th:text="${carrito.precio} + '€'">Precio</td>
                   </tr>
                 </tbody>
               </table>
@@ -59,15 +65,17 @@
               pedido.usuario.localidad == null or pedido.usuario.localidad.trim().length() == 0 or 
               pedido.usuario.telefono == null or pedido.usuario.telefono.trim().length() == 0 or 
               pedido.usuario.email == null or pedido.usuario.email.trim().length() == 0 or 
-              pedido.usuario.CP == null or pedido.usuario.CP.trim().length() == 0}" th:text="'Gastos de envío: ' + '6,95' + '€'">Total: </h6>
+              pedido.usuario.CP == null or pedido.usuario.CP.trim().length() == 0}"
+              th:text="'Gastos de envío: ' + '6,95' + '€'">Total: </h6>
             <h5 th:text="'Total: ' + ${pedido.total} + '€'" style="text-align: right; font-weight: bold"></h5>
           </div>
         </div>
         <label class="form-check-label" for="exampleRadios1">
-          <img th:src="@{/images/admin/CorreosLogo.png}" width="30px" height="30px"/> Envío con Correos. Entrega de 3 a 5 días, con número de seguimiento.
+          <img th:src="@{/images/admin/CorreosLogo.png}" width="30px" height="30px" /> Envío con Correos. Entrega de 3 a
+          5 días, con número de seguimiento.
         </label>
       </div>
-  
+
       <!-- Columna de dirección y resumen -->
       <div class="col-lg-4">
         <!-- Tarjeta de dirección -->
@@ -79,7 +87,8 @@
           pedido.usuario.CP == null or pedido.usuario.CP.trim().length() == 0 
           ? 'width: 19rem; border-color: red;' : 'width: 19rem' }">
 
-          <div class="card-body" th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
+          <div class="card-body"
+            th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
             <h5 class="card-title">Dirección</h5>
             <br>
             <h6 class="card-subtitle mb-2" th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellidos}"></h6>
@@ -96,16 +105,18 @@
             <!-- Botón de editar -->
             <a th:href="@{/usuario/cuenta/editar}"><button type="button" class="btn btn-dark">Editar</button></a>
           </div>
-          
-          <div class="card-body" th:if="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null}">
+
+          <div class="card-body"
+            th:if="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null}">
             <h5 class="card-title">Dirección</h5>
             <br>
             <h6 class="card-subtitle mb-2">Sin dirección</h6>
             <br>
             <!-- Botón de editar -->
-            <a th:href="@{/usuario/cuenta/editar}"><button type="button" class="btn btn-dark">Agregar dirección</button></a>
+            <a th:href="@{/usuario/cuenta/editar}"><button type="button" class="btn btn-dark">Agregar
+                dirección</button></a>
           </div>
-          
+
         </div>
 
         <!-- Resumen -->
@@ -124,8 +135,12 @@
                   <!-- A Stripe Element will be inserted here. -->
                 </div>
               </div>
-              <button type="button" data-toggle="modal" data-target="#exampleModal" th:if="${pedido.usuario.direccion == null || pedido.usuario.direccion == '' || pedido.usuario.nombre == null || pedido.usuario.nombre == '' || pedido.usuario.localidad == null || pedido.usuario.localidad == '' || pedido.usuario.telefono == null || pedido.usuario.telefono == '' || pedido.usuario.email == null || pedido.usuario.email == '' || pedido.usuario.CP == null || pedido.usuario.CP == ''}"  class="btn btn-dark">Pagar</button>
-              <button th:unless="${pedido.usuario.direccion == null || pedido.usuario.direccion == '' || pedido.usuario.nombre == null || pedido.usuario.nombre == '' || pedido.usuario.localidad == null || pedido.usuario.localidad == '' || pedido.usuario.telefono == null || pedido.usuario.telefono == '' || pedido.usuario.email == null || pedido.usuario.email == '' || pedido.usuario.CP == null || pedido.usuario.CP == ''}" type="submit" class="btn btn-dark">Pagar</button>
+              <button type="button" data-toggle="modal" data-target="#exampleModal"
+                th:if="${pedido.usuario.direccion == null || pedido.usuario.direccion == '' || pedido.usuario.nombre == null || pedido.usuario.nombre == '' || pedido.usuario.localidad == null || pedido.usuario.localidad == '' || pedido.usuario.telefono == null || pedido.usuario.telefono == '' || pedido.usuario.email == null || pedido.usuario.email == '' || pedido.usuario.CP == null || pedido.usuario.CP == ''}"
+                class="btn btn-dark">Pagar</button>
+              <button
+                th:unless="${pedido.usuario.direccion == null || pedido.usuario.direccion == '' || pedido.usuario.nombre == null || pedido.usuario.nombre == '' || pedido.usuario.localidad == null || pedido.usuario.localidad == '' || pedido.usuario.telefono == null || pedido.usuario.telefono == '' || pedido.usuario.email == null || pedido.usuario.email == '' || pedido.usuario.CP == null || pedido.usuario.CP == ''}"
+                type="submit" class="btn btn-dark">Pagar</button>
               <div id="error-message" role="alert"></div>
             </form>
           </div>
@@ -162,6 +177,12 @@
     </div>
   </div>
 
+  <!-- Footer -->
+  <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+  <!-- Scripts -->
+  <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
   <!-- Incluye los scripts de Bootstrap y Stripe -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -180,46 +201,47 @@
 
     // Maneja el envío del formulario
     var form = document.getElementById('payment-form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
 
-        // Muestra la rueda de carga y el fondo oscurecido
-        document.getElementById('loading').style.display = 'block';
-        document.getElementById('loading-background').style.display = 'block';
+      // Muestra la rueda de carga y el fondo oscurecido
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('loading-background').style.display = 'block';
 
-        // Oculta el botón de submit para evitar múltiples envíos
-        form.querySelector('button[type="submit"]').style.display = 'none';
+      // Oculta el botón de submit para evitar múltiples envíos
+      form.querySelector('button[type="submit"]').style.display = 'none';
 
-        stripe.createToken(card).then(function(result) {
-            if (result.error) {
-                // Informa al usuario si hubo un error
-                var errorElement = document.getElementById('error-message');
-                errorElement.textContent = result.error.message;
+      stripe.createToken(card).then(function (result) {
+        if (result.error) {
+          // Informa al usuario si hubo un error
+          var errorElement = document.getElementById('error-message');
+          errorElement.textContent = result.error.message;
 
-                // Oculta la rueda de carga y muestra el botón de submit de nuevo
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('loading-background').style.display = 'none';
-                form.querySelector('button[type="submit"]').style.display = 'block';
-            } else {
-                // Envía el token al servidor
-                stripeTokenHandler(result.token);
-            }
-        });
+          // Oculta la rueda de carga y muestra el botón de submit de nuevo
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('loading-background').style.display = 'none';
+          form.querySelector('button[type="submit"]').style.display = 'block';
+        } else {
+          // Envía el token al servidor
+          stripeTokenHandler(result.token);
+        }
+      });
     });
 
     // Envía el token al servidor
     function stripeTokenHandler(token) {
-        // Inserta el ID del token en el formulario para que se envíe al servidor
-        var form = document.getElementById('payment-form');
-        var hiddenInput = document.createElement('input');
-        hiddenInput.setAttribute('type', 'hidden');
-        hiddenInput.setAttribute('name', 'stripeToken');
-        hiddenInput.setAttribute('value', token.id);
-        form.appendChild(hiddenInput);
+      // Inserta el ID del token en el formulario para que se envíe al servidor
+      var form = document.getElementById('payment-form');
+      var hiddenInput = document.createElement('input');
+      hiddenInput.setAttribute('type', 'hidden');
+      hiddenInput.setAttribute('name', 'stripeToken');
+      hiddenInput.setAttribute('value', token.id);
+      form.appendChild(hiddenInput);
 
-        // Envía el formulario
-        form.submit();
+      // Envía el formulario
+      form.submit();
     }
   </script>
 </body>
+
 </html>

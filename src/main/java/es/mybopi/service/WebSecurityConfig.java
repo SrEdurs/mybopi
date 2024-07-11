@@ -1,7 +1,6 @@
 package es.mybopi.service;
 
 import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,9 +30,8 @@ public class WebSecurityConfig {
 
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {
-    return (web) -> web.ignoring().requestMatchers("/vendor/**", "/css/**");
+        return (web) -> web.ignoring().requestMatchers("/vendor/**", "/css/**");
     }
-
 
     @Bean
     UserDetailsService userDetailsService() {
@@ -45,7 +43,7 @@ public class WebSecurityConfig {
         return new SimpleUrlAuthenticationSuccessHandler() {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                                Authentication authentication) throws IOException, ServletException {
+                    Authentication authentication) throws IOException, ServletException {
                 HttpSession session = request.getSession();
                 if (session.getAttribute("mensaje") == null) {
                     session.setAttribute("mensaje", "Has iniciado sesión");
@@ -62,24 +60,24 @@ public class WebSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         request -> request
-                                .requestMatchers("/","/usuario/login","/usuario/registro","/usuario/save",
-                                "/usuario/cerrar","/images/**", "/producto/**","/totebags/**","/mochilas/**","/buscar/**",
-                                "/send-email","/usuario/recordar","/usuario/recordar/**","/usuario/cambiapassword",
-                                "/usuario/cambiapassword/**").permitAll()
+                                .requestMatchers("/", "/usuario/login", "/usuario/registro", "/usuario/save",
+                                        "/usuario/cerrar", "/images/**", "/producto/**", "/totebags/**", "/mochilas/**",
+                                        "/buscar/**",
+                                        "/send-email", "/usuario/recordar", "/usuario/recordar/**",
+                                        "/usuario/cambiapassword",
+                                        "/usuario/cambiapassword/**")
+                                .permitAll()
                                 .requestMatchers("/productos/**", "/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/pedidos/**").hasRole("USER")
-                                .anyRequest().authenticated()
-                )
+                                .anyRequest().authenticated())
                 .formLogin(
                         formLogin -> formLogin
                                 .loginPage("/usuario/login")
                                 .successHandler(myAuthenticationSuccessHandler())
-                                .failureUrl("/usuario/login?error=true")
-                )
+                                .failureUrl("/usuario/login?error=true"))
                 .logout(logout -> logout
-                                .logoutUrl("/usuario/cerrar")
-                                .logoutSuccessUrl("/usuario/login?logout=true")
-                )
+                        .logoutUrl("/usuario/cerrar")
+                        .logoutSuccessUrl("/usuario/login?logout=true"))
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }

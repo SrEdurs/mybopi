@@ -5,52 +5,54 @@
 
 <body>
 
-<!-- Navigation -->
-<div th:insert="~{usuarios/template_usuario :: nav}"></div>
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
 
-<!-- Page Content -->
-<div class="container">
-  <br><br>
-  <h2>Usuarios</h2>
-  <table class="table" style="text-align: center;">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellidos</th>
-        <th scope="col">Email</th>
-        <th scope="col">Tlfn</th>
-        <th scope="col">Activo</th>
-        <th scope="col" colspan="2">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="usuario : ${usuarios}">
-        <td th:text="${usuario.id}" style="font-weight: bold;">ID</td>
-        <td th:text="${usuario.nombre} ?: 'Sin asignar'">Nombre</td>
-        <td th:text="${usuario.apellidos} ?: 'Sin asignar'">Apellidos</td>
-        <td th:text="${usuario.email} ?: 'Sin asignar'">Email</td>
-        <td th:text="${usuario.telefono} ?: 'Sin asignar'">Tlfn</td>
-        <td>
-          <img th:if="${usuario.activo} == 1" th:src="@{/images/admin/Verde.png}" width="30px" height="30px"/>
-          <img th:if="${usuario.activo} == 0" th:src="@{/images/admin/Rojo.png}" width="30px" height="30px"/>
-        </td>
-        <td><a class="btn btn-dark" th:href="@{/usuario/perfil/{id}(id=${usuario.id})}">Ver perfil</a></td>
-        <td th:if="${usuario.activo} == 1"><a class="btn btn-danger" th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Desactivar</a></td>
-        <td th:if="${usuario.activo} == 0"><a class="btn btn-warning" th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Activar</a></td>
-      </tr>       
-    </tbody>
-  </table>
-  <br><br><br>
+  <!-- Page Content -->
+  <div class="container">
+    <br><br>
+    <h2>Usuarios</h2>
+    <table class="table" style="text-align: center;">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col">Email</th>
+          <th scope="col">Tlfn</th>
+          <th scope="col">Activo</th>
+          <th scope="col" colspan="2">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="usuario : ${usuarios}">
+          <td th:text="${usuario.id}" style="font-weight: bold;">ID</td>
+          <td th:text="${usuario.nombre} ?: 'Sin asignar'">Nombre</td>
+          <td th:text="${usuario.apellidos} ?: 'Sin asignar'">Apellidos</td>
+          <td th:text="${usuario.email} ?: 'Sin asignar'">Email</td>
+          <td th:text="${usuario.telefono} ?: 'Sin asignar'">Tlfn</td>
+          <td>
+            <img th:if="${usuario.activo} == 1" th:src="@{/images/admin/Verde.png}" width="30px" height="30px" />
+            <img th:if="${usuario.activo} == 0" th:src="@{/images/admin/Rojo.png}" width="30px" height="30px" />
+          </td>
+          <td><a class="btn btn-dark" th:href="@{/usuario/perfil/{id}(id=${usuario.id})}">Ver perfil</a></td>
+          <td th:if="${usuario.activo} == 1"><a class="btn btn-danger"
+              th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Desactivar</a></td>
+          <td th:if="${usuario.activo} == 0"><a class="btn btn-warning"
+              th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Activar</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <br><br><br>
 
-</div>
-<!-- /.container -->
+  </div>
+  <!-- /.container -->
 
-    <!-- Footer -->
-    <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+  <!-- Footer -->
+  <div th:insert="~{usuarios/template_usuario :: footer}"></div>
 
-    <!-- Scripts -->
-    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+  <!-- Scripts -->
+  <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
 </body>
 
 </html>

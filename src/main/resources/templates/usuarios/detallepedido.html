@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <style>
+
+<head>
+  <style>
     .loading-spinner {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 1050; /* Asegúrate de que está por encima de otros elementos */
+      z-index: 1050;
+      /* Asegúrate de que está por encima de otros elementos */
     }
 
     .loading-background {
@@ -17,7 +19,8 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
-      z-index: 1040; /* Debe estar debajo de .loading-spinner pero por encima del contenido */
+      z-index: 1040;
+      /* Debe estar debajo de .loading-spinner pero por encima del contenido */
       display: none;
     }
   </style>
@@ -29,20 +32,21 @@
 
   <!-- Navigation -->
   <div th:insert="~{usuarios/template_usuario :: nav}"></div>
-    <!-- Page Content -->
-    <div class="container">
-      <br><br>
-      <h2>Detalles del pedido</h2>
+  <!-- Page Content -->
+  <div class="container">
+    <br><br>
+    <h2>Detalles del pedido</h2>
     <div class="row">
-            
-        <!-- Tabla datos del pedido -->
-        <div class="col-lg-8 mb-4">
-          <div class="card" style="border: 0px;">
-            <div class="card-body">
-              <h5 th:if="${pedido.cancelacion == true}" style="color: red;">Se ha solicitado la cancelación del pedido</h5>
-              <table class="table" style="text-align: center;">
-                <form id="estado" th:action="@{/actualizarEstado/{id}(id=${pedido.id})}" method="post">
-                <thead>           
+
+      <!-- Tabla datos del pedido -->
+      <div class="col-lg-8 mb-4">
+        <div class="card" style="border: 0px;">
+          <div class="card-body">
+            <h5 th:if="${pedido.cancelacion == true}" style="color: red;">Se ha solicitado la cancelación del pedido
+            </h5>
+            <table class="table" style="text-align: center;">
+              <form id="estado" th:action="@{/actualizarEstado/{id}(id=${pedido.id})}" method="post">
+                <thead>
                   <tr>
                     <th scope="col">Pedido</th>
                     <th scope="col">Fecha</th>
@@ -52,8 +56,13 @@
                       <button type="submit" class="btn btn-dark">Guardar estado</button>
                     </th>
                     <th scope="col" sec:authorize="hasRole('USER')">
-                      <button th:if="${pedido.cancelacion == false && pedido.estado != 'Cancelado' && pedido.estado != 'Entregado'}" th:value="${pedido.id}"  data-toggle="modal" id="cancelar-pedido" data-target="#exampleModal" class="btn btn-dark cancel-button">Cancelar pedido</button>
-                      <button th:if="${pedido.devolucion == false && pedido.estado == 'Entregado'}" th:value="${pedido.id}"  data-toggle="modal" id="cancelar-pedido" data-target="#exampleModal2" class="btn btn-dark devolver-button">Devolver pedido</button>
+                      <button
+                        th:if="${pedido.cancelacion == false && pedido.estado != 'Cancelado' && pedido.estado != 'Entregado'}"
+                        th:value="${pedido.id}" data-toggle="modal" id="cancelar-pedido" data-target="#exampleModal"
+                        class="btn btn-dark cancel-button">Cancelar pedido</button>
+                      <button th:if="${pedido.devolucion == false && pedido.estado == 'Entregado'}"
+                        th:value="${pedido.id}" data-toggle="modal" id="cancelar-pedido" data-target="#exampleModal2"
+                        class="btn btn-dark devolver-button">Devolver pedido</button>
                     </th>
                   </tr>
                 </thead>
@@ -62,100 +71,132 @@
                     <td th:text="${pedido.numero}" style="font-weight: bold;"></td>
                     <td th:text="${#dates.format(pedido.fecha, 'dd-MM-yyyy')}"></td>
                     <td th:text="${pedido.total} + '€'">Total</td>
-                    <td th:if="${pedido.estado == 'En preparación'}" th:text="${pedido.estado}" style="color: rgb(128, 109, 0); font-weight: bold"></td>
-                    <td th:if="${pedido.estado == 'Enviado'}" th:text="${pedido.estado}" style="color: rgb(94, 128, 0); font-weight: bold"></td>
-                    <td th:if="${pedido.estado == 'Entregado'}" th:text="${pedido.estado}" style="color: green; font-weight: bold"></td>
-                    <td th:if="${pedido.estado == 'Cancelado'}" th:text="${pedido.estado}" style="color: red; font-weight: bold"></td>
-                    <td sec:authorize="hasRole('ADMIN')"> 
-                        <select class="form-control" name="estado">
-                          <option disabled selected>Estado</option>
-                          <option value="En preparación">En preparación</option>
-                          <option value="Enviado">Enviado</option>
-                          <option value="Entregado">Entregado</option>
-                          <option value="Cancelado" style="color: red;">Cancelado</option>
-                        </select>
+                    <td th:if="${pedido.estado == 'En preparación'}" th:text="${pedido.estado}"
+                      style="color: rgb(128, 109, 0); font-weight: bold"></td>
+                    <td th:if="${pedido.estado == 'Enviado'}" th:text="${pedido.estado}"
+                      style="color: rgb(94, 128, 0); font-weight: bold"></td>
+                    <td th:if="${pedido.estado == 'Entregado'}" th:text="${pedido.estado}"
+                      style="color: green; font-weight: bold"></td>
+                    <td th:if="${pedido.estado == 'Cancelado'}" th:text="${pedido.estado}"
+                      style="color: red; font-weight: bold"></td>
+                    <td sec:authorize="hasRole('ADMIN')">
+                      <select class="form-control" name="estado">
+                        <option disabled selected>Estado</option>
+                        <option value="En preparación">En preparación</option>
+                        <option value="Enviado">Enviado</option>
+                        <option value="Entregado">Entregado</option>
+                        <option value="Cancelado" style="color: red;">Cancelado</option>
+                      </select>
                     </td>
                   </tr>
                 </tbody>
               </form>
+            </table>
+          </div>
+        </div>
+        <!-- Fin tabla datos del pedido -->
+
+        <!-- Tabla de productos -->
+        <div class="card mb-4" style="border-width: 0px;">
+          <div class="card-body">
+            <h5 class="card-title">Resumen del pedido</h5>
+            <div class="alert alert-light" role="alert">
+              <table class="table">
+                <tbody>
+                  <tr th:each="producto : ${pedido.productos}">
+                    <td><img class="img-fluid" th:src="@{'/images/' + ${producto.portada}}" width="100px"
+                        height="100px" /></td>
+                    <!-- Añade text-align: center; al estilo de las celdas para centrar el texto -->
+                    <td style="text-align: left;" th:text="${producto.nombre}">Nombre</td>
+                    <td style="text-align: center; font-weight: bold;" th:text="${producto.precio} + '€'">Precio</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
+            <h6 style="text-align: right" th:text="'Gastos de envío: ' + '6,95' + '€'">Total: </h6>
+            <h5 th:text="'Total: ' + ${pedido.total} + '€'" style="text-align: right; font-weight: bold"></h5>
           </div>
-           <!-- Fin tabla datos del pedido -->
+        </div>
+      </div>
+      <!-- Fin tabla de productos -->
 
-          <!-- Tabla de productos -->
-          <div class="card mb-4" style="border-width: 0px;">
-            <div class="card-body">
-              <h5 class="card-title">Resumen del pedido</h5>
-              <div class="alert alert-light" role="alert">
-                <table class="table">
-                  <tbody>
-                    <tr th:each="producto : ${pedido.productos}">
-                      <td><img class="img-fluid"  th:src="@{'/images/' + ${producto.portada}}" width="100px" height="100px"/></td>
-                      <!-- Añade text-align: center; al estilo de las celdas para centrar el texto -->
-                      <td style="text-align: left;" th:text="${producto.nombre}">Nombre</td>
-                      <td style="text-align: center; font-weight: bold;" th:text="${producto.precio} + '€'">Precio</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <h6 style="text-align: right" th:text="'Gastos de envío: ' + '6,95' + '€'">Total: </h6>
-              <h5 th:text="'Total: ' + ${pedido.total} + '€'" style="text-align: right; font-weight: bold"></h5>
+
+      <!-- Card datos de la dirección -->
+      <div class="col-lg-4 mb-4">
+        <div class="card"
+          th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'border-color: red;' : ''">
+          <div class="card-body"
+            th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
+            <h5 class="card-title">Dirección de envío</h5>
+            <h6 class="card-subtitle mb-2" th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellidos}"></h6>
+            <br>
+            <p class="card-text" th:text="${pedido.usuario.direccion}"></p>
+            <p class="card-text" th:text="${pedido.usuario.localidad}"></p>
+            <p class="card-text" th:text="'CP: ' + ${pedido.usuario.CP}"></p>
+            <p class="card-text" th:text="'Tlf: ' + ${pedido.usuario.telefono}"></p>
+            <p class="card-text" th:text="${pedido.usuario.email}"></p>
+          </div>
+        </div>
+        <!-- Fin card datos de la dirección -->
+
+        <br>
+
+        <!-- Seguimiento -->
+        <div class="card"
+          th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'border-color: red;' : ''">
+          <div class="card-body"
+            th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
+            <h5 class="card-title">Seguimiento</h5>
+            <p th:if="${pedido.seguimiento == 'Pendiente de envío'}" class="card-text" th:text="${pedido.seguimiento}"
+              style="font-weight: bold; color: blue"></p>
+            <a th:if="${pedido.seguimiento != 'Pendiente de envío'}" th:href="${pedido.seguimiento}">
+              <p style="color: rgb(0, 81, 255)" class="card-text" th:text="${pedido.seguimiento}"></p>
+            </a>
+            <br>
+            <div class="form-group" sec:authorize="hasRole('ADMIN')">
+              <form id="seguimiento" th:action="@{/actualizarSeguimiento/{id}(id=${pedido.id})}" method="post">
+                <label for="seguimiento">Enlace de seguimiento</label>
+                <input type="text" class="form-control" id="seguimiento" name="seguimiento"
+                  placeholder="Pon aquí el enlace de correos">
+                <br>
+                <button type="submit" class="btn btn-dark">Guardar</button>
+              </form>
             </div>
           </div>
         </div>
-        <!-- Fin tabla de productos -->
-       
+        <!-- Fin seguimiento -->
 
-        <!-- Card datos de la dirección -->
-        <div class="col-lg-4 mb-4">
-          <div class="card" th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'border-color: red;' : ''">
-            <div class="card-body" th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
-              <h5 class="card-title">Dirección de envío</h5>
-              <h6 class="card-subtitle mb-2" th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellidos}"></h6>
-              <br>
-              <p class="card-text" th:text="${pedido.usuario.direccion}"></p>
-              <p class="card-text" th:text="${pedido.usuario.localidad}"></p>
-              <p class="card-text" th:text="'CP: ' + ${pedido.usuario.CP}"></p>
-              <p class="card-text" th:text="'Tlf: ' + ${pedido.usuario.telefono}"></p>
-              <p class="card-text" th:text="${pedido.usuario.email}"></p>
-            </div>
-          </div>
-          <!-- Fin card datos de la dirección -->
-
-          <br>
-
-          <!-- Seguimiento -->
-          <div class="card" th:style="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null} ? 'border-color: red;' : ''">
-            <div class="card-body" th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
-              <h5 class="card-title">Seguimiento</h5>
-              <p th:if="${pedido.seguimiento == 'Pendiente de envío'}" class="card-text" th:text="${pedido.seguimiento}" style="font-weight: bold; color: blue"></p>
-              <a th:if="${pedido.seguimiento != 'Pendiente de envío'}" th:href="${pedido.seguimiento}">
-                <p style="color: rgb(0, 81, 255)" class="card-text" th:text="${pedido.seguimiento}"></p>
-              </a>
-              <br>
-              <div class="form-group" sec:authorize="hasRole('ADMIN')">
-                <form id="seguimiento" th:action="@{/actualizarSeguimiento/{id}(id=${pedido.id})}" method="post">
-                  <label for="seguimiento">Enlace de seguimiento</label>
-                  <input  type="text" class="form-control" id="seguimiento" name="seguimiento" placeholder="Pon aquí el enlace de correos">
-                  <br>
-                  <button type="submit" class="btn btn-dark">Guardar</button>
-                </form>
-              </div>
-            </div>
-          </div>
-          <!-- Fin seguimiento -->
-
-        </div>
+      </div>
 
     </div>
-      
+
   </div>
 
   <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div th:if="${pedido.estado != 'Enviado'}" class="modal-dialog modal-dialog-centered">
-    <form action="#" id="cancelar" >
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div th:if="${pedido.estado != 'Enviado'}" class="modal-dialog modal-dialog-centered">
+      <form action="#" id="cancelar">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Cancelar pedido</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5>¿Quieres solicitar la cancelación del pedido?</h5>
+            <h5></h5>
+          </div>
+          <div class="modal-footer">
+            <a id="cancelbutton" href="#">
+              <button type="button" class="btn btn-danger">SI</button>
+            </a>
+            <button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div th:if="${pedido.estado == 'Enviado'}" class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Cancelar pedido</h4>
@@ -164,154 +205,136 @@
           </button>
         </div>
         <div class="modal-body">
-          <h5>¿Quieres solicitar la cancelación del pedido?</h5>
+          <h5>El pedido ya se ha enviado y no puede ser cancelado pero cuando lo recibas puedes realizar la devolución.
+          </h5>
           <h5></h5>
         </div>
         <div class="modal-footer">
-          <a id="cancelbutton" href="#">
-            <button type="button" class="btn btn-danger">SI</button>
-          </a>
-          <button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Vale</button>
         </div>
-      </div>
-    </form>
-  </div>
-  <div th:if="${pedido.estado == 'Enviado'}" class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Cancelar pedido</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h5>El pedido ya se ha enviado y no puede ser cancelado pero cuando lo recibas puedes realizar la devolución.</h5>
-        <h5></h5>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Vale</button>
       </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div th:if="${pedido.estado != 'Enviado' && hanPasado30Dias == false}" class="modal-dialog modal-dialog-centered">
-    <form action="#" id="cancelar" >
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Devolver pedido</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+  <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div th:if="${pedido.estado != 'Enviado' && hanPasado30Dias == false}" class="modal-dialog modal-dialog-centered">
+      <form action="#" id="cancelar">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Devolver pedido</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5>¿Quieres devolver el pedido?</h5>
+            <h5 style="font-weight: lighter;">Te recordamos que para tramitar la devolución deberás cargar con los
+              gastos de envío. Una vez recibamos el producto y lo revisemos, procederemos a realizar la devolución del
+              importe, recibirás una confirmación en tu email.</h5>
+          </div>
+          <div class="modal-footer">
+            <a id="devolverbutton" href="#">
+              <button type="button" class="btn btn-danger">SI</button>
+            </a>
+            <button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
+          </div>
         </div>
-        <div class="modal-body">
-          <h5>¿Quieres devolver el pedido?</h5>
-          <h5 style="font-weight: lighter;">Te recordamos que para tramitar la devolución deberás cargar con los gastos de envío. Una vez recibamos el producto y lo revisemos, procederemos a realizar la devolución del importe, recibirás una confirmación en tu email.</h5>
+      </form>
+    </div>
+
+    <div th:if="${hanPasado30Dias == true}" class="modal-dialog modal-dialog-centered">
+      <form action="#" id="cancelar">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Devolver pedido</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5>¿Quieres devolver el pedido?</h5>
+            <h5 style="font-weight: lighter;">Han pasado 30 días desde que realizaste la compra del producto y ya no
+              puedes tramitar la devolución.</h5>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark" data-dismiss="modal">Vale</button>
+          </div>
         </div>
-        <div class="modal-footer">
-          <a id="devolverbutton" href="#">
-            <button type="button" class="btn btn-danger">SI</button>
-          </a>
-          <button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 
-  <div th:if="${hanPasado30Dias == true}" class="modal-dialog modal-dialog-centered">
-    <form action="#" id="cancelar" >
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Devolver pedido</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <h5>¿Quieres devolver el pedido?</h5>
-                <h5 style="font-weight: lighter;">Han pasado 30 días desde que realizaste la compra del producto y ya no puedes tramitar la devolución.</h5>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-dark" data-dismiss="modal">Vale</button>
-            </div>
-        </div>
-    </form>
-</div>
-</div>
-  
 
- <!-- Fondo oscurecido -->
- <div id="loading-background" class="loading-background"></div>
+  <!-- Fondo oscurecido -->
+  <div id="loading-background" class="loading-background"></div>
 
- <!-- Contenedor de la rueda de carga centrada -->
- <div id="loading" class="loading-spinner" style="display:none;">
-   <div class="spinner-border text-warning" role="status">
-     <span class="sr-only">Cargando...</span>
-   </div>
- </div>
-   <!-- Footer -->
-   <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+  <!-- Contenedor de la rueda de carga centrada -->
+  <div id="loading" class="loading-spinner" style="display:none;">
+    <div class="spinner-border text-warning" role="status">
+      <span class="sr-only">Cargando...</span>
+    </div>
+  </div>
+  <!-- Footer -->
+  <div th:insert="~{usuarios/template_usuario :: footer}"></div>
 
-   <!-- Scripts -->
-   <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+  <!-- Scripts -->
+  <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
 
-   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 
-   <!-- Script para mostrar la rueda de carga -->
-   <script>
+  <!-- Script para mostrar la rueda de carga -->
+  <script>
     function showLoading() {
-        // Muestra el fondo oscurecido y la rueda de carga
-        document.getElementById('loading-background').style.display = 'block';
-        document.getElementById('loading').style.display = 'block';
+      // Muestra el fondo oscurecido y la rueda de carga
+      document.getElementById('loading-background').style.display = 'block';
+      document.getElementById('loading').style.display = 'block';
     }
 
     function hideSubmitButton(form) {
-        // Oculta el botón de submit para evitar múltiples envíos
-        form.querySelector('button[type="submit"]').style.display = 'none';
+      // Oculta el botón de submit para evitar múltiples envíos
+      form.querySelector('button[type="submit"]').style.display = 'none';
     }
 
     // Añade el evento de submit a ambos formularios
-    document.getElementById('estado').addEventListener('submit', function(event) {
-        showLoading();
-        hideSubmitButton(this);
+    document.getElementById('estado').addEventListener('submit', function (event) {
+      showLoading();
+      hideSubmitButton(this);
     });
 
-    document.getElementById('seguimiento').addEventListener('submit', function(event) {
-        showLoading();
-        hideSubmitButton(this);
+    document.getElementById('seguimiento').addEventListener('submit', function (event) {
+      showLoading();
+      hideSubmitButton(this);
     });
 
-    document.getElementById('cancelar').addEventListener('submit', function(event) {
-        showLoading();
-        hideSubmitButton(this);
+    document.getElementById('cancelar').addEventListener('submit', function (event) {
+      showLoading();
+      hideSubmitButton(this);
     });
-</script>
+  </script>
 
-<script>
-  document.getElementById('cancelar-pedido').addEventListener('click', function(event) {
+  <script>
+    document.getElementById('cancelar-pedido').addEventListener('click', function (event) {
       // Previene el comportamiento por defecto del botón
       event.preventDefault();
-  });
-</script>
+    });
+  </script>
 
-<script type="text/javascript">  document.querySelectorAll('.cancel-button').forEach(button => {
-  button.addEventListener('click', function() {
-    var id = this.getAttribute('value');
-    document.getElementById('cancelbutton').setAttribute('href', '/cancelar/' + id);
-  });
-});
-</script>
+  <script type="text/javascript">  document.querySelectorAll('.cancel-button').forEach(button => {
+      button.addEventListener('click', function () {
+        var id = this.getAttribute('value');
+        document.getElementById('cancelbutton').setAttribute('href', '/cancelar/' + id);
+      });
+    });
+  </script>
 
-<script type="text/javascript">  document.querySelectorAll('.devolver-button').forEach(button => {
-  button.addEventListener('click', function() {
-    var id = this.getAttribute('value');
-    document.getElementById('devolverbutton').setAttribute('href', '/devolver/' + id);
-  });
-});
-</script>
+  <script type="text/javascript">  document.querySelectorAll('.devolver-button').forEach(button => {
+      button.addEventListener('click', function () {
+        var id = this.getAttribute('value');
+        document.getElementById('devolverbutton').setAttribute('href', '/devolver/' + id);
+      });
+    });
+  </script>
 </body>
 
 </html>
-
