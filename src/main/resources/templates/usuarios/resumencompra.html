@@ -74,6 +74,9 @@
           <img th:src="@{/images/admin/CorreosLogo.png}" width="30px" height="30px" /> Envío con Correos. Entrega de 3 a
           5 días, con número de seguimiento.
         </label>
+        <br><br>
+        <p style="font-size: small">Al continuar con la compra aceptas las condiciones y políticas de Mybopi.</p>
+        <p style="font-size: small">Puedes consultarlas en detalle desde <a th:href="@{/politicas}">AQUÍ</a>.</p>
       </div>
 
       <!-- Columna de dirección y resumen -->
@@ -186,7 +189,6 @@
   <!-- Incluye los scripts de Bootstrap y Stripe -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://js.stripe.com/v3/"></script>
   <script>
     // Inicializa Stripe

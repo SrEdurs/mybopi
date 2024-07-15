@@ -326,6 +326,7 @@ public class HomeController {
             // Actualizar el estado de los productos y limpiar el carrito del usuario
             for (Producto producto : productos) {
                 producto.setVendido(true);
+                producto.setActivo(false);
                 producto.setPedido(pedido);
                 productoService.save(producto);
             }
@@ -557,6 +558,12 @@ public class HomeController {
         emailService.sendMail(email);
 
         return "redirect:/pedidos/" + id;
+    }
+
+    @GetMapping("/politicas")
+    public String politicas(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
+        model.addAttribute("usuarioNav", usuario);
+        return "usuarios/politicas";
     }
 
     // Método para calcular el total de los productos en el carrito

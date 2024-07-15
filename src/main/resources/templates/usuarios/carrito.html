@@ -54,7 +54,7 @@
 
             <ul class="list-group">
               <li class="list-group-item">
-                <h5 th:text="${carrito.total} + '€'"></h5>
+                <h5 style="font-weight: bold" th:text="${carrito.total} + '€'"></h5>
               </li>
               <a th:if="${!#lists.isEmpty(carrito.productos)}" th:href="@{/pedido}" class="btn btn-dark">Continuar</a>
             </ul>
@@ -63,6 +63,10 @@
         </div>
       </div>
 
+    </div>
+
+    <div class="row">
+      <h1 class="mt-4 mb-3" style="margin-left: 15px;"><small>Últimas novedades</small></h1>
     </div>
 
     <div class="row">

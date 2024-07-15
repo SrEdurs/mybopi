@@ -43,7 +43,6 @@
         <div class="card" style="border: 0px;">
           <div class="card-body">
             <table class="table" style="text-align: center;">
-              <form id="estado" th:action="@{/actualizarEstado/{id}(id=${pedido.id})}" method="post">
                 <thead>
                   <tr>
                     <th scope="col" style="border-top: 0px;">Instrucciones</th>
@@ -73,7 +72,6 @@
                       correcto, te haremos el reembolso completo.</td>
                   </tr>
                 </tbody>
-              </form>
             </table>
           </div>
         </div>
@@ -82,7 +80,7 @@
           El comprador es responsable de los gastos de envío de la devolución y de cualquier pérdida de valor
           si el artículo no se devuelve en su estado original.</p>
         <p>Puedes consultar nuestras políticas desde aquí: <a
-            href="https://mybopi.es/politica-de-privacidad/">POLÍTICAS</a></p>
+            th:href="@{/politicas}">POLÍTICAS</a></p>
 
         <!-- Tabla de productos -->
         <div class="card mb-4" style="border-width: 0px;">
