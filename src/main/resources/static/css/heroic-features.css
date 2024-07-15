@@ -113,3 +113,47 @@ table td, table th {
   max-width: 100%;
   height: auto;
 }
+
+body {
+  padding-top: 70px; /* Ajusta este valor según la altura de tu navbar */
+}
+
+.navbar-toggler {
+  border-color: black; /* Cambia el color del borde del botón */
+}
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%280, 0, 0, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  /* Cambia el color de las líneas del icono a negro */
+}
+
+.text-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Espacio entre el nombre y el precio */
+}
+
+.product-name {
+  margin: 0;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  overflow: hidden; /* Oculta el texto que se desborda */
+  text-overflow: ellipsis; /* Añade un "..." al final si el texto es muy largo */
+  flex: 3; /* Permite que el nombre del producto ocupe más espacio que el precio */
+  text-align: center;
+}
+
+.product-price {
+  margin: 0;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  font-weight: bold; /* Resalta el precio */
+  flex: 1; /* Permite que el precio ocupe menos espacio que el nombre del producto */
+}
+
+.vr {
+  border-left: 2px solid #ccc; /* Línea vertical entre el nombre y el precio */
+  height: 1.5rem; /* Altura de la línea vertical */
+}
+
+.mx-3 {
+  margin-left: 0.75rem; /* Espacio entre el nombre y la línea vertical */
+  margin-right: 0.75rem; /* Espacio entre la línea vertical y el precio */
+}
