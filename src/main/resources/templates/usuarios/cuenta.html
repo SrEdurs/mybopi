@@ -170,23 +170,24 @@
 
         <div class="row">
             <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${productosHome}">
-                <div class="card h-100">
-                    <a th:href="@{/producto/{id}(id=${producto.id})}">
-                        <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt=""
-                            th:classappend="${producto.vendido} ? 'grayscale' : ''">
-                        <div class="overlay" th:if="${producto.vendido}">
-                            <img th:src="@{/images/vendido.png}" alt="Vendido" class="vendido-image" />
-                        </div>
-                    </a>
-
-                    <div class="card-body">
-                        <p class="card-text text-center text" style="font-weight: bold" th:text="${producto.nombre}">
-                        </p>
-                    </div>
-
+              <div class="card h-100">
+                <a th:href="@{/producto/{id}(id=${producto.id})}">
+                  <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt=""
+                    th:classappend="${producto.vendido} ? 'grayscale' : ''">
+                  <div class="overlay" th:if="${producto.vendido}">
+                    <img th:src="@{/images/vendido.png}" alt="Vendido" class="vendido-image" />
+                  </div>
+                </a>
+                <div class="card-body">
+                  <div class="d-flex align-items-center text-container">
+                    <p class="product-name" th:text="${producto.nombre}"></p>
+                    <div class="vr mx-3"></div>
+                    <p class="product-price" th:text="${producto.precio} + '€'"></p>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
+          </div>
     </div>
     <!-- /.container -->
 

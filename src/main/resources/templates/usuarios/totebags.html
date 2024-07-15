@@ -17,7 +17,7 @@
     </div>
 
     <div class="row">
-      <h4>Totebags</h4>
+      <h4 style="margin-left: 15px;">Totebags</h4>
     </div>
 
     <div class="row">
@@ -31,7 +31,11 @@
             </div>
           </a>
           <div class="card-body">
-            <p class="card-text text-center" th:text="${producto.nombre}"></p>
+            <div class="d-flex align-items-center text-container">
+              <p class="product-name" th:text="${producto.nombre}"></p>
+              <div class="vr mx-3"></div>
+              <p class="product-price" th:text="${producto.precio} + '€'"></p>
+            </div>
           </div>
         </div>
       </div>
