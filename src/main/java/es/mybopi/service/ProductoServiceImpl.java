@@ -3,6 +3,8 @@ package es.mybopi.service;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import es.mybopi.model.Producto;
 import es.mybopi.repository.ProductoRepository;
@@ -41,5 +43,10 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public List<Producto> findTop4ByActivoOrderByFechaDesc(boolean activo) {
         return productoRepository.findTop4ByActivoOrderByFechaDesc(activo);
+    }
+
+    @Override
+    public Page<Producto> findProductosActivosOrderByFechaDesc(boolean activo, Pageable pageable) {
+        return productoRepository.findByActivoOrderByFechaDesc(activo, pageable);
     }
 }

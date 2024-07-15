@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import es.mybopi.model.Carrito;
 import es.mybopi.model.Producto;
 import es.mybopi.model.Usuario;
-import es.mybopi.repository.ProductoRepository;
 import es.mybopi.service.CarritoService;
 import es.mybopi.service.ProductoService;
 import es.mybopi.service.UploadFileService;
@@ -34,15 +37,40 @@ public class ProductoController {
     @Autowired
     private UsuarioService usuarioService;
     @Autowired
-    private ProductoRepository productoRepository;
-    @Autowired
     private CarritoService carritoService;
 
     @GetMapping("/inventario")
-    public String detalles(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
-        model.addAttribute("inventario", productoRepository.findAllByOrderByFechaDesc());
+    public String detalles(Model model, @ModelAttribute("usuarioNav") Usuario usuario,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "true") Boolean estado) {
+
+        // Validación de parámetros de paginación
+        if (page < 0) {
+            page = 0;
+        }
+        if (size <= 0) {
+            size = 10;
+        }
+
+        Boolean activo = estado;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "fecha"));
+        Page<Producto> inventario = productoService.findProductosActivosOrderByFechaDesc(activo, pageable);
+
+        model.addAttribute("inventario", inventario);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", inventario.getTotalPages());
+        model.addAttribute("totalItems", inventario.getTotalElements());
+        model.addAttribute("pageSize", size);
+        model.addAttribute("estado", activo);
+
+
         return "admin/inventario";
     }
+
+    
+
 
     @GetMapping("/crear")
     public String crearProducto(@ModelAttribute("usuarioNav") Usuario usuario) {
