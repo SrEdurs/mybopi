@@ -57,18 +57,18 @@
               <ul class="pagination">
                 <li class="page-item" th:classappend="${pedidos.hasPrevious()} ? '' : 'disabled'">
                   <a class="page-link" th:if="${pedidos.hasPrevious()}" th:with="prevPage=${currentPage - 1}"
-                    th:href="@{/pedidos(page=${prevPage},size=${pageSize})}" aria-label="Anterior">
+                    th:href="@{/pedidos/usuario/{id}(id=${usuario.id},page=${prevPage},size=${pageSize})}" aria-label="Anterior">
                     <span aria-hidden="true" style="color: black;">«</span>
                   </a>
                 </li>
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                   th:classappend="${currentPage == i} ? 'active'">
                   <a class="page-link" style="color: black;" th:with="pageNumber=${i}"
-                    th:href="@{/pedidos(page=${pageNumber},size=${pageSize})}" th:text="${i + 1}"></a>
+                    th:href="@{/pedidos/usuario/{id}(id=${usuario.id},page=${pageNumber},size=${pageSize})}" th:text="${i + 1}"></a>
                 </li>
                 <li class="page-item" th:classappend="${pedidos.hasNext()} ? '' : 'disabled'">
                   <a class="page-link" th:if="${pedidos.hasNext()}" th:with="nextPage=${currentPage + 1}"
-                    th:href="@{/pedidos(page=${nextPage},size=${pageSize})}" aria-label="Siguiente">
+                    th:href="@{/pedidos/usuario/{id}(id=${usuario.id},page=${nextPage},size=${pageSize})}" aria-label="Siguiente">
                     <span aria-hidden="true" style="color: black;">»</span>
                   </a>
                 </li>

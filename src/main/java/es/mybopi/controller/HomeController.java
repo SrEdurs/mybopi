@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -371,12 +375,29 @@ public class HomeController {
     }
 
     @GetMapping("/pedidos")
-    public String pedidos(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
+    public String pedidos(Model model, @ModelAttribute("usuarioNav") Usuario usuario,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        // Validación de parámetros de paginación
+        if (page < 0) {
+            page = 0;
+        }
+        if (size <= 0) {
+            size = 10;
+        }
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
-        List<Pedido> pedidos = pedidoService.findByUsuarioIdOrderByFechaDesc(user.get().getId());
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "fecha"));
+        Page<Pedido> pedidos = pedidoService.findByUsuarioIdOrderByFechaDesc(user.get().getId(), pageable);
         model.addAttribute("pedidos", pedidos);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", pedidos.getTotalPages());
+        model.addAttribute("totalItems", pedidos.getTotalElements());
+        model.addAttribute("pageSize", size);
         return "usuarios/pedidos";
     }
 
@@ -455,11 +476,29 @@ public class HomeController {
     }
 
     @GetMapping("pedidos/usuario/{id}")
-    public String pedidosUsuario(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
+    public String pedidosUsuario(@PathVariable Integer id, Model model, @ModelAttribute("usuarioNav") Usuario usuario,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        List<Pedido> pedidos = pedidoService.findByUsuarioIdOrderByFechaDesc(id);
+        // Validación de parámetros de paginación
+        if (page < 0) {
+            page = 0;
+        }
+        if (size <= 0) {
+            size = 10;
+        }
+        //Optener usuario por el ID
+        Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "fecha"));
+        Page<Pedido> pedidos = pedidoService.findByUsuarioIdOrderByFechaDesc(id, pageable);
+        model.addAttribute("usuario", user.get());
         model.addAttribute("pedidos", pedidos);
-        return "usuarios/pedidos";
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", pedidos.getTotalPages());
+        model.addAttribute("totalItems", pedidos.getTotalElements());
+        model.addAttribute("pageSize", size);
+        return "usuarios/pedidosUser";
     }
 
     @PostMapping("/actualizarEstado/{id}")

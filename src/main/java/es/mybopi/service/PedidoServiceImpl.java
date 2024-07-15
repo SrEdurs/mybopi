@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import es.mybopi.model.Pedido;
 import es.mybopi.repository.PedidoRepository;
@@ -69,8 +71,14 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoRepository.findAllWithOrderByFechaDesc();
     }
 
+
     @Override
-    public List<Pedido> findByUsuarioIdOrderByFechaDesc(int id) {
-        return pedidoRepository.findByUsuarioIdOrderByFechaDesc(id);
+    public Page<Pedido> findAllWithOrderByFechaDesc(Pageable pageable) {
+        return pedidoRepository.findAllWithOrderByFechaDesc(pageable);
+    }
+
+    @Override
+    public Page<Pedido> findByUsuarioIdOrderByFechaDesc(int id, Pageable pageable) {
+        return pedidoRepository.findByUsuarioIdOrderByFechaDesc(id, pageable);
     }
 }

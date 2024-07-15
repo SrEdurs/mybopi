@@ -65,12 +65,8 @@ public class ProductoController {
         model.addAttribute("pageSize", size);
         model.addAttribute("estado", activo);
 
-
         return "admin/inventario";
     }
-
-    
-
 
     @GetMapping("/crear")
     public String crearProducto(@ModelAttribute("usuarioNav") Usuario usuario) {
