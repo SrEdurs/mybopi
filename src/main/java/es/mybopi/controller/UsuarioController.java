@@ -410,7 +410,7 @@ public class UsuarioController {
             //Mandamos un email al usuario
             emailConfirma.setAsunto("Tu cuenta se ha marcado para el borrado");
             emailConfirma.setDestinatario(usuario.getEmail());
-            emailConfirma.setMensaje("Hola! Tu cuenta se eliminará en 2 días desde tu solicitud. Borraremos todos tus datos de nuestra base de datos. Puedes cancelar el borrado en cualquier momento desde el apartado de editar los datos de tu cuenta.");
+            emailConfirma.setMensaje("Hola! Tu cuenta se eliminará en 2 días desde tu solicitud. Borraremos toda tu información de nuestra base de datos. También puedes cancelar el borrado en cualquier momento desde el apartado de editar los datos de tu cuenta.");
             emailService.sendMail(emailConfirma);
 
             return "redirect:/usuario/cuenta/editar";

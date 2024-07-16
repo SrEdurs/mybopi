@@ -97,13 +97,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void borrarUsuariosMarcados() throws MessagingException {
         List<Usuario> usuarios = usuarioRepository.findAllByBorrandoTrue();
         LocalDateTime now = LocalDateTime.now();
-        System.out.println("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         for (Usuario usuario : usuarios) {
             Duration duration = Duration.between(usuario.getFechaBorrado(), now); 
 
             if (duration.toDays() >= 2) {
 
-                System.out.println("ANTES DEL EMAIL");
                 // Manda un email al usuario
                 EmailDTO email = new EmailDTO();                
                 email.setAsunto("Tu cuenta ha sido eliminada");
@@ -111,20 +109,15 @@ public class UsuarioServiceImpl implements UsuarioService {
                 email.setMensaje("Hola, tu cuenta ha sido eliminada conforme a tu solicitud.");
                 emailService.sendMail(email);
 
-                System.out.println("DESPUES DEL EMAIL");
-
                 // Cierra la sesión del usuario
                 cerrarSesion(usuario);
 
-                System.out.println("BORRANDO EL CARRITO");
                 // Elimina el carrito
                 if (usuario.getCarrito() != null) {
                     usuario.getCarrito().setProductos(null); // Elimina los productos del carrito
                     carritoRepository.delete(usuario.getCarrito()); // Elimina el carrito
                 }
 
-
-                System.out.println("BORRANDO LOS PEDIDOS");
                 // Elimina los pedidos y sus productos
                 for (Pedido pedido : usuario.getPedidos()) {
                     pedido.getProductos().forEach(producto -> producto.setPedido(null));
@@ -133,8 +126,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                     pedidoRepository.delete(pedido); // Elimina el pedido
                 }
                 
-
-                System.out.println("BORRANDO EL USUARIO");
                 // Elimina el usuario
                 usuarioRepository.delete(usuario);
             }
