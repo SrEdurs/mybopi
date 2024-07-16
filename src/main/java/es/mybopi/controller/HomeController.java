@@ -309,7 +309,7 @@ public class HomeController {
             //Actualizar el estado de los productos y limpiar el carrito del usuario
             for (Producto producto : productos) {
                 producto.setVendido(true);
-                producto.setElPedido(pedido);
+                producto.setPedido(pedido);
                 productoService.save(producto);
             }
             usuario.getCarrito().getProductos().clear();

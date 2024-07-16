@@ -13,4 +13,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Optional<Usuario> findByEmail(String email);
     @SuppressWarnings("null")
     List<Usuario> findAll();
+    List<Usuario> findAllByBorrandoTrue();
 }

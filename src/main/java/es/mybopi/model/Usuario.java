@@ -1,6 +1,8 @@
 package es.mybopi.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,11 +40,13 @@ public class Usuario {
     private int activo = 1;
     private String password;
     private String token;
+    private boolean borrando = false;
+    private LocalDateTime fechaBorrado = null;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Producto> productos;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pedido> pedidos;
 
     @OneToOne(mappedBy = "usuario")

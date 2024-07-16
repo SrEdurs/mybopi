@@ -1,6 +1,8 @@
 package es.mybopi.model;
 
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,7 +37,7 @@ public class Carrito {
     @JoinColumn(name = "idUsuario", referencedColumnName = "id")
     private Usuario usuario;
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
     @JoinTable(
         name = "carrito_producto",
         joinColumns = @JoinColumn(name = "carrito_id"),

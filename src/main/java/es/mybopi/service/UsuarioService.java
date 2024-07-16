@@ -13,4 +13,5 @@ public interface UsuarioService {
     List<Usuario> findAll();
     public boolean checkUserExists(String email);
     public Integer saveUser(Usuario usuario);
+    void delete(Usuario usuario);
 }

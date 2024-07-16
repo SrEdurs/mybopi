@@ -1,5 +1,6 @@
 package es.mybopi.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,6 +211,7 @@ public class UsuarioController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         Optional<Usuario> user = usuarioService.findByEmail(name);
+
         if(user.get().getActivo() == 0) {
             return "redirect:/usuario/banned";
         }
@@ -239,6 +241,7 @@ public class UsuarioController {
             model.addAttribute("productosHome", productos);
             model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
+            System.out.println("SEPARADOR-------------------------------------------------------------------------");
             return "usuarios/editarusuario";
         } else {
             return "redirect:/";
@@ -393,6 +396,46 @@ public class UsuarioController {
         } else {
             return "redirect:/";
         }        
+    }
+
+    @GetMapping("/cuenta/borrar/{id}")
+    public String marcarParaBorrado(@PathVariable("id") Integer id, @ModelAttribute EmailDTO emailConfirma) throws MessagingException {
+        Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
+        if (user.isPresent()) {
+            Usuario usuario = user.get();
+            usuario.setBorrando(true);
+            usuario.setFechaBorrado(LocalDateTime.now());
+            usuarioService.save(usuario);
+
+            //Mandamos un email al usuario
+            emailConfirma.setAsunto("Tu cuenta se ha marcado para el borrado");
+            emailConfirma.setDestinatario(usuario.getEmail());
+            emailConfirma.setMensaje("Hola! Tu cuenta se eliminará en 2 días desde tu solicitud. Borraremos todos tus datos de nuestra base de datos. Puedes cancelar el borrado en cualquier momento desde el apartado de editar los datos de tu cuenta.");
+            emailService.sendMail(emailConfirma);
+
+            return "redirect:/usuario/cuenta/editar";
+        }
+        return "redirect:/error";
+    }
+
+    @GetMapping("/cuenta/cancelarborrado/{id}")
+    public String cancelarBorrado(@PathVariable("id") Integer id, @ModelAttribute EmailDTO emailConfirma) throws MessagingException {
+        Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
+        if (user.isPresent()) {
+            Usuario usuario = user.get();
+            usuario.setBorrando(false);
+            usuario.setFechaBorrado(null);
+            usuarioService.save(usuario);
+
+            //Mandamos un email al usuario
+            emailConfirma.setAsunto("Se ha cancelado el borrado de tu cuenta");
+            emailConfirma.setDestinatario(usuario.getEmail());
+            emailConfirma.setMensaje("Hola! Hemos cancelado el borrado de tu cuenta conforme a tu solicitud.");
+            emailService.sendMail(emailConfirma);
+
+            return "redirect:/usuario/cuenta/editar";
+        }
+        return "redirect:/error";
     }
 
     @ModelAttribute("usuarioNav")
