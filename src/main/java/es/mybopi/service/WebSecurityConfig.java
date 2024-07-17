@@ -65,7 +65,7 @@ public class WebSecurityConfig {
                                         "/buscar/**",
                                         "/send-email", "/usuario/recordar", "/usuario/recordar/**",
                                         "/usuario/cambiapassword",
-                                        "/usuario/cambiapassword/**")
+                                        "/usuario/cambiapassword/**", "/politicas")
                                 .permitAll()
                                 .requestMatchers("/productos/**", "/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/pedidos/**").hasRole("USER")

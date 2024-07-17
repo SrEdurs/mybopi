@@ -1,22 +1,24 @@
 package es.mybopi.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UploadFileService {
 
-    private String ruta = "images\\";
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     public String saveImage(MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
+            Path path = Paths.get(uploadDir).resolve(file.getOriginalFilename()).toAbsolutePath();
+            Files.createDirectories(path.getParent()); // Crear directorios si no existen
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(ruta).resolve(file.getOriginalFilename()).toAbsolutePath();
             Files.write(path, bytes);
             return file.getOriginalFilename();
         }
@@ -24,8 +26,7 @@ public class UploadFileService {
     }
 
     public void deleteImage(String name) throws IOException {
-        String ruta = "images\\";
-        File file = new File(ruta + name);
-        file.delete();
+        Path path = Paths.get(uploadDir).resolve(name).toAbsolutePath();
+        Files.deleteIfExists(path);
     }
 }
