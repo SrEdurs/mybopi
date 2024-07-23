@@ -262,7 +262,6 @@ public class UsuarioController {
             model.addAttribute("productosHome", productos);
             model.addAttribute("usuarioSesion", usu.get());
             model.addAttribute("usuario", user.get());
-            System.out.println("SEPARADOR-------------------------------------------------------------------------");
             return "usuarios/editarusuario";
         } else {
             return "redirect:/";
