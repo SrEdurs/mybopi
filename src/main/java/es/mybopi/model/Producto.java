@@ -50,4 +50,5 @@ public class Producto {
 
     @ManyToMany(mappedBy = "productos")
     private List<Carrito> carritos;
+
 }

@@ -40,4 +40,9 @@ public class Carrito {
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
     @JoinTable(name = "carrito_producto", joinColumns = @JoinColumn(name = "carrito_id"), inverseJoinColumns = @JoinColumn(name = "producto_id"))
     private List<Producto> productos;
+
+    // Método para recalcular el total del carrito
+    public void calcularTotal() {
+        total = productos.stream().mapToDouble(Producto::getPrecio).sum();
+    }
 }

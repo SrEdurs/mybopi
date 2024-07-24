@@ -157,6 +157,19 @@ public class ProductoController {
             producto.setImagen2(nombreImagen);
         }
 
+        // Comprobar si el producto está en algún carrito
+        if (p.getCarritos() != null && !p.getCarritos().isEmpty()) {
+            for (Carrito carrito : p.getCarritos()) {
+                carrito.getProductos().forEach(prod -> {
+                    if (prod.getId().equals(producto.getId())) {
+                        prod.setPrecio(producto.getPrecio());
+                    }
+                });
+                carrito.calcularTotal();
+                carritoService.save(carrito); // Usar el método save del servicio
+            }
+        }
+
         producto.setUsuario(p.getUsuario());
         productoService.update(producto);
         return "redirect:/productos/inventario";
