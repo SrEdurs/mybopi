@@ -1,0 +1,37 @@
+
+services:
+  mybopi:
+    build: .
+    mem_limit: 512m
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:mysql://mybopi_data:3306/mybopi?createDatabaseIfNotExist=true&serverTimezone=UTC
+      DB_USERNAME: root
+      DB_PASSWORD: 2020
+      file.upload-dir: /app/images  # Define el directorio donde se guardan las imágenes subidas
+      STRIPE_KEY: ${STRIPE_KEY}
+    restart: always
+    depends_on:
+      mybopi_data:
+        condition: service_healthy
+    volumes:
+      - ./images:/app/images  # Monta la carpeta images del host al contenedor
+
+  mybopi_data:
+    image: mysql:9.0.0 
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 2020
+      MYSQL_PASSWORD: 2020
+      MYSQL_DATABASE: mybopi
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+      
+
+volumes:
+  images:  # Define el volumen para las imágenes, gestionado por Docker
