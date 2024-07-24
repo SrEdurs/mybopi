@@ -1,0 +1,166 @@
+/*!
+ * Start Bootstrap - Heroic Features (https://startbootstrap.com/templates/heroic-features)
+ * Copyright 2013-2020 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-heroic-features/blob/master/LICENSE)
+ */
+body {
+  padding-top: 56px;
+}
+
+.card-img-container {
+  position: relative;
+  overflow: hidden; 
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.vendido-image {
+  width: 250px;
+  height: 210px;
+  margin-bottom: 90px;
+  filter: hue-rotate(30deg);
+  filter: opacity(0.6);
+  max-width: 100%; /* Para asegurarse de que la imagen de "vendido" no se desborde */
+  height: auto; /* Para mantener la proporción de la imagen */
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.grayscale {
+  filter: grayscale(70%);
+}
+
+.center-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+  }
+
+table td, table th {
+    vertical-align: middle !important;
+}
+
+.card .card-img-top {
+    width: 100%; /* Tamaño deseado en píxeles */
+    height: 350px; /* Tamaño deseado en píxeles */
+    max-width: 100%; /* La imagen no puede ser más ancha que el contenedor */
+    max-height: 100%; /* La imagen no puede ser más alta que el contenedor */
+    object-fit: cover; /* Mantener la relación de aspecto y recortar la imagen si es necesario */
+}
+
+
+#payment-form div {
+  margin-bottom: 20px;
+}
+
+#payment-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+#payment-form input[type="text"],
+#card-element {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#payment-form .btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#payment-form .btn:hover {
+  background-color: #333;
+}
+
+#error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+body {
+  padding-top: 70px; /* Ajusta este valor según la altura de tu navbar */
+}
+
+.navbar-toggler {
+  border-color: black; /* Cambia el color del borde del botón */
+}
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%280, 0, 0, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  /* Cambia el color de las líneas del icono a negro */
+}
+
+.text-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Espacio entre el nombre y el precio */
+}
+
+.product-name {
+  margin: 0;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  overflow: hidden; /* Oculta el texto que se desborda */
+  text-overflow: ellipsis; /* Añade un "..." al final si el texto es muy largo */
+  flex: 3; /* Permite que el nombre del producto ocupe más espacio que el precio */
+  text-align: center;
+}
+
+.product-price {
+  margin: 0;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  font-weight: bold; /* Resalta el precio */
+  flex: 1; /* Permite que el precio ocupe menos espacio que el nombre del producto */
+}
+
+.vr {
+  border-left: 2px solid #ccc; /* Línea vertical entre el nombre y el precio */
+  height: 1.5rem; /* Altura de la línea vertical */
+}
+
+.mx-3 {
+  margin-left: 0.75rem; /* Espacio entre el nombre y la línea vertical */
+  margin-right: 0.75rem; /* Espacio entre la línea vertical y el precio */
+}
+
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: rgb(241, 193, 120);
+  border-color: rgb(241, 193, 120);
+}

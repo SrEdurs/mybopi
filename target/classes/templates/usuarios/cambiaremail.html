@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <style>
+        .loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1050;
+            /* Asegúrate de que está por encima de otros elementos */
+        }
+
+        .loading-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            /* Debe estar debajo de .loading-spinner pero por encima del contenido */
+            display: none;
+        }
+    </style>
+</head>
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+    <!-- Navigation -->
+    <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Page Heading -->
+        <h3 class="mt-4 mb-3" style="margin-left: 7px; font-weight:normal">EDITAR DATOS DE USUARIO</h3>
+        <div class="row">
+            <!-- Columna de dirección y resumen -->
+            <div class="col-lg-8">
+                <!-- Tarjeta de dirección -->
+                <div class="card mb-4" style="border: 0px">
+                    <div class="card-body">
+                        <div class="row">
+                            <h5 class="card-title" style="margin-left: 7px;">Email</h5>
+                        </div>
+                        <form id="myForm" method="post">
+                            <div class="row" style="border: 1px solid rgba(148, 148, 148, 0.219); border-bottom: 0px;">
+                                <div class="col">
+                                    <br>
+                                    <p>
+                                        <Strong>Email actual:</Strong>
+                                        <br>
+                                        <span class="form-control" th:text="${usuario.email}"></span>
+                                        <br>
+                                        <Strong>Nuevo email:</Strong>
+                                        <span>
+                                            <input name="email" type="text" class="form-control" id="email"
+                                                placeholder="Introduce un nuevo email" required>
+                                        </span>
+                                        <br>
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="row d-flex justify-content-center"
+                                style="align-items: center; border: 1px solid rgba(148, 148, 148, 0.219); border-top: 0px;">
+                                <button type="submit" class="btn btn-dark"
+                                    style="margin-bottom: 15px; margin-top: 10px;">Guardar cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Opdiones -->
+            <div class="col-lg-4">
+                <div class="card mb-4" style="border: 0px">
+                    <div class="card-body">
+                        <h5 class="card-title" style="text-align: center;">Opciones</h5>
+                        <table class="table" th:if="${usuario.id == usuarioSesion.id}">
+                            <tbody>
+                                <tr>
+                                    <a th:href="@{/usuario/cuenta}" class="list-group-item list-group-item-action"
+                                        style="text-align: center;">Mi cuenta</a>
+                                </tr>
+                                <tr>
+                                    <a th:href="@{/usuario/cuenta/editar}"
+                                        class="list-group-item list-group-item-action"
+                                        style="text-align: center;">Editar datos</a>
+                                </tr>
+                                <tr>
+                                    <a th:href="@{/usuario/password}" class="list-group-item list-group-item-action"
+                                        style="text-align: center;">Cambiar contraseña</a>
+                                </tr>
+                                <tr>
+                                    <a th:href="@{/pedidos}" class="list-group-item list-group-item-action"
+                                        style="text-align: center;">Ver pedidos</a>
+                                </tr>
+                                <tr>
+                                    <a th:href="@{/pedidos}" class="list-group-item list-group-item-action"
+                                        style="text-align: center; color: red;">Eliminar cuenta</a>
+                                </tr>
+                                <br>
+                                <p style="color: rgb(207, 0, 0);" th:if="${error}" class="alert alert-danger"
+                                    th:text="${error}"></p>
+                                <p style="color: rgb(17, 207, 0);" th:if="${mensaje}" class="alert alert-success"
+                                    th:text="${mensaje}"></p>
+                            </tbody>
+                        </table>
+                        <table class="table" sec:authorize="hasRole('ADMIN')" th:if="${usuario.id != usuarioSesion.id}">
+                            <tbody>
+                                <tr>
+                                    <a class="list-group-item list-group-item-action"
+                                        th:href="@{/usuario/perfil/{id}(id=${usuario.id})}"
+                                        style="margin-right: 10px; text-align: center;">Volver al perfil</a>
+                                </tr>
+                                <tr>
+                                    <a th:href="@{/usuario/cuenta/editar}"
+                                        class="list-group-item list-group-item-action"
+                                        style="text-align: center;">Editar datos</a>
+                                </tr>
+                                <tr>
+                                    <a th:href="@{/usuario/password}" class="list-group-item list-group-item-action"
+                                        style="text-align: center;">Cambiar contraseña</a>
+                                </tr>
+                                <tr>
+                                    <a class="list-group-item list-group-item-action"
+                                        th:href="@{/pedidos/usuario/{id}(id=${usuario.id})}"
+                                        style="margin-right: 10px; text-align: center;">Ver pedidos</a>
+                                </tr>
+                                <tr>
+                                    <a style="background-color: rgb(250, 180, 180); font-weight: bold; color: black; text-align: center;"
+                                        th:if="${usuario.activo} == 1" class="list-group-item list-group-item-action"
+                                        th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Desactivar usuario</a>
+                                    <a style="background-color: rgb(169, 245, 166); font-weight: bold; color: black; text-align: center;"
+                                        th:if="${usuario.activo} == 0" class="list-group-item list-group-item-action"
+                                        th:href="@{/usuario/desactivar/{id}(id=${usuario.id})}">Activar usuario</a>
+                                </tr>
+                                <br>
+                                <p style="color: rgb(207, 0, 0);" th:if="${error}" th:text="${error}"
+                                    class="alert alert-danger"></p>
+                                <p style="color: rgb(17, 207, 0);" th:if="${mensaje}" th:text="${mensaje}"
+                                    class="alert alert-success"></p>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <h1 class="mt-4 mb-3" style="margin-left: 15px;"><small>Últimas novedades</small></h1>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${productosHome}">
+              <div class="card h-100">
+                <a th:href="@{/producto/{id}(id=${producto.id})}">
+                  <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt=""
+                    th:classappend="${producto.vendido} ? 'grayscale' : ''">
+                  <div class="overlay" th:if="${producto.vendido}">
+                    <img th:src="@{/images/vendido.png}" alt="Vendido" class="vendido-image" />
+                  </div>
+                </a>
+                <div class="card-body">
+                  <div class="d-flex align-items-center text-container">
+                    <p class="product-name" th:text="${producto.nombre}"></p>
+                    <div class="vr mx-3"></div>
+                    <p class="product-price" th:text="${producto.precio} + '€'"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- /.container -->
+
+    <!-- Fondo oscurecido -->
+    <div id="loading-background" class="loading-background"></div>
+
+    <!-- Contenedor de la rueda de carga centrada -->
+    <div id="loading" class="loading-spinner" style="display:none;">
+        <div class="spinner-border text-warning" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+    <!-- Scripts -->
+    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+
+    <!-- Script para mostrar la rueda de carga -->
+    <script>
+        document.getElementById('myForm').addEventListener('submit', function (event) {
+            // Muestra el fondo oscurecido y la rueda de carga
+            document.getElementById('loading-background').style.display = 'block';
+            document.getElementById('loading').style.display = 'block';
+
+            // Opcional: Oculta el botón de submit para evitar múltiples envíos
+            this.querySelector('button[type="submit"]').style.display = 'none';
+        });
+    </script>
+</body>
+
+</html>

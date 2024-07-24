@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "stripe.api.key",
+    "type": "java.lang.String",
+    "description": "A description for 'stripe.api.key'"
+  },
+  {
+    "name": "stripe.apikey",
+    "type": "java.lang.String",
+    "description": "A description for 'stripe.apikey'"
+  },
+  {
+    "name": "email.username",
+    "type": "java.lang.String",
+    "description": "A description for 'email.username'"
+  },
+  {
+    "name": "email.password",
+    "type": "java.lang.String",
+    "description": "A description for 'email.password'"
+  },
+  {
+    "name": "spring.scheduled.enabled",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.scheduled.enabled'"
+  },
+  {
+    "name": "file.upload-dir",
+    "type": "java.lang.String",
+    "description": "A description for 'file.upload-dir'"
+  }
+]}

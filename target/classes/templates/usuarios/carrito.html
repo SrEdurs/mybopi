@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+  <!-- Page Content -->
+  <div class="container">
+
+
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">
+      <small>Carrito</small>
+    </h1>
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-9">
+            <table class="table">
+
+              <tbody>
+
+                <tr th:if="${carrito != null && !#lists.isEmpty(carrito.productos)}"
+                  th:each="producto : ${carrito.productos}">
+                  <td><img class="img-fluid" th:src="@{images/{img} (img = ${producto.portada})}" width="100px"
+                      height="100px" th:classappend="${producto.vendido} ? 'grayscale' : ''" /></td>
+                  <td th:if="${producto.vendido}" th:text="${producto.nombre}" style="font-size: large; color: black">
+                  </td>
+                  <td th:if="!${producto.vendido}" th:text="${producto.nombre}" style="font-size: large; color: black">
+                  </td>
+                  <td th:if="!${producto.vendido}" th:text="${producto.precio} + '€'"
+                    style="font-size: large; font-weight: bold"></td>
+                  <td th:if="${producto.vendido}" th:text="'[VENDIDO]'"
+                    style="font-size: large; color: red; font-weight: bold"></td>
+                  <td><a th:href="@{/quitar/{id} (id = ${producto.id})}" class="btn btn-danger">Quitar</a></td>
+                </tr>
+                <tr th:if="${carrito == null || #lists.isEmpty(carrito.productos)}">
+                  <td colspan="6">
+                    <h3>Carrito vacío</h3>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+          <div class="col-lg-3">
+            <h2 class="card-title">TOTAL</h2>
+
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h5 style="font-weight: bold" th:text="${carrito.total} + '€'"></h5>
+              </li>
+              <a th:if="${!#lists.isEmpty(carrito.productos)}" th:href="@{/pedido}" class="btn btn-dark">Continuar</a>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <h1 class="mt-4 mb-3" style="margin-left: 15px;"><small>Últimas novedades</small></h1>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-3 col-md-6 mb-4" th:each="producto : ${productosHome}">
+        <div class="card h-100">
+          <a th:href="@{/producto/{id}(id=${producto.id})}">
+            <img class="card-img-top" th:src="@{/images/{img} (img = ${producto.portada})}" alt=""
+              th:classappend="${producto.vendido} ? 'grayscale' : ''">
+            <div class="overlay" th:if="${producto.vendido}">
+              <img th:src="@{/images/vendido.png}" alt="Vendido" class="vendido-image" />
+            </div>
+          </a>
+          <div class="card-body">
+            <div class="d-flex align-items-center text-container">
+              <p class="product-name" th:text="${producto.nombre}"></p>
+              <div class="vr mx-3"></div>
+              <p class="product-price" th:text="${producto.precio} + '€'"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+  <!-- Scripts -->
+  <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+</body>
+
+</html>

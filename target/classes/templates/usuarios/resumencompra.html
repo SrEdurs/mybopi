@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resumen del Pedido</title>
+
+  <style>
+    .loading-spinner {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1050;
+      /* Asegúrate de que está por encima de otros elementos */
+    }
+
+    .loading-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1040;
+      /* Debe estar debajo de .loading-spinner pero por encima del contenido */
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+  <!-- Page Content -->
+  <div class="container">
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3"><small>Resumen del pedido</small></h1>
+
+    <div class="row">
+      <!-- Lista de productos -->
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">PRODUCTOS</h5>
+            <div class="alert alert-light" role="alert">
+              <table class="table">
+                <tbody>
+                  <tr th:each="carrito : ${pedido.productos}">
+                    <td><img class="img-fluid" th:src="@{images/{img} (img = ${carrito.portada})}" width="100px"
+                        height="100px" /></td>
+                    <td style="text-align: left; font-size: large;" th:text="${carrito.nombre}">Nombre</td>
+                    <td style="text-align: center; font-weight: bold; font-size: large"
+                      th:text="${carrito.precio} + '€'">Precio</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h6 style="text-align: right" th:unless="${pedido.usuario.direccion == null or pedido.usuario.direccion.trim().length() == 0 or 
+              pedido.usuario.nombre == null or pedido.usuario.nombre.trim().length() == 0 or 
+              pedido.usuario.localidad == null or pedido.usuario.localidad.trim().length() == 0 or 
+              pedido.usuario.telefono == null or pedido.usuario.telefono.trim().length() == 0 or 
+              pedido.usuario.email == null or pedido.usuario.email.trim().length() == 0 or 
+              pedido.usuario.CP == null or pedido.usuario.CP.trim().length() == 0}"
+              th:text="'Gastos de envío: ' + '6,95' + '€'">Total: </h6>
+            <h5 th:text="'Total: ' + ${pedido.total} + '€'" style="text-align: right; font-weight: bold"></h5>
+          </div>
+        </div>
+        <label class="form-check-label" for="exampleRadios1">
+          <img th:src="@{/images/admin/CorreosLogo.png}" width="30px" height="30px" /> Envío con Correos. Entrega de 3 a
+          5 días, con número de seguimiento.
+        </label>
+        <br><br>
+        <p style="font-size: small">Al continuar con la compra aceptas las condiciones y políticas.</p>
+        <p style="font-size: small">Puedes consultarlas en detalle desde <a th:href="@{/politicas}">AQUÍ</a>.</p>
+      </div>
+
+      <!-- Columna de dirección y resumen -->
+      <div class="col-lg-4">
+        <!-- Tarjeta de dirección -->
+        <div class="card mb-4" th:style="${pedido.usuario.direccion == null or pedido.usuario.direccion.trim().length() == 0 or 
+          pedido.usuario.nombre == null or pedido.usuario.nombre.trim().length() == 0 or 
+          pedido.usuario.localidad == null or pedido.usuario.localidad.trim().length() == 0 or 
+          pedido.usuario.telefono == null or pedido.usuario.telefono.trim().length() == 0 or 
+          pedido.usuario.email == null or pedido.usuario.email.trim().length() == 0 or 
+          pedido.usuario.CP == null or pedido.usuario.CP.trim().length() == 0 
+          ? 'width: 19rem; border-color: red;' : 'width: 19rem' }">
+
+          <div class="card-body"
+            th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
+            <h5 class="card-title">Dirección</h5>
+            <br>
+            <h6 class="card-subtitle mb-2" th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellidos}"></h6>
+            <h7 class="card-text" th:text="${pedido.usuario.direccion}"></h7>
+            <br>
+            <h7 class="card-text" th:text="${pedido.usuario.localidad}"></h7>
+            <br>
+            <h7 class="card-text" th:text="'CP: ' +${pedido.usuario.CP}"></h7>
+            <br>
+            <h7 class="card-text" th:text="'Tlf: ' + ${pedido.usuario.telefono}"></h7>
+            <br>
+            <h7 class="card-text" th:text="${pedido.usuario.email}"></h7>
+            <p></p>
+            <!-- Botón de editar -->
+            <a th:href="@{/usuario/cuenta/editar}"><button type="button" class="btn btn-dark">Editar</button></a>
+          </div>
+
+          <div class="card-body"
+            th:if="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null}">
+            <h5 class="card-title">Dirección</h5>
+            <br>
+            <h6 class="card-subtitle mb-2">Sin dirección</h6>
+            <br>
+            <!-- Botón de editar -->
+            <a th:href="@{/usuario/cuenta/editar}"><button type="button" class="btn btn-dark">Agregar
+                dirección</button></a>
+          </div>
+
+        </div>
+
+        <!-- Resumen -->
+        <div class="card mb-4" style="width: 19rem;">
+          <div class="card-body">
+            <h5 class="card-title">Pago</h5>
+            <form id="payment-form" action="/guardarPedido" method="post">
+              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+              <div>
+                <label for="card-holder-name">Nombre completo</label>
+                <input type="text" id="card-holder-name" name="card-holder-name">
+              </div>
+              <div>
+                <label for="card-element">Tarjeta</label>
+                <div id="card-element">
+                  <!-- A Stripe Element will be inserted here. -->
+                </div>
+              </div>
+              <button type="button" data-toggle="modal" data-target="#exampleModal"
+                th:if="${pedido.usuario.direccion == null || pedido.usuario.direccion == '' || pedido.usuario.nombre == null || pedido.usuario.nombre == '' || pedido.usuario.localidad == null || pedido.usuario.localidad == '' || pedido.usuario.telefono == null || pedido.usuario.telefono == '' || pedido.usuario.email == null || pedido.usuario.email == '' || pedido.usuario.CP == null || pedido.usuario.CP == ''}"
+                class="btn btn-dark">Pagar</button>
+              <button
+                th:unless="${pedido.usuario.direccion == null || pedido.usuario.direccion == '' || pedido.usuario.nombre == null || pedido.usuario.nombre == '' || pedido.usuario.localidad == null || pedido.usuario.localidad == '' || pedido.usuario.telefono == null || pedido.usuario.telefono == '' || pedido.usuario.email == null || pedido.usuario.email == '' || pedido.usuario.CP == null || pedido.usuario.CP == ''}"
+                type="submit" class="btn btn-dark">Pagar</button>
+              <div id="error-message" role="alert"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fondo oscurecido -->
+  <div id="loading-background" class="loading-background"></div>
+
+  <!-- Contenedor de la rueda de carga centrada -->
+  <div id="loading" class="loading-spinner" style="display:none;">
+    <div class="spinner-border text-warning" role="status">
+      <span class="sr-only">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 5);"><b>Aviso</b></h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h5>Debes rellenar todos los datos de envío antes de completar el pedido</h5>
+        </div>
+        <div class="modal-footer">
+          <a th:href="@{/usuario/cuenta/editar}"><button type="button" class="btn btn-dark">Aceptar</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+  <!-- Scripts -->
+  <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+  <!-- Incluye los scripts de Bootstrap y Stripe -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    // Inicializa Stripe
+    var stripe = Stripe('pk_live_51PJXqG2M93Fl6PVfoU7SEzyxBxtxGoUIjwa7bPtt3wyXpwPUezwmqxN247AcwqBzniszt0zabbce0m9F2p4OWu1P00p0U6QOdT');
+    var elements = stripe.elements();
+
+    // Crea una instancia del elemento de tarjeta
+    var card = elements.create('card');
+
+    // Añade una instancia del elemento de tarjeta al div `card-element`
+    card.mount('#card-element');
+
+    // Maneja el envío del formulario
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      // Muestra la rueda de carga y el fondo oscurecido
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('loading-background').style.display = 'block';
+
+      // Oculta el botón de submit para evitar múltiples envíos
+      form.querySelector('button[type="submit"]').style.display = 'none';
+
+      stripe.createToken(card).then(function (result) {
+        if (result.error) {
+          // Informa al usuario si hubo un error
+          var errorElement = document.getElementById('error-message');
+          errorElement.textContent = result.error.message;
+
+          // Oculta la rueda de carga y muestra el botón de submit de nuevo
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('loading-background').style.display = 'none';
+          form.querySelector('button[type="submit"]').style.display = 'block';
+        } else {
+          // Envía el token al servidor
+          stripeTokenHandler(result.token);
+        }
+      });
+    });
+
+    // Envía el token al servidor
+    function stripeTokenHandler(token) {
+      // Inserta el ID del token en el formulario para que se envíe al servidor
+      var form = document.getElementById('payment-form');
+      var hiddenInput = document.createElement('input');
+      hiddenInput.setAttribute('type', 'hidden');
+      hiddenInput.setAttribute('name', 'stripeToken');
+      hiddenInput.setAttribute('value', token.id);
+      form.appendChild(hiddenInput);
+
+      // Envía el formulario
+      form.submit();
+    }
+  </script>
+</body>
+
+</html>

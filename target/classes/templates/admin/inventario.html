@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+  <!-- Page Content -->
+  <div class="container">
+    <br><br>
+    <h2>Productos</h2>
+    <h4 style="text-align: center;">
+      <a class="btn btn-dark w-25" th:href="@{/productos/inventario?estado=true}">Activos</a>
+      <a class="btn btn-dark w-25" th:href="@{/productos/inventario?estado=false}">Inactivos</a>
+    </h4>
+    <table class="table" style="text-align: center;">
+      <thead>
+        <tr>
+          <th scope="col">Portada</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Precio</th>
+          <th scope="col">Categoría</th>
+          <th scope="col">Activo</th>
+          <th scope="col">Vendido</th>
+          <th scope="col" colspan="2">
+            <a class="btn btn-warning w-100" th:href="@{/productos/crear}">Añadir</a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="producto : ${inventario.content}">
+          <td>
+            <a th:href="@{/producto/{id}(id=${producto.id})}">
+              <img class="img-fluid" th:src="@{/images/{img} (img = ${producto.portada})}" width="100px"
+                height="100px" />
+            </a>
+          </td>
+          <td th:text="${producto.nombre}"></td>
+          <td th:text="${producto.precio} + '€'"></td>
+          <td>
+            <img th:if="${producto.categoria} == '1'" th:src="@{/images/home/totebags.jpg}" width="50px"
+              height="50px" />
+            <img th:if="${producto.categoria} == '2'" th:src="@{/images/home/mochilas.jpg}" width="50px"
+              height="50px" />
+          </td>
+          <td>
+            <img th:if="${producto.activo}" th:src="@{/images/admin/Verde.png}" width="30px" height="30px" />
+            <img th:if="${!producto.activo}" th:src="@{/images/admin/Rojo.png}" width="30px" height="30px" />
+          </td>
+          <td>
+            <img th:if="${producto.vendido}" th:src="@{/images/admin/Verde.png}" width="30px" height="30px" />
+            <img th:if="${!producto.vendido}" th:src="@{/images/admin/Rojo.png}" width="30px" height="30px" />
+          </td>
+          <td><a class="btn btn-dark" th:href="@{/productos/editar/{id}(id=${producto.id})}">Editar</a> </td>
+          <td>
+            <button class="delete-button btn btn-danger" th:value="${producto.id}" data-toggle="modal"
+              data-target="#exampleModal" style="color: white;">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${inventario.hasPrevious()} ? '' : 'disabled'">
+                <a class="page-link" th:if="${inventario.hasPrevious()}" th:with="prevPage=${currentPage - 1}" th:href="@{/productos/inventario(page=${prevPage},size=${pageSize},estado=${estado})}" aria-label="Anterior">
+                    <span aria-hidden="true" style="color: black;">«</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${currentPage == i} ? 'active'">
+                <a class="page-link" style="color: black;" th:with="pageNumber=${i}" th:href="@{/productos/inventario(page=${pageNumber},size=${pageSize},estado=${estado})}" th:text="${i + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${inventario.hasNext()} ? '' : 'disabled'">
+                <a class="page-link" th:if="${inventario.hasNext()}" th:with="nextPage=${currentPage + 1}" th:href="@{/productos/inventario(page=${nextPage},size=${pageSize},estado=${estado})}" aria-label="Siguiente">
+                    <span aria-hidden="true" style="color: black;">»</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Eliminar producto</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5>¿Quieres eliminar el producto del inventario?</h5>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <a id="deleteButton" href="#">
+            <button type="button" class="btn btn-danger">Eliminar</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Javascript que sustituye idProducto de th:href="@{/productos/eliminar/idProducto}" cuando se abre el modal por el id del <button id="deletes" data-id="${producto.id}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="color: white;">Eliminar</button> -->
+  <script type="text/javascript">  document.querySelectorAll('.delete-button').forEach(button => {
+      button.addEventListener('click', function () {
+        var id = this.getAttribute('value');
+        document.getElementById('deleteButton').setAttribute('href', '/productos/eliminar/' + id);
+      });
+    });
+  </script>
+
+  <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+  <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+</body>
+
+</html>

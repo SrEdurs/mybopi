@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+
+    <!-- Navigation -->
+    <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+
+
+    <!-- Page Content -->
+    <div class="container mt-5">
+        <div class="row center-div">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Iniciar sesión</h4>
+                        <form th:action="@{/usuario/login}" method="post">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="username"
+                                    placeholder="Escribe tu email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="Escribe tu contraseña" required>
+                            </div>
+                            <button type="submit" class="btn btn-dark w-100">Iniciar sesión</button>
+                            <br><br>
+                            <h5 th:if="${param.error}" style="color: red; font-weight: bold; text-align: center">Email o
+                                contraseña incorrectos.</h5>
+                            <h5 th:if="${param.logout}" style="color: green; font-weight: bold; text-align: center">Has
+                                cerrado sesión.</h5>
+                            <h5 th:if="${param.changed}" style="color: green; font-weight: bold; text-align: center">
+                                Contraseña cambiada con éxito.</h5>
+                        </form>
+                        <br>
+                        <div class="d-flex-justify" style="display: flex; justify-content: space-between;">
+                            <a th:href="@{/usuario/registro}" class="card-link"
+                                style="color: rgb(70, 54, 30);">Registrarse</a>
+                            <a th:href="@{/usuario/recordar}" class="card-link" style="color: rgb(70, 54, 30);">He
+                                olvidado la contraseña</a>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+
+            </div>
+        </div>
+        <br><br>
+    </div>
+    <!-- /.Page Content -->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel" style="color: rgb(241, 193, 120);">Cuenta creada</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>Has creado una cuenta con este email. Ya puedes iniciar sesión.</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Vale</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+
+    <!-- Scripts -->
+    <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+
+    <!-- Incluye Bootstrap JS y jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Script para mostrar el modal -->
+    <script th:if="${accountCreated}">
+        $(document).ready(function () {
+            $('#exampleModal').modal('show');
+        });
+    </script>
+
+</body>
+
+</html>

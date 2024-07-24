@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear cuenta</title>
+  <!-- Agrega el CSS de Bootstrap 4.5.0 -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<div th:insert="~{usuarios/template_usuario :: header}"></div>
+
+<body>
+  <!-- Navigation -->
+  <div th:insert="~{usuarios/template_usuario :: nav}"></div>
+  <!-- Page Content -->
+  <div class="container mt-5">
+    <div class="row center-div">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title text-center">Crear cuenta</h4>
+            <form id="myForm" th:action="@{/usuario/save}" method="post" onsubmit="return validateForm()">
+              <div class="mb-3">
+                <label for="InputEmail" class="form-label">Email</label>
+                <input required type="email" id="InputEmail" class="form-control" maxlength="100" name="email"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Escribe tu email"
+                  th:classappend="${emailInUse} ? 'is-invalid' : ''">
+                <div th:if="${emailInUse}" class="invalid-feedback">
+                  El email ya está en uso. Por favor, usa otro.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="InputPassword" class="form-label">Contraseña</label>
+                <input required type="password" id="InputPassword" class="form-control" maxlength="255" name="password"
+                  pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_])(?=\S+$).{8,}$"
+                  placeholder="Escribe tu contraseña">
+              </div>
+              <div class="mb-3">
+                <label for="InputConfirmPassword" class="form-label">Confirmar Contraseña</label>
+                <input required type="password" id="InputConfirmPassword" class="form-control" maxlength="255"
+                  name="confirmPassword" placeholder="Confirma tu contraseña">
+              </div>
+              <input type="hidden" name="roles" value="ROLE_USER" />
+              <button type="submit" class="btn btn-dark w-100">Crear cuenta</button>
+            </form>
+            <br>
+            <a th:href="@{/usuario/login}" class="card-link" style="color: rgb(70, 54, 30); ">Iniciar sesión</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br><br>
+  </div>
+  <!-- /.Page Content -->
+
+  <!-- Footer -->
+  <div th:insert="~{usuarios/template_usuario :: footer}"></div>
+  <!-- Scripts -->
+  <div th:insert="~{usuarios/template_usuario :: scripts}"></div>
+  <!-- Agrega los scripts de Bootstrap 4.5.0 -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script>
+    // Función de validación de contraseñas
+    function validateForm() {
+      var password = document.getElementById('InputPassword').value;
+      var confirmPassword = document.getElementById('InputConfirmPassword').value;
+      if (password !== confirmPassword) {
+        $('#errorModal').modal('show');
+        return false;  // Evita que se envíe el formulario
+      }
+      return true;  // Permite que se envíe el formulario
+    }
+
+    // Muestra la rueda de carga durante el envío del formulario
+    document.getElementById('myForm').addEventListener('submit', function (event) {
+      // Muestra el fondo oscurecido y la rueda de carga
+      document.getElementById('loading-background').style.display = 'block';
+      document.getElementById('loading').style.display = 'block';
+
+    });
+
+    $(document).ready(function () {
+      // Verifica si el atributo passwordMismatch está presente
+      var passwordMismatch = /*[[${passwordMismatch}]]*/ false;
+      if (passwordMismatch) {
+        $('#errorModal').modal('show');
+      }
+    });
+
+    // Cierra el modal y oculta la rueda de carga cuando el modal se cierra
+    $('#errorModal').on('hidden.bs.modal', function (e) {
+      console.log('Modal cerrado');
+      // Asegúrate de que el formulario esté visible nuevamente
+      document.getElementById('myForm').querySelector('button[type="submit"]').style.display = 'block';
+      document.getElementById('loading-background').style.display = 'none';
+      document.getElementById('loading').style.display = 'none';
+    });
+  </script>
+  <!-- Modal -->
+  <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle" style="color: rgb(241, 193, 120);">Error de Validación</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          Las contraseñas no coinciden. Por favor, inténtalo de nuevo.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fondo oscurecido -->
+  <div id="loading-background" class="loading-background"></div>
+
+  <!-- Contenedor de la rueda de carga centrada -->
+  <div id="loading" class="loading-spinner" style="display:none;">
+    <div class="spinner-border text-warning" role="status">
+      <span class="sr-only">Cargando...</span>
+    </div>
+  </div>
+</body>
+
+</html>
