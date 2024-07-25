@@ -162,7 +162,7 @@ public class UsuarioController {
             email.setDestinatario(usuario.get().getEmail());
             email.setMensaje(
                     "Hola! Hemos recibido una petición para cambiar la contraseña de tu cuenta. Si no es el caso, por favor, ignora este mensage");
-            email.setEnlace2("http://localhost:8080/usuario/cambiapassword?token=" + randomText + "&email=" + correo);
+            email.setEnlace2("https://mybopi.es/usuario/cambiapassword?token=" + randomText + "&email=" + correo);
             emailService.sendMail(email);
 
             return "redirect:/usuario/recordar?email=true";
