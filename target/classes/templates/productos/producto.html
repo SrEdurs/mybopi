@@ -73,7 +73,7 @@
                 </li>
                 <li class="list-group-item" style="border-width: 0px;">
                   <h5>Descripción:</h5>
-                  <p th:text="${producto.descripcion}">Descripción:</p>
+                  <p th:text="${producto.descripcion}" style="white-space: pre-wrap;">Descripción:</p>
                 </li>
                 <li th:unless="${producto.vendido}" class="list-group-item" style="border-width: 0px;"><button
                     type="submit" th:if="${!producto.vendido}" class="btn btn-dark">Añadir al carrito</button></li>
