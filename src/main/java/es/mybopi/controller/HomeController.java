@@ -245,7 +245,7 @@ public class HomeController {
                     usuario.getEmail() != null && !usuario.getEmail().trim().isEmpty() &&
                     usuario.getCP() != null && !usuario.getCP().trim().isEmpty()) {
                 // Sumar 6,95 al total
-                pedido.setTotal(pedido.getTotal() + 0);
+                pedido.setTotal(pedido.getTotal() + 6.95);
             }
             model.addAttribute("usuario", usuario);
             model.addAttribute("pedido", pedido);
@@ -293,7 +293,7 @@ public class HomeController {
             Pedido pedido = new Pedido();
             pedido.setUsuario(usuario);
             pedido.setProductos(new ArrayList<>(productosCarrito));
-            pedido.setTotal(calcularTotal(productosCarrito) + 0);
+            pedido.setTotal(calcularTotal(productosCarrito) + 6.95);
             pedido.setFecha(new Date());
             pedido.setNumero(pedidoService.generarNumPedido());
             pedido.setSeguimiento("Pendiente de envío");
@@ -530,6 +530,7 @@ public class HomeController {
             List<Producto> productos = pedido.getProductos();
             for (Producto producto : productos) {
                 producto.setVendido(false);
+                producto.setActivo(true);
                 productoService.save(producto);
             }
         }
