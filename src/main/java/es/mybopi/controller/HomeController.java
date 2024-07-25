@@ -268,17 +268,6 @@ public class HomeController {
             List<Producto> productosCarrito = usuario.getCarrito().getProductos();
             double envio = 6.95;
 
-            // Realizar el cargo en Stripe
-            StripeChargeDto chargeRequest = new StripeChargeDto();
-            chargeRequest.setStripeToken(stripeToken);
-            chargeRequest.setAmount(String.valueOf(calcularTotal(productos) + envio)); // El total debería estar en
-                                                                                       // centavos
-
-            StripeChargeDto chargeResponse = stripeService.charge(chargeRequest);
-            if (!chargeResponse.isSuccess()) {
-                return "paymentError";
-            }
-
             // Cadena de texto aleatoria
             String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             StringBuilder sb = new StringBuilder();
@@ -302,6 +291,19 @@ public class HomeController {
             pedido.setDevolucion(false);
             pedido.setToken(randomString);
             pedidoService.save(pedido);
+
+            // Realizar el cargo en Stripe
+            StripeChargeDto chargeRequest = new StripeChargeDto();
+            chargeRequest.setStripeToken(stripeToken);
+            chargeRequest.setAmount(String.valueOf(calcularTotal(productos) + envio)); // El total debería estar en
+                                                                                       // centavos
+
+            StripeChargeDto chargeResponse = stripeService.charge(chargeRequest, pedido);
+            if (!chargeResponse.isSuccess()) {
+                return "paymentError";
+            }
+
+            
 
             // Enviar correo con los datos
             email.setAsunto(pedido.getUsuario().getNombre() + " - Gracias por tu pedido en Mybopi");
