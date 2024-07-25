@@ -2,12 +2,7 @@ package es.mybopi.service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -15,7 +10,6 @@ import com.stripe.model.Charge;
 import com.stripe.model.Token;
 import es.mybopi.dto.StripeTokenDto;
 import es.mybopi.model.Pedido;
-import es.mybopi.model.Usuario;
 import es.mybopi.dto.StripeChargeDto;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +25,6 @@ public class StripeService {
     public void init() {
         Stripe.apiKey = stripeApiKey;
     }
-
-    @Autowired
-    private UsuarioService usuarioService;
-    @Autowired
-    private PedidoService pedidoService;
 
     public StripeTokenDto createCardToken(StripeTokenDto model) {
 
@@ -71,8 +60,8 @@ public class StripeService {
             chargeParams.put("amount", (int) (amount * 100)); // Convertir el resultado a int
             chargeParams.put("currency", "EUR");
 
-            String info = " pedido " + pedido.getNumero() + " - Usuario: ID  " + pedido.getUsuario().getId() + " - Nombre: " + pedido.getUsuario().getNombre();
-
+            String info = " pedido " + pedido.getNumero() + " - Usuario: ID  " + pedido.getUsuario().getId()
+                    + " - Nombre: " + pedido.getUsuario().getNombre();
 
             chargeParams.put("description",
                     "Pago de " + info + " " + chargeRequest.getAdditionalInfo().getOrDefault("ID_TAG", ""));
