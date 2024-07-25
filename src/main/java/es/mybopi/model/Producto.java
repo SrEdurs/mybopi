@@ -3,11 +3,13 @@ package es.mybopi.model;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -35,7 +37,11 @@ public class Producto {
     private String portada;
     private String imagen1;
     private String imagen2;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String descripcion;
+    
     private int categoria;
     private boolean activo = true;
     private boolean vendido = false;
