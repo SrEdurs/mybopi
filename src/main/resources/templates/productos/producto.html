@@ -76,7 +76,8 @@
                   <p th:text="${producto.descripcion}" style="white-space: pre-wrap;">Descripción:</p>
                 </li>
                 <li th:unless="${producto.vendido}" class="list-group-item" style="border-width: 0px;"><button
-                    type="submit" th:if="${!producto.vendido}" class="btn btn-dark">Añadir al carrito</button></li>
+                    type="submit" th:if="${!producto.vendido}" class="btn btn-dark">Añadir al carrito 🛒</button>
+                    <a sec:authorize="hasRole('ADMIN')" class="btn btn-dark" th:href="@{/productos/editar/{id}(id=${producto.id})}">Editar ✏️</a></li>
               </ul>
             </form>
             <li th:if="${producto.vendido}" class="list-group-item" style="border-width: 0px;"> <button

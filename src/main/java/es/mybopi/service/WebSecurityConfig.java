@@ -46,7 +46,7 @@ public class WebSecurityConfig {
                     Authentication authentication) throws IOException, ServletException {
                 HttpSession session = request.getSession();
                 if (session.getAttribute("mensaje") == null) {
-                    session.setAttribute("mensaje", "Has iniciado sesión");
+                    session.setAttribute("mensaje", "¡Hola!👋 Has iniciado sesión 😊");
                 }
                 setDefaultTargetUrl("/");
                 super.onAuthenticationSuccess(request, response, authentication);
