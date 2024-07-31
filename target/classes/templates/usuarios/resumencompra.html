@@ -47,7 +47,7 @@
       <div class="col-lg-8">
         <div class="card mb-4">
           <div class="card-body">
-            <h5 class="card-title">PRODUCTOS</h5>
+            <h5 class="card-title">PRODUCTOS 🛍️</h5>
             <div class="alert alert-light" role="alert">
               <table class="table">
                 <tbody>
@@ -72,8 +72,8 @@
           </div>
         </div>
         <label class="form-check-label" for="exampleRadios1">
-          <img th:src="@{/images/admin/CorreosLogo.png}" width="30px" height="30px" /> Envío con Correos. Entrega de 3 a
-          5 días, con número de seguimiento.
+          <img th:src="@{/images/admin/CorreosLogo.png}" width="30px" height="30px" /> Envío peninsular con Correos. Entrega de 3 a
+          5 días con número de seguimiento. 
         </label>
         <br><br>
         <p style="font-size: small">Al continuar con la compra aceptas las condiciones y políticas.</p>
@@ -93,7 +93,7 @@
 
           <div class="card-body"
             th:if="${pedido.usuario.direccion != null && pedido.usuario.nombre != null && pedido.usuario.localidad != null && pedido.usuario.telefono != null && pedido.usuario.email != null && pedido.usuario.CP != null}">
-            <h5 class="card-title">Dirección</h5>
+            <h5 class="card-title">Dirección 🏠</h5>
             <br>
             <h6 class="card-subtitle mb-2" th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellidos}"></h6>
             <h7 class="card-text" th:text="${pedido.usuario.direccion}"></h7>
@@ -112,7 +112,7 @@
 
           <div class="card-body"
             th:if="${pedido.usuario.direccion == null || pedido.usuario.nombre == null || pedido.usuario.localidad == null || pedido.usuario.telefono == null || pedido.usuario.email == null || pedido.usuario.CP == null}">
-            <h5 class="card-title">Dirección</h5>
+            <h5 class="card-title">Dirección 🏠</h5>
             <br>
             <h6 class="card-subtitle mb-2">Sin dirección</h6>
             <br>
@@ -126,7 +126,7 @@
         <!-- Resumen -->
         <div class="card mb-4" style="width: 19rem;">
           <div class="card-body">
-            <h5 class="card-title">Pago</h5>
+            <h5 class="card-title">Pago 💶</h5>
             <form id="payment-form" action="/guardarPedido" method="post">
               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
               <div>
