@@ -9,7 +9,7 @@
 ![Badge MYSQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
 
 ## ¿Qué es Mybopi?
-Mybopi es una app web para la venta de productos pintados a mano. Se ha realizado a petición del cliente y se ha adaptado a sus necesidades.
+Mybopi es una app web, accesible desde https://mybopi.es/, para la venta de productos pintados a mano. Se ha realizado a petición del cliente y se ha adaptado a sus necesidades.
 
 ## ¿Qué funciones tiene?
 Mybopi cuenta con un sistema de registro y login seguros gracias a Spring Security, permitiendo que los usuarios puedan acceder a la app y a sus funcionalidades. Los usuarios se dividen a su vez en administradores y usuarios normales. Los administradores tienen acceso al crud de usuarios, productos y pedidos realizados. Los usuarios solo pueden realizar y ver sus pedidos, además de editar sus datos. Otras funciones disponibles son el envío de correos al realizar ciertas acciones, el borrado de cuentas de usuarios automático (siempre que se haya solicitado) e integración de pagos con Stripe.

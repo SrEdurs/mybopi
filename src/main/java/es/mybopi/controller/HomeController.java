@@ -77,6 +77,15 @@ public class HomeController {
         return "usuarios/index";
     }
 
+    @PostMapping("/Eduardo/{entrevista}")
+    public String Eduardo(@PathVariable Boolean entrevista) {
+        if (entrevista) {
+            return "redirect:/Eduardo/posibilidades";
+        } else {
+            return "redirect:/Eduardo/sigueIntentando";
+        }
+    }
+
     @GetMapping("/totebags")
     public String totebags(Model model, @ModelAttribute("usuarioNav") Usuario usuario) {
         List<Producto> totebags = this.productoRepository.findByCategoriaAndActivoOrderByFechaDesc(1, true);
@@ -303,8 +312,6 @@ public class HomeController {
                 return "paymentError";
             }
 
-            
-
             // Enviar correo con los datos
             email.setAsunto(pedido.getUsuario().getNombre() + " - Gracias por tu pedido en Mybopi");
             email.setDestinatario(usuario.getEmail());
@@ -489,7 +496,7 @@ public class HomeController {
         if (size <= 0) {
             size = 10;
         }
-        //Optener usuario por el ID
+        // Optener usuario por el ID
         Optional<Usuario> user = Optional.ofNullable(usuarioService.findById(id));
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "fecha"));
