@@ -14,7 +14,7 @@
   <!-- Page Content -->
   <div class="container">
     <br><br>
-    <h2>Productos</h2>
+    <h2 th:text="${'Productos (' + inventario.totalElements + ')'}">Productos</h2>
     <h4 style="text-align: center;">
       <a class="btn btn-dark w-25" th:href="@{/productos/inventario?estado=true}">Activos</a>
       <a class="btn btn-dark w-25" th:href="@{/productos/inventario?estado=false}">Inactivos</a>

@@ -164,3 +164,83 @@ body {
   background-color: rgb(241, 193, 120);
   border-color: rgb(241, 193, 120);
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.card.h-100 {
+  transition: transform 0.3s ease;
+  animation: fadeIn 0.2s ease-in;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.card.h-100:hover {
+  transform: scale(1.05);
+}
+
+.btn.btn-dark:hover {
+  transform: scale(1.05);
+}
+
+.btn.btn-danger:hover {
+  transform: scale(1.05);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card.mb-4.productos {
+  animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.card.mb-4.direccion {
+  animation: slideInFromRight 0.5s ease-out;
+}
+
+.card.mb-4.pago {
+  animation: slideInFromRight 0.5s ease-out;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.carousel.slide.producto {
+  animation: slideInFromLeft 0.5s ease-out;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+

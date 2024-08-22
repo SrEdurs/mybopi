@@ -45,7 +45,7 @@
     <div class="row">
       <!-- Lista de productos -->
       <div class="col-lg-8">
-        <div class="card mb-4">
+        <div class="card mb-4 productos">
           <div class="card-body">
             <h5 class="card-title">PRODUCTOS 🛍️</h5>
             <div class="alert alert-light" role="alert">
@@ -83,7 +83,7 @@
       <!-- Columna de dirección y resumen -->
       <div class="col-lg-4">
         <!-- Tarjeta de dirección -->
-        <div class="card mb-4" th:style="${pedido.usuario.direccion == null or pedido.usuario.direccion.trim().length() == 0 or 
+        <div class="card mb-4 direccion" th:style="${pedido.usuario.direccion == null or pedido.usuario.direccion.trim().length() == 0 or 
           pedido.usuario.nombre == null or pedido.usuario.nombre.trim().length() == 0 or 
           pedido.usuario.localidad == null or pedido.usuario.localidad.trim().length() == 0 or 
           pedido.usuario.telefono == null or pedido.usuario.telefono.trim().length() == 0 or 
@@ -124,9 +124,9 @@
         </div>
 
         <!-- Resumen -->
-        <div class="card mb-4" style="width: 19rem;">
+        <div class="card mb-4 pago" style="width: 19rem;">
           <div class="card-body">
-            <h5 class="card-title">Pago 💶</h5>
+            <h5 class="card-title">Pago seguro 🔒💶</h5>
             <form id="payment-form" action="/guardarPedido" method="post">
               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
               <div>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <link rel="icon" th:href="@{/images/admin/favicon.ico}" type="image/x-icon">
-    <title>Carrito</title>
+
+<head>
+  <link rel="icon" th:href="@{/images/admin/favicon.ico}" type="image/x-icon">
+  <title>Carrito</title>
 </head>
 
 <div th:insert="~{usuarios/template_usuario :: header}"></div>
@@ -21,14 +22,13 @@
       <small>Carrito</small>
     </h1>
 
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-lg-9">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card mb-4 productos">
+          <div class="card-body">
+            <h5 class="card-title">PRODUCTOS 🛍️</h5>
             <table class="table">
-
               <tbody>
-
                 <tr th:if="${carrito != null && !#lists.isEmpty(carrito.productos)}"
                   th:each="producto : ${carrito.productos}">
                   <td><img class="img-fluid" th:src="@{images/{img} (img = ${producto.portada})}" width="100px"
@@ -41,32 +41,37 @@
                     style="font-size: large; font-weight: bold"></td>
                   <td th:if="${producto.vendido}" th:text="'[VENDIDO]'"
                     style="font-size: large; color: red; font-weight: bold"></td>
-                  <td><a th:href="@{/quitar/{id} (id = ${producto.id})}" class="btn btn-danger">Quitar</a></td>
+                  <td><a th:href="@{/quitar/{id} (id = ${producto.id})}" class="btn btn-danger">Quitar 🚫</a></td>
                 </tr>
                 <tr th:if="${carrito == null || #lists.isEmpty(carrito.productos)}">
                   <td colspan="6">
                     <h3>Carrito vacío</h3>
                   </td>
                 </tr>
-
               </tbody>
             </table>
           </div>
-
-          <div class="col-lg-3">
-            <h2 class="card-title">TOTAL</h2>
-
-            <ul class="list-group">
-              <li class="list-group-item">
-                <h5 style="font-weight: bold" th:text="${carrito.total} + '€'"></h5>
-              </li>
-              <a th:if="${!#lists.isEmpty(carrito.productos)}" th:href="@{/pedido}" class="btn btn-dark">Continuar</a>
-            </ul>
-          </div>
-
         </div>
       </div>
 
+      <div class="col-lg-3">
+        <div class="card mb-4 pago">
+          <div class="card-body">
+            <h5 class="card-title">TOTAL 🟰</h5>
+            <table class="table text-center">
+              <tbody>
+                <td>
+                  <br>
+                  <h4 style="font-weight: bold" th:text="${carrito.total} + '€'"></h4>
+                  <br>
+                  <a th:if="${!#lists.isEmpty(carrito.productos)}" th:href="@{/pedido}" class="btn btn-dark">Continuar
+                    🛒</a>
+                </td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="row">
