@@ -1,4 +1,4 @@
-
+version: '3'
 services:
   mybopi:
     build: .
@@ -31,7 +31,9 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 10s
       retries: 10
-      
+    volumes:
+      - mysql_data:/var/lib/mysql  # Monta el volumen de datos de MySQL
 
 volumes:
+  mysql_data:  # Define el volumen para los datos de MySQL
   images:  # Define el volumen para las imágenes, gestionado por Docker
