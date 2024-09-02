@@ -22,12 +22,12 @@
                         <h4 class="card-title text-center">Iniciar sesión</h4>
                         <form th:action="@{/usuario/login}" method="post">
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
+                                <label for="email" class="form-label" style="font-weight: bold;">Email</label>
                                 <input type="email" class="form-control" id="email" name="username"
                                     placeholder="Escribe tu email" required>
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
+                                <label for="password" class="form-label" style="font-weight: bold;">Contraseña</label>
                                 <input type="password" class="form-control" id="password" name="password"
                                     placeholder="Escribe tu contraseña" required>
                             </div>
@@ -43,8 +43,8 @@
                         <br>
                         <div class="d-flex-justify" style="display: flex; justify-content: space-between;">
                             <a th:href="@{/usuario/registro}" class="card-link"
-                                style="color: rgb(70, 54, 30);">Registrarse</a>
-                            <a th:href="@{/usuario/recordar}" class="card-link" style="color: rgb(70, 54, 30);">He
+                                style="color: rgb(70, 54, 30); font-weight: bold;">Registrarse</a>
+                            <a th:href="@{/usuario/recordar}" class="card-link" style="color: rgb(70, 54, 30); font-weight: bold;">He
                                 olvidado la contraseña</a>
                         </div>
                     </div>

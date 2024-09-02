@@ -13,7 +13,7 @@
         z-index: 1050;
         /* Asegúrate de que está por encima de otros elementos */
       }
-  
+
       .loading-background {
         position: fixed;
         top: 0;
@@ -50,7 +50,7 @@
             <h4 class="card-title text-center">Crear cuenta</h4>
             <form id="myForm" th:action="@{/usuario/save}" method="post" onsubmit="return validateForm()">
               <div class="mb-3">
-                <label for="InputEmail" class="form-label">Email</label>
+                <label for="InputEmail" class="form-label" style="font-weight: bold;">Email</label>
                 <input required type="email" id="InputEmail" class="form-control" maxlength="100" name="email"
                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Escribe tu email"
                   th:classappend="${emailInUse} ? 'is-invalid' : ''">
@@ -59,13 +59,13 @@
                 </div>
               </div>
               <div class="mb-3">
-                <label for="InputPassword" class="form-label">Contraseña</label>
+                <label for="InputPassword" class="form-label" style="font-weight: bold;">Contraseña</label>
                 <input required type="password" id="InputPassword" class="form-control" maxlength="255" name="password"
                   pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_])(?=\S+$).{8,}$"
                   placeholder="Escribe tu contraseña">
               </div>
               <div class="mb-3">
-                <label for="InputConfirmPassword" class="form-label">Confirmar Contraseña</label>
+                <label for="InputConfirmPassword" class="form-label" style="font-weight: bold;">Confirmar Contraseña</label>
                 <input required type="password" id="InputConfirmPassword" class="form-control" maxlength="255"
                   name="confirmPassword" placeholder="Confirma tu contraseña">
               </div>
@@ -73,7 +73,7 @@
               <button type="submit" class="btn btn-dark w-100">Crear cuenta</button>
             </form>
             <br>
-            <a th:href="@{/usuario/login}" class="card-link" style="color: rgb(70, 54, 30); ">Iniciar sesión</a>
+            <a th:href="@{/usuario/login}" class="card-link" style="color: rgb(70, 54, 30); font-weight: bold">Iniciar sesión</a>
           </div>
         </div>
       </div>
